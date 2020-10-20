@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:12.3-alpine
+    environment:
+      TZ: UTC
+      PGTZ: UTC
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./api
+      args:
+        WORKDIR: $WORKDIR
+    environment:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      API_DOMAIN: "localhost:$FRONT_PORT"
+    volumes:
+      - ./api:/$WORKDIR
+      - api-bundle:/user/local/bundle
+    depends_on:
+      - db
+    ports:
+      - "$API_PORT:$CONTAINER_PORT"
+
+  front:
+    build:
+      context: ./front
+      args:
+        WORKDIR: $WORKDIR
+        CONTAINER_PORT: $CONTAINER_PORT
+        API_URL: "http://localhost:$API_PORT"   # 追加
+    command: yarn run dev
+    volumes:
+      - ./front:/$WORKDIR
+      - front-node-modules:/app/node_modules
+    ports:
+      - "$FRONT_PORT:$CONTAINER_PORT"
+    depends_on:
+      - api
+
+volumes:
+  db-data:
+  api-bundle:
+  front-node_modules:
