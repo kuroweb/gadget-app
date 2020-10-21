@@ -41,6 +41,7 @@
               color="success"
               class="mx-auto white--text mt-4"
               :disabled="invalid"
+              @click="signup"
             >新規登録
             </v-btn>
           </v-row>
@@ -70,14 +71,18 @@ export default {
   },
   methods: {
     signup() {
-      if (this.password !== this.passwordConfirm) {
-        this.error = "※パスワードとパスワード確認が一致していません";
-      }
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(res => {
-          console.log(res.user);
+          const user = {
+            email: res.user.email,
+            name: this.name,
+            uid: res.user.uid
+          };
+          axios.post("/v1/users",{ user }).then(() => {
+            this.$router.push("/");
+          });
         })
         .catch(error => {
           this.error = (code => {
@@ -90,8 +95,8 @@ export default {
                 return "※パスワードは最低6文字以上にしてください";
               default:
                 return "※メールアドレスとパスワードをご確認ください";
-              }
-            })(error.code);
+            }
+          })(error.code);
         });
     }
   }  
