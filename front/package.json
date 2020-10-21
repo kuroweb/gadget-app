@@ -9,7 +9,10 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.12.2",
+    "@nuxtjs/dotenv": "^1.4.1",
     "core-js": "^3.6.5",
+    "firebase": "^7.24.0",
     "nuxt": "^2.14.6"
   },
   "devDependencies": {
