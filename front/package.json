@@ -13,7 +13,8 @@
     "@nuxtjs/dotenv": "^1.4.1",
     "core-js": "^3.6.5",
     "firebase": "^7.24.0",
-    "nuxt": "^2.14.6"
+    "nuxt": "^2.14.6",
+    "vee-validate": "^3.4.2"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.11.2"
