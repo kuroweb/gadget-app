@@ -52,7 +52,8 @@
 </template>
 
 <script>
-import firebase from "@/plugins/firebase";
+import axios from "@/plugins/axios"
+import firebase from "@/plugins/firebase"
 import TextField from '~/components/atoms/TextField.vue'
 export default {
   components: {
@@ -76,8 +77,8 @@ export default {
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(res => {
           const user = {
-            email: res.user.email,
             name: this.name,
+            email: res.user.email,
             uid: res.user.uid
           };
           axios.post("/v1/users",{ user }).then(() => {
