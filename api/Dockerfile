@@ -21,6 +21,7 @@ RUN apk update && \
     apk add --virtual build-dependencies --no-cache ${DEV_PACKAGES} && \
     bundle install -j4 && \
     apk del build-dependencies
+RUN apk add --update --no-cache less
 
 COPY . .
 

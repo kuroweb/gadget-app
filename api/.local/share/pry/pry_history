@@ -1,2 +1,19 @@
 User.all
 exit
+User.all
+User.first
+User.all
+exit
+User.all
+user = User.all
+user
+user = User.first
+user
+user.destroy
+User.first.destroy
+User.all.destroy
+User.all
+User.first.destroy
+User.all
+q
+exit
