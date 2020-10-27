@@ -1,3 +1,4 @@
+require('dotenv').config()
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
@@ -18,8 +19,7 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    '~/plugins/vee-validate',
-    '~/plugins/auth-check'
+    '~/plugins/vee-validate'
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -30,6 +30,7 @@ export default {
     '@nuxtjs/vuetify',
     '@nuxtjs/dotenv',
   ],
+
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
@@ -44,5 +45,5 @@ export default {
     transpile: [
       "vee-validate/dist/rules"
     ],
-  }
+  },
 }

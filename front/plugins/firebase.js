@@ -1,5 +1,6 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import 'firebase/database'
 
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
@@ -9,6 +10,7 @@ const firebaseConfig = {
   storageBucket: process.env.STORAGE_BUCKET,
   messagingSenderId: process.env.MESSAGE_SENDER_ID
 }
+
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
