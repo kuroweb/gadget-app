@@ -1,4 +1,5 @@
 class V1::UsersController < ApplicationController
+  before_action :set_user, only: [:show, :edit, :update]
 
   def index
     if params[:uid] 
@@ -8,7 +9,11 @@ class V1::UsersController < ApplicationController
       @users = User.all
       render json: @users
     end
-  end 
+  end
+
+  def show
+    render json: @user
+  end
     
   def create
     @user = User.new(user_params)
@@ -23,6 +28,10 @@ class V1::UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(:name, :email, :uid, :profile)
+    end
+
+    def set_user
+      @user = User.find(params[:id])
     end
 
 end
