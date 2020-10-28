@@ -1,68 +1,54 @@
 <template>
-  <section class="container">
-    <div>
-      <nuxt-link to="/auth/signin">Already a user? Sign-in</nuxt-link>
-    </div>
-    <div>
-      <form @submit.prevent="signUp">
-        <label for="usernameTxt">Username:</label>
-        <input id="usernameTxt" type="text" v-model="email">
-        <label for="passwordTxt">Password:</label>
-        <input id="passwordTxt" type="password" v-model="password">
-        <button type="submit">Sign Up</button>
-      </form>
-    </div>
-    <v-card class="mx-auto mt-5 pa-5" width="400px">
-      <v-card-title>
-        <h2 class="signup-title">新規登録</h2>
-      </v-card-title>
-      <v-card-text>
-      <ValidationObserver
-        v-slot="{ invalid }"
-      >
-        <v-form>
-          <p v-if="error" class="errors">{{error}}</p>
-          <TextField
-            v-model="name"
-            label="名前"
-            rules="max:20|required"
-          />
-          <TextField
-            v-model="email"
-            label="メールアドレス"
-            rules="max:255|required|email"
-          />
-          <TextField
-            v-model="password"
-            label="パスワード"
-            rules="required|min:6"
-            :type="show1 ? 'text' : 'password'"
-            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-            @click:append="show1 = !show1"
-            vid="password"
-          />
-          <TextField
-            v-model="passwordConfirm"
-            label="パスワード(再入力)"
-            rules="required|min:6|confirmed:パスワード"
-            :type="show2 ? 'text' : 'password'"
-            :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-            @click:append="show2 = !show2"
-          />
-          <v-row justify="center">
-            <v-btn
-              color="success"
-              class="mx-auto white--text mt-4"
-              :disabled="invalid"
-              @click="signUp"
-            >新規登録
-            </v-btn>
-          </v-row>
-        </v-form>
-      </ValidationObserver>
-      </v-card-text>
-    </v-card>
-  </section>
+  <v-card class="mx-auto mt-5 pa-5" width="400px">
+    <v-card-title>
+      <h2 class="signup-title">新規登録</h2>
+    </v-card-title>
+    <v-card-text>
+    <ValidationObserver
+      v-slot="{ invalid }"
+    >
+      <v-form>
+        <p v-if="error" class="errors">{{error}}</p>
+        <TextField
+          v-model="name"
+          label="名前"
+          rules="max:20|required"
+        />
+        <TextField
+          v-model="email"
+          label="メールアドレス"
+          rules="max:255|required|email"
+        />
+        <TextField
+          v-model="password"
+          label="パスワード"
+          rules="required|min:6"
+          :type="show1 ? 'text' : 'password'"
+          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+          @click:append="show1 = !show1"
+          vid="password"
+        />
+        <TextField
+          v-model="passwordConfirm"
+          label="パスワード(再入力)"
+          rules="required|min:6|confirmed:パスワード"
+          :type="show2 ? 'text' : 'password'"
+          :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+          @click:append="show2 = !show2"
+        />
+        <v-row justify="center">
+          <v-btn
+            color="success"
+            class="mx-auto white--text mt-4"
+            :disabled="invalid"
+            @click="signUp"
+          >新規登録
+          </v-btn>
+        </v-row>
+      </v-form>
+    </ValidationObserver>
+    </v-card-text>
+  </v-card>
 </template>
 
 
@@ -89,9 +75,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions('modules/user', [ 'login' ]),
+    ...mapActions('modules/user', ['login', 'setLOADING', 'setFLASH']),
     async signUp () {
+      this.setLOADING(true)
       try {
+        // 要リファクタリング（新規登録、APIリクエスト、それぞれにエラーハンドリングが必要）
         const firebaseUser = await firebaseApp.auth().createUserWithEmailAndPassword(this.email, this.password)
         await this.login(firebaseUser.user)
         const user = await {
@@ -99,9 +87,18 @@ export default {
           email: firebaseUser.user.email,
           uid: firebaseUser.user.uid
         }
-        this.$axios.$post("/v1/users", { user }).then(() => {
-          this.$router.push("/")
+        this.$axios.$post(process.env.BROWSER_BASE_URL + "/v1/users", { user })
+        this.setFLASH({
+          status: true,
+          message: "登録に成功しました"
         })
+        await this.$router.push("/")
+        setTimeout(() => {
+          this.setFLASH({
+            status: false,
+            message: ""
+          })
+        }, 2000)
       } catch (error) {
         this.error = (code => {
           switch (code) {
@@ -116,6 +113,7 @@ export default {
             }
           })(error.code);
       }
+      this.setLOADING(false)
     },
   }
 }

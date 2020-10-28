@@ -17,3 +17,6 @@ User.first.destroy
 User.all
 q
 exit
+User.first
+User.all
+iq

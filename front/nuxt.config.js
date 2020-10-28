@@ -1,5 +1,10 @@
-require('dotenv').config()
+const environment = process.env.NODE_ENV || 'development';
+const envSet = require(`./env.${environment}.js`)
+
 export default {
+
+  env: envSet,
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'gadget-app',
@@ -28,7 +33,6 @@ export default {
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
     '@nuxtjs/vuetify',
-    '@nuxtjs/dotenv',
   ],
 
 

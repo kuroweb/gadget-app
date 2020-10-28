@@ -1,12 +1,13 @@
 <template>
   <v-app style="background-color: #ECEFF1;">
+    <Flash/>
+    <Loading
+      v-if="loading"
+    />
     <Header/>
     <v-main>
       <v-container>
-        <div>
-          <nuxt-link to="/">Home</nuxt-link>
-          <a href='#' @click="signout">Logout</a>
-        </div>
+        <nuxt />
       </v-container>
     </v-main>
     <Footer/>
@@ -14,24 +15,39 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import Header from '../components/organisms/Header.vue'
+import Footer from '../components/organisms/Footer.vue'
+import Loading from '../components/atoms/Loading.vue'
+import Flash from '../components/atoms/Flash.vue'
 
-  export default {
-    middleware: 'authenticated',
-    methods: {
-      ...mapActions('modules/user', [ 'logout' ]),
-      async signout () {
-        await this.logout()
-        this.$router.push('/')
+export default {
+  middleware: 'authenticated',
+  components: {
+    Header,
+    Footer,
+    Loading,
+    Flash,
+  },
+  computed: {
+    ...mapGetters('modules/user', [
+      'loading',
+    ])
+  },
+  methods: {
+    ...mapActions('modules/user', [ 'logout' ]),
+    async signout () {
+      await this.logout()
+      this.$router.push('/')
 
-        // this.logout().then(() => {
-        //   this.$router.push('/')
-        // }).catch((error) => {
-        //   console.log(error.message)
-        // })
-      }
+      // this.logout().then(() => {
+      //   this.$router.push('/')
+      // }).catch((error) => {
+      //   console.log(error.message)
+      // })
     }
   }
+}
 </script>
 
 <style>

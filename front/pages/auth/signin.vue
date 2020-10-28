@@ -1,55 +1,41 @@
 <template>
-  <section class="container">
-    <div>
-      <nuxt-link to="/auth/signup">Not a user? Sign-up</nuxt-link>
-    </div>
-    <div>
-      <form @submit.prevent="submit">
-        <label for="usernameTxt">Username:</label>
-        <input id="usernameTxt" type="text" v-model="email">
-        <label for="passwordTxt">Password:</label>
-        <input id="passwordTxt" type="password" v-model="password">
-        <button type="submit">Sign In</button>
-      </form>
-    </div>
-    <v-card class="mx-auto mt-5 pa-5" width="400px">
-      <v-card-title>
-        <h2 class="signup-title">新規登録</h2>
-      </v-card-title>
-      <v-card-text>
-      <ValidationObserver
-        v-slot="{ invalid }"
-      >
-        <v-form>
-          <p v-if="error" class="errors">{{error}}</p>
-          <TextField
-            v-model="email"
-            label="メールアドレス"
-            rules="max:255|required|email"
-          />
-          <TextField
-            v-model="password"
-            label="パスワード"
-            rules="required|min:6"
-            :type="show1 ? 'text' : 'password'"
-            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-            @click:append="show1 = !show1"
-            vid="password"
-          />
-          <v-row justify="center">
-            <v-btn
-              color="success"
-              class="mx-auto white--text mt-4"
-              :disabled="invalid"
-              @click="signIn"
-            >ログイン
-            </v-btn>
-          </v-row>
-        </v-form>
-      </ValidationObserver>
-      </v-card-text>
-    </v-card>
-  </section>
+  <v-card class="mx-auto mt-5 pa-5" width="400px">
+    <v-card-title>
+      <h2 class="signup-title">ログイン</h2>
+    </v-card-title>
+    <v-card-text>
+    <ValidationObserver
+      v-slot="{ invalid }"
+    >
+      <v-form>
+        <p v-if="error" class="errors">{{error}}</p>
+        <TextField
+          v-model="email"
+          label="メールアドレス"
+          rules="max:255|required|email"
+        />
+        <TextField
+          v-model="password"
+          label="パスワード"
+          rules="required|min:6"
+          :type="show1 ? 'text' : 'password'"
+          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+          @click:append="show1 = !show1"
+          vid="password"
+        />
+        <v-row justify="center">
+          <v-btn
+            color="success"
+            class="mx-auto white--text mt-4"
+            :disabled="invalid"
+            @click="signIn"
+          >ログイン
+          </v-btn>
+        </v-row>
+      </v-form>
+    </ValidationObserver>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -68,12 +54,23 @@ export default {
   },
   middleware: ['handle-login-route'],
   methods: {
-    ...mapActions('modules/user', ['login']),
+    ...mapActions('modules/user', ['login', 'setLOADING', 'setFLASH']),
     async signIn () {
+      this.setLOADING(true)
       try {
         const firebaseUser = await firebaseApp.auth().signInWithEmailAndPassword(this.email, this.password)
         await this.login(firebaseUser.user)
+        this.setFLASH({
+          status: true,
+          message: "ログインしました"
+        })
         await this.$router.push("/")
+        setTimeout(() => {
+          this.setFLASH({
+            status: false,
+            message: ""
+          })
+        }, 2000)
       } catch (error) {
         this.error = (code => {
           switch (code) {
@@ -86,6 +83,7 @@ export default {
             }
           })(error.code);
       }
+      this.setLOADING(false)
     },
   }
 }

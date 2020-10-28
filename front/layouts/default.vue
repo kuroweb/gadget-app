@@ -1,5 +1,9 @@
 <template>
   <v-app style="background-color: #ECEFF1;">
+    <Flash/>
+    <Loading
+      v-if="loading"
+    />
     <Header/>
     <v-main>
       <v-container>
@@ -10,12 +14,24 @@
   </v-app>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import Header from '../components/organisms/Header.vue'
 import Footer from '../components/organisms/Footer.vue'
+import Loading from '../components/atoms/Loading.vue'
+import Flash from '../components/atoms/Flash.vue'
+
 export default {
+
   components: {
     Header,
     Footer,
+    Loading,
+    Flash,
+  },
+  computed: {
+    ...mapGetters('modules/user', [
+      'loading',
+    ])
   }
 }
 </script>
