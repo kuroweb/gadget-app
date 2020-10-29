@@ -11,11 +11,6 @@ export const state = () => ({
     status: false,
     message: "",
   },
-  // railsから取得したユーザーデータ
-  profile: {
-    name: "",
-    profile: ""
-  }
 })
 
 export const getters = {
@@ -39,7 +34,7 @@ export const getters = {
 
   flash(state) {
     return state.flash
-  }
+  },
 }
 
 export const actions = {
@@ -80,11 +75,6 @@ export const actions = {
     console.log('[STORE ACTIONS] - saveFLASH')
     commit('setFLASH', payload)
   },
-
-  setPROFILE({commit}, payload) {
-    console.log('[STORE ACTIONS] = savePROFILE')
-    commit('setPROFILE', payload)
-  }
 }
 
 export const mutations = {
@@ -103,10 +93,4 @@ export const mutations = {
     console.log('[STORE MUTATIONS] - setFLASH;', payload)
     state.flash = payload
   },
-
-  setPROFILE (state, payload) {
-    console.log('[STORE MUTATIONS] - setPROFILE', payload)
-    state.profile.name = payload.name
-    state.profile.profile = payload.profile
-  }
 }

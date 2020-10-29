@@ -1,18 +1,28 @@
 <template>
-  <p>{{ userData }}ユーザー詳細ページ</p>
+  <v-card class="mx-auto mt-5 pa-5" width="700px">
+    <v-card-text>
+      <p>{{ userData.name }}さん</p>
+    </v-card-text>
+  </v-card>
 </template>
 <script>
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
     }
   },
-  async asyncData({ $axios, params }) {
+  async asyncData({ $axios, params, store, redirect }) {
     const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
-    const data = await $axios.$get(baseUrl + `/v1/users`)
-    return {
-      userData: data
-    }
+    const data = await $axios.$get(baseUrl + `/v1/users/${params.id}`)
+      .catch((error) => {
+        if (error.response.status === 404) {
+          // とりあえずエラーページを実装。改修予定。
+          return redirect('/error/404')
+        }
+        return false
+      })
+    return { userData: data }
   }
 }
 </script>
