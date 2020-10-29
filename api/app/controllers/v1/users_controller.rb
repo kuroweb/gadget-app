@@ -24,6 +24,12 @@ class V1::UsersController < ApplicationController
     end
   end
 
+  def update
+    if @user.update(user_params)
+      render json: @user
+    end
+  end
+
   private
 
     def user_params
