@@ -79,7 +79,30 @@
         <v-tab-item>
           <v-card flat>
             <v-card-text>
-              <p>プロフィール編集ページをここに作成</p>
+              <v-form>
+                <ValidationObserver
+                  v-slot="{ invalid }"
+                >
+                  <div class="username-box">
+                    <TextField
+                      v-model="name"
+                      label="名前"
+                      rules="max:30|required"
+                    />
+                    <v-row justify="center">
+                      <v-btn
+                        color="success"
+                        block
+                        class="white--text"
+                        :disabled="invalid"
+                        @click="changeUserName"
+                      >変更
+                      </v-btn>
+                    </v-row>
+                  </div>
+                </ValidationObserver>
+                <p v-if="error" class="errors">{{error}}</p>
+              </v-form>
             </v-card-text>
           </v-card>
         </v-tab-item>
@@ -103,6 +126,7 @@ export default {
     return {
       email: '',
       emailOriginal: '',
+      name: '',
       password: '',
       passwordConfirm: '',
       show1: false,
@@ -112,6 +136,17 @@ export default {
       userId: '',
       isEmail: false,
       isPassword: false,
+    }
+  },
+  async asyncData({ $axios, store }) {
+    const uid = store.getters['modules/user/uid']
+    const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
+    const data = await $axios.$get(baseUrl + `/v1/users?uid=${uid}`)
+    return {
+      email: data.email,
+      emailOriginal: data.email,
+      name: data.name,
+      userId: data.id,
     }
   },
   computed: {
@@ -176,17 +211,26 @@ export default {
     openDialogForPassword() {
       this.isPassword = true
       this.dialog = true
-    }
-  },
-  async asyncData({ $axios, store }) {
-    const uid = store.getters['modules/user/uid']
-    const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
-    const data = await $axios.$get(baseUrl + `/v1/users?uid=${uid}`)
-    return {
-      email: data.email,
-      emailOriginal: data.email,
-      name: data.name,
-      userId: data.id,
+    },
+    async changeUserName() {
+      this.$axios.$patch(`/v1/users/${this.userId}`, {
+        user: {
+          name: this.name
+        }
+      })
+        .then((res) => {
+          this.name = res.name
+          this.setFLASH({
+            status: true,
+            message: "名前を変更しました"
+          })
+          setTimeout(() => {
+            this.setFLASH({
+              status: false,
+              message: ""
+            })
+          }, 2000)
+        })
     }
   },
 }
