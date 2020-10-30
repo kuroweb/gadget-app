@@ -20,3 +20,23 @@ exit
 User.first
 User.all
 iq
+User.first
+exit
+User.first
+user = User.first
+user.email = 'test1@exmaple.com'
+user
+user.save
+exit
+user = User.fist
+user = User.first
+user.email = 'test1@example.com'
+exit
+user = User.first
+user.email = 'test1@example.com'
+user.save
+exit
+user = User.first
+user.email = 'test1@example.com'
+user.save
+exit

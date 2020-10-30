@@ -1,92 +1,145 @@
 <template>
-  <v-card class="mx-auto mt-5 pa-5" width="400px">
-    <v-tabs
-      centered
-    >
-      <v-tabs-slider></v-tabs-slider>
-      <v-tab>アカウント</v-tab>
-      <v-tab>プロフィール</v-tab>
-      <v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <ValidationObserver
-              v-slot="{ invalid }"
-            >
+  <v-container>
+    <LoginDialog
+      :dialog="dialog"
+      :email="emailOriginal"
+      @loginSuccess="loginSuccess"
+      @closeDialog="dialog = false"
+    />
+    <v-card class="mx-auto mt-5 pa-5" width="400px">
+      <v-tabs
+        centered
+      >
+        <v-tabs-slider></v-tabs-slider>
+        <v-tab>アカウント</v-tab>
+        <v-tab>プロフィール</v-tab>
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
               <v-form>
-                <TextField
-                v-model="name"
-                label="名前"
-                rules="max:20|required"
-                />
-                <TextField
-                v-model="email"
-                label="メールアドレス"
-                rules="max:255|required|email"
-                />
-                <TextField
-                v-model="password"
-                label="パスワード"
-                rules="required|min:6"
-                :type="show1 ? 'text' : 'password'"
-                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                @click:append="show1 = !show1"
-                vid="password"
-                />
-                <TextField
-                v-model="passwordConfirm"
-                label="パスワード(再入力)"
-                rules="required|min:6|confirmed:パスワード"
-                :type="show2 ? 'text' : 'password'"
-                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                @click:append="show2 = !show2"
-                />
-                <v-row justify="center">
-                  <v-btn
-                  color="light-blue lighten-3"
-                  class="mx-auto white--text mt-4"
-                  :disabled="invalid"
-                  @click="changeAccount"
-                  >変更
-                  </v-btn>
-                </v-row>
+                <ValidationObserver
+                  v-slot="{ invalid }"
+                >
+                  <div class="email-box">
+                    <TextField
+                      v-model="email"
+                      label="メールアドレス"
+                      rules="max:255|required|email"
+                    />
+                    <v-row justify="center">
+                      <v-btn
+                        color="success"
+                        class="white--text"
+                        :disabled="invalid"
+                        @click="openDialog"
+                      >変更
+                      </v-btn>
+                    </v-row>
+                  </div>
+                </ValidationObserver>
+                <ValidationObserver
+                  v-slot="{ invalid }"
+                >
+                  <div class="password-box">
+                    <TextField
+                      v-model="password"
+                      label="変更後のパスワード"
+                      rules="required|min:6"
+                      :type="show1 ? 'text' : 'password'"
+                      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                      @click:append="show1 = !show1"
+                      vid="password"
+                    />
+                    <TextField
+                      v-model="passwordConfirm"
+                      label="変更後のパスワード(再入力)"
+                      rules="required|min:6|confirmed:変更後のパスワード"
+                      :type="show2 ? 'text' : 'password'"
+                      :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                      @click:append="show2 = !show2"
+                    />  
+                    <v-row justify="center">
+                      <v-btn
+                        color="success"
+                        class="white--text"
+                        :disabled="invalid"
+                        @click="changePassword"
+                      >変更
+                      </v-btn>
+                    </v-row>
+                  </div>
+                </ValidationObserver>
                 <p v-if="error" class="errors">{{error}}</p>
               </v-form>
-            </ValidationObserver>
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <p>プロフィール編集ページをここに作成</p>
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
-    </v-tabs>
-  </v-card>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <p>プロフィール編集ページをここに作成</p>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs>
+    </v-card>
+  </v-container>
 </template>
   
 <script>
+import LoginDialog from '~/components/organisms/LoginDialog.vue'
+import { mapActions, mapGetters } from 'vuex'
 import TextField from '~/components/atoms/TextField.vue'
-import firebase from "@/plugins/firebase";
+import firebaseApp from "@/plugins/firebase";
 export default {
   middleware: 'authenticated',
   components: {
-    TextField
+    TextField,
+    LoginDialog
   },
   data() {
     return {
       email: '',
-      name: '',
+      emailOriginal: '',
       password: '',
       passwordConfirm: '',
       show1: false,
       show2: false,
-      error: ''
+      error: '',
+      dialog: false,
+      userId: '',
     }
   },
   computed: {
+    ...mapGetters('modules/user', [
+      'uid',
+    ])
+  },
+  methods: {
+    ...mapActions('modules/user', ['setLOADING', 'setFLASH']),
+    async changeEmail() {
+      const user = await firebaseApp.auth().currentUser
+      user.updateEmail(this.email)
+        .then(() => {
+          this.$axios.$patch(process.env.BROWSER_BASE_URL + `/v1/users/${this.userId}`, { user: { email: this.email }})
+            .then((res) => {
+              this.emailOriginal = res.email
+              this.setFLASH({
+                status: true,
+                message: 'メールアドレスを変更しました'
+              })
+            })
+        })
+    },
+    async changePassword() {
 
+    },
+    openDialog() {
+      this.dialog = true
+    },
+    loginSuccess() {
+      this.changeEmail()
+    }
   },
   async asyncData({ $axios, store }) {
     const uid = store.getters['modules/user/uid']
@@ -94,15 +147,11 @@ export default {
     const data = await $axios.$get(baseUrl + `/v1/users?uid=${uid}`)
     return {
       email: data.email,
+      emailOriginal: data.email,
       name: data.name,
+      userId: data.id,
     }
   },
-
-  methods: {
-    async changeAccount() {
-      
-    }
-  }
 }
 </script>
   
