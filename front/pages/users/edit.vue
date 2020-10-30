@@ -29,9 +29,10 @@
                     <v-row justify="center">
                       <v-btn
                         color="success"
+                        block
                         class="white--text"
                         :disabled="invalid"
-                        @click="openDialog"
+                        @click="openDialogForEmail"
                       >変更
                       </v-btn>
                     </v-row>
@@ -61,9 +62,10 @@
                     <v-row justify="center">
                       <v-btn
                         color="success"
+                        block
                         class="white--text"
                         :disabled="invalid"
-                        @click="changePassword"
+                        @click="openDialogForPassword"
                       >変更
                       </v-btn>
                     </v-row>
@@ -108,6 +110,8 @@ export default {
       error: '',
       dialog: false,
       userId: '',
+      isEmail: false,
+      isPassword: false,
     }
   },
   computed: {
@@ -128,17 +132,50 @@ export default {
                 status: true,
                 message: 'メールアドレスを変更しました'
               })
+              setTimeout(() => {
+                this.setFLASH({
+                  status: false,
+                  message: ""
+                })
+              }, 2000)
             })
         })
     },
     async changePassword() {
-
-    },
-    openDialog() {
-      this.dialog = true
+      const user = await firebaseApp.auth().currentUser
+      user.updatePassword(this.password)
+        .then(() => {
+          //this.password = ''
+          //this.passwordConfirm = ''
+          this.setFLASH({
+            status: true,
+            message: 'パスワードを変更しました'
+          })
+          setTimeout(() => {
+            this.setFLASH({
+              status: false,
+              message: ""
+            })
+          }, 2000)
+        })
     },
     loginSuccess() {
-      this.changeEmail()
+      if(this.isEmail) {
+        this.isEmail = false
+        this.changeEmail()
+      }
+      else if(this.isPassword) {
+        this.isPassword = false
+        this.changePassword()
+      }
+    },
+    openDialogForEmail() {
+      this.isEmail = true
+      this.dialog = true
+    },
+    openDialogForPassword() {
+      this.isPassword = true
+      this.dialog = true
     }
   },
   async asyncData({ $axios, store }) {

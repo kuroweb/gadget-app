@@ -39,6 +39,7 @@
         <v-row justify="center">
           <v-btn
             color="success"
+            block
             class="mx-auto white--text mt-4"
             :disabled="invalid"
             @click="signUp"
