@@ -83,11 +83,16 @@
                 <ValidationObserver
                   v-slot="{ invalid }"
                 >
-                  <div class="username-box">
+                  <div class="profile-box">
                     <TextField
                       v-model="name"
                       label="名前"
                       rules="max:30|required"
+                    />
+                    <TextArea
+                      v-model="profile"
+                      label="プロフィール"
+                      rules="max:300"
                     />
                     <v-row justify="center">
                       <v-btn
@@ -112,6 +117,7 @@
 </template>
   
 <script>
+import TextArea from '~/components/atoms/TextArea.vue'
 import LoginDialog from '~/components/organisms/LoginDialog.vue'
 import { mapActions, mapGetters } from 'vuex'
 import TextField from '~/components/atoms/TextField.vue'
@@ -120,7 +126,8 @@ export default {
   middleware: 'authenticated',
   components: {
     TextField,
-    LoginDialog
+    LoginDialog,
+    TextArea
   },
   data() {
     return {
@@ -136,6 +143,7 @@ export default {
       userId: '',
       isEmail: false,
       isPassword: false,
+      profile: '',
     }
   },
   async asyncData({ $axios, store }) {
@@ -147,6 +155,7 @@ export default {
       emailOriginal: data.email,
       name: data.name,
       userId: data.id,
+      profile: data.profile
     }
   },
   computed: {
@@ -180,8 +189,6 @@ export default {
       const user = await firebaseApp.auth().currentUser
       user.updatePassword(this.password)
         .then(() => {
-          //this.password = ''
-          //this.passwordConfirm = ''
           this.setFLASH({
             status: true,
             message: 'パスワードを変更しました'
@@ -215,7 +222,8 @@ export default {
     async changeUserName() {
       this.$axios.$patch(`/v1/users/${this.userId}`, {
         user: {
-          name: this.name
+          name: this.name,
+          profile: this.profile
         }
       })
         .then((res) => {
