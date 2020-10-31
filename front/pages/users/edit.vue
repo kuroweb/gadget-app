@@ -21,6 +21,7 @@
                   v-slot="{ invalid }"
                 >
                   <div class="email-box">
+                    <h3>メールアドレスを変更</h3>
                     <TextField
                       v-model="email"
                       label="メールアドレス"
@@ -51,6 +52,7 @@
                       @click:append="show1 = !show1"
                       vid="password"
                     />
+                    <h3>パスワードを変更</h3>
                     <TextField
                       v-model="passwordConfirm"
                       label="変更後のパスワード(再入力)"
@@ -80,15 +82,27 @@
           <v-card flat>
             <v-card-text>
               <v-form>
+                <ValidationObserver>
+                  <div class="user-avatar-box">
+                    <h3>アバター画像</h3>
+                    <FileInput
+                      v-model="avatar"
+                      label="画像"
+                      rules="size:1000"
+                    />
+                  </div>
+                </ValidationObserver>
                 <ValidationObserver
                   v-slot="{ invalid }"
                 >
                   <div class="profile-box">
+                    <h3>アカウント名</h3>
                     <TextField
                       v-model="name"
                       label="名前"
                       rules="max:30|required"
                     />
+                    <h3>プロフィール文</h3>
                     <TextArea
                       v-model="profile"
                       label="プロフィール"
@@ -110,7 +124,7 @@
               </v-form>
               <v-form>
                 <div class="delete-box">
-                  <h3>アカウントを削除する</h3>
+                  <h3>アカウントを削除</h3>
                   <form>
                     <v-row justify="center">
                       <v-btn
@@ -132,6 +146,7 @@
 </template>
   
 <script>
+import FileInput from '~/components/atoms/FileInput.vue'
 import TextArea from '~/components/atoms/TextArea.vue'
 import LoginDialog from '~/components/organisms/LoginDialog.vue'
 import { mapActions, mapGetters } from 'vuex'
@@ -142,7 +157,8 @@ export default {
   components: {
     TextField,
     LoginDialog,
-    TextArea
+    TextArea,
+    FileInput
   },
   data() {
     return {
@@ -160,6 +176,7 @@ export default {
       isPassword: false,
       profile: '',
       isDeleteAccount: false,
+      avatar: '',
     }
   },
   async asyncData({ $axios, store }) {
