@@ -43,6 +43,7 @@
                   v-slot="{ invalid }"
                 >
                   <div class="password-box">
+                    <h3>パスワードを変更</h3>
                     <TextField
                       v-model="password"
                       label="変更後のパスワード"
@@ -52,7 +53,6 @@
                       @click:append="show1 = !show1"
                       vid="password"
                     />
-                    <h3>パスワードを変更</h3>
                     <TextField
                       v-model="passwordConfirm"
                       label="変更後のパスワード(再入力)"

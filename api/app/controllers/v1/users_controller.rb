@@ -30,6 +30,12 @@ class V1::UsersController < ApplicationController
     end
   end
 
+  def update_avatar
+    @user = User.find(params[:id])
+    @user.avatar.attach(params[:avatar])
+    render json: @user
+  end
+
   def destroy
     @user.destroy
   end
@@ -37,7 +43,7 @@ class V1::UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :uid, :profile)
+      params.require(:user).permit(:name, :email, :uid, :profile, :avatar)
     end
 
     def set_user
