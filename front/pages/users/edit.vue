@@ -108,6 +108,21 @@
                 </ValidationObserver>
                 <p v-if="error" class="errors">{{error}}</p>
               </v-form>
+              <v-form>
+                <div class="delete-box">
+                  <h3>アカウントを削除する</h3>
+                  <form>
+                    <v-row justify="center">
+                      <v-btn
+                        block
+                        color="white--text red"
+                        @click="openDialogForDeleteAccount"
+                      >削除
+                      </v-btn>
+                    </v-row>
+                  </form>
+                </div>
+              </v-form>
             </v-card-text>
           </v-card>
         </v-tab-item>
@@ -144,6 +159,7 @@ export default {
       isEmail: false,
       isPassword: false,
       profile: '',
+      isDeleteAccount: false,
     }
   },
   async asyncData({ $axios, store }) {
@@ -164,7 +180,33 @@ export default {
     ])
   },
   methods: {
-    ...mapActions('modules/user', ['setLOADING', 'setFLASH']),
+    ...mapActions('modules/user', ['setLOADING', 'setFLASH', 'logout']),
+    loginSuccess() {
+      if(this.isEmail) {
+        this.isEmail = false
+        this.changeEmail()
+      }
+      else if(this.isPassword) {
+        this.isPassword = false
+        this.changePassword()
+      }
+      else if(this.isDeleteAccount) {
+        this.isDeleteAccount = false
+        this.destroyUserAccount()
+      }
+    },
+    openDialogForEmail() {
+      this.isEmail = true
+      this.dialog = true
+    },
+    openDialogForPassword() {
+      this.isPassword = true
+      this.dialog = true
+    },
+    openDialogForDeleteAccount() {
+      this.isDeleteAccount = true
+      this.dialog = true
+    },
     async changeEmail() {
       const user = await firebaseApp.auth().currentUser
       user.updateEmail(this.email)
@@ -201,24 +243,6 @@ export default {
           }, 2000)
         })
     },
-    loginSuccess() {
-      if(this.isEmail) {
-        this.isEmail = false
-        this.changeEmail()
-      }
-      else if(this.isPassword) {
-        this.isPassword = false
-        this.changePassword()
-      }
-    },
-    openDialogForEmail() {
-      this.isEmail = true
-      this.dialog = true
-    },
-    openDialogForPassword() {
-      this.isPassword = true
-      this.dialog = true
-    },
     async changeUserName() {
       this.$axios.$patch(`/v1/users/${this.userId}`, {
         user: {
@@ -239,13 +263,42 @@ export default {
             })
           }, 2000)
         })
+    },
+    async destroyUserAccount() {
+      const user = await firebaseApp.auth().currentUser
+      user.delete()
+        .then(() => {
+          this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/users/${this.userId}`)
+        })
+          .then(() => {
+            this.logout()
+            this.setFLASH({
+              status: true,
+              message: "ユーザーを削除しました"
+            })
+            setTimeout(() => {
+              this.setFLASH({
+                status: false,
+                message: ""
+              })
+            }, 2000)
+            this.$router.push("/")
+          })
     }
-  },
+  }
 }
 </script>
   
 <style>
   .user-edit-title {
     font-size: 24px;
+  }
+  .password-box {
+    margin-top: 24px;
+    padding-top: 16px;
+  }
+  .delete-box {
+    margin-top: 24px;
+    padding-top: 16px;
   }
 </style>

@@ -40,3 +40,21 @@ user = User.first
 user.email = 'test1@example.com'
 user.save
 exit
+User.second
+user = User.second
+user.destroy
+User.all
+exit
+user = User.second
+user.delete
+exit
+user = User.second
+user.destroy
+user = User.second
+user.destroy
+user = User.second
+user.destroy
+user = User.second
+user.destroy
+User.all
+exit

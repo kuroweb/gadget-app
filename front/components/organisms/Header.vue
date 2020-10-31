@@ -14,33 +14,43 @@
     <v-spacer />
     <div class="header-list">
       <v-btn
-      v-if="!isAuthenticated"
-      to="/auth/signin"
-      text
-      color="white"
-      :outlined="true"
-      small
+        v-if="!isAuthenticated"
+        to="/auth/signin"
+        text
+        color="white"
+        :outlined="true"
+        small
       >
       ログイン
       </v-btn>
       <v-btn
-      v-if="!isAuthenticated"
-      to="/auth/signup"
-      text
-      color="white"
-      :outlined="true"
-      small
+        v-if="!isAuthenticated"
+        to="/auth/signup"
+        text
+        color="white"
+        :outlined="true"
+        small
       >
       新規登録
       </v-btn>
       <v-btn
-      v-if="isAuthenticated"
-      to="/"
-      text
-      color="white"
-      :outlined="true"
-      small
-      @click="logOut"
+        v-if="isAuthenticated"
+        to="/users/edit"
+        text
+        color="white"
+        :outlined="true"
+        small
+      >
+      マイページ
+      </v-btn>
+      <v-btn
+        v-if="isAuthenticated"
+        to="/"
+        text
+        color="white"
+        :outlined="true"
+        small
+        @click="logOut"
       >
       ログアウト
       </v-btn>
@@ -57,10 +67,20 @@ import { mapGetters, mapActions } from 'vuex'
       ])
     },
     methods: {
-      ...mapActions('modules/user', [ 'logout' ]),
+      ...mapActions('modules/user', [ 'logout', 'setFLASH' ]),
       async logOut () {
         await this.logout()
         this.$router.push('/')
+        this.setFLASH({
+          status: true,
+          message: "ログアウトしました"
+        })
+        setTimeout(() => {
+          this.setFLASH({
+            status: false,
+            message: ""
+          })
+        }, 2000)
 
         // this.logout().then(() => {
         //   this.$router.push('/')

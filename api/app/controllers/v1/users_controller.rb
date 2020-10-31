@@ -1,5 +1,5 @@
 class V1::UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update]
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
     if params[:uid] 
@@ -28,6 +28,10 @@ class V1::UsersController < ApplicationController
     if @user.update(user_params)
       render json: @user
     end
+  end
+
+  def destroy
+    @user.destroy
   end
 
   private
