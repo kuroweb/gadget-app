@@ -10,6 +10,7 @@
       <v-tabs
         centered
       >
+      
         <v-tabs-slider></v-tabs-slider>
         <v-tab>アカウント</v-tab>
         <v-tab>プロフィール</v-tab>
@@ -89,7 +90,16 @@
                       v-model="avatar"
                       label="画像"
                       rules="size:1000"
+                      :avatar_url="avatar_url"
                     />
+                    <v-row justify="center">
+                      <v-btn
+                        block
+                        color="success"
+                        @click="changeUserAvatar"
+                      >画像変更ボタン
+                      </v-btn>
+                    </v-row>
                   </div>
                 </ValidationObserver>
                 <ValidationObserver
@@ -114,7 +124,7 @@
                         block
                         class="white--text"
                         :disabled="invalid"
-                        @click="changeUserName"
+                        @click="changeUserProfile"
                       >変更
                       </v-btn>
                     </v-row>
@@ -176,7 +186,7 @@ export default {
       isPassword: false,
       profile: '',
       isDeleteAccount: false,
-      avatar: '',
+      avatar: [],
     }
   },
   async asyncData({ $axios, store }) {
@@ -188,7 +198,8 @@ export default {
       emailOriginal: data.email,
       name: data.name,
       userId: data.id,
-      profile: data.profile
+      profile: data.profile,
+      avatar_url: data.avatar_url
     }
   },
   computed: {
@@ -260,8 +271,8 @@ export default {
           }, 2000)
         })
     },
-    async changeUserName() {
-      this.$axios.$patch(`/v1/users/${this.userId}`, {
+    async changeUserProfile() {
+      this.$axios.$patch(process.env.BROWSER_BASE_URL +　`/v1/users/${this.userId}`, {
         user: {
           name: this.name,
           profile: this.profile
@@ -271,7 +282,42 @@ export default {
           this.name = res.name
           this.setFLASH({
             status: true,
-            message: "名前を変更しました"
+            message: "プロフィールを変更しました"
+          })
+          setTimeout(() => {
+            this.setFLASH({
+              status: false,
+              message: ""
+            })
+          }, 2000)
+        })
+    },
+    async changeUserAvatar() {
+      const formData = new FormData()
+      formData.append('avatar', this.avatar)
+      const config = {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      }
+      this.$axios.$patch(process.env.BROWSER_BASE_URL + `/v1/users/${this.userId}/update_avatar`, formData, config)
+        .then((res) => {
+          this.avatar = res.avatar
+          this.setFLASH({
+            status: true,
+            message: "画像を変更しました"
+          })
+          setTimeout(() => {
+            this.setFLASH({
+              status: false,
+              message: ""
+            })
+          }, 2000)
+        })
+        .catch((error) => {
+          this.setFLASH({
+            status: true,
+            message: "画像の更新に失敗しました。"
           })
           setTimeout(() => {
             this.setFLASH({
@@ -301,7 +347,7 @@ export default {
             }, 2000)
             this.$router.push("/")
           })
-    }
+    },
   }
 }
 </script>
@@ -315,6 +361,10 @@ export default {
     padding-top: 16px;
   }
   .delete-box {
+    margin-top: 24px;
+    padding-top: 16px;
+  }
+  .profile-box {
     margin-top: 24px;
     padding-top: 16px;
   }

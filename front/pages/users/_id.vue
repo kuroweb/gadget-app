@@ -1,7 +1,16 @@
 <template>
   <v-card class="mx-auto mt-5 pa-5" width="700px">
     <v-card-text>
-      <p>{{ userData.name }}さん</p>
+      <p>{{ userData }}さん</p>
+      <v-avatar
+        v-if="userData.avatar_url"
+        size="62"
+      >
+        <img
+          :src="userData.avatar_url"
+          alt="Avatar"
+        >
+      </v-avatar>
     </v-card-text>
   </v-card>
 </template>

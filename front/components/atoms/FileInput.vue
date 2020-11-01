@@ -6,25 +6,31 @@
     :vid="$attrs.label"
   >
     <v-row justify="center">
-      <v-avatar
-        v-if="uploadImageUrl"
-        size="62"
+      <v-avatar 
+      size="62"
       >
-      <img
-        :src="uploadImageUrl"
-        alt="Avatar"
-      >
+        <img 
+          v-if="uploadImageUrl"
+          :src="uploadImageUrl"
+          alt="Avater"
+        >
+        <img 
+          v-else-if="avatar_url"
+          :src="avatar_url"
+          alt="Avater"
+        >
       </v-avatar>
     </v-row>
     <v-file-input
+      v-model="inputValue"
       accept="image/*"
       label="File input"
+      prepend-icon="mdi-image"
+      @change="onImagePicked"
       :error-messages="errors"
       :success="valid"
       v-bind="$attrs"
       v-on="$listeners"
-      v-model="inputValue"
-      @change="onImagePicked"
     >
     </v-file-input>
   </ValidationProvider>
@@ -38,7 +44,11 @@ export default {
     },
     value: {
       type: null
-    }
+    },
+    avatar_url: {
+      type: String,
+      required: true
+    },
   },
   data() {
     return {

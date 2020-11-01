@@ -58,3 +58,9 @@ user = User.second
 user.destroy
 User.all
 exit
+Rails.env
+ENV['AWS_ACCESS_KEY_ID']
+ENV['AWS_SECRET_ACCESS_KEY']
+exit
+User.second
+exit
