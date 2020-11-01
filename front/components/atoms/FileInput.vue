@@ -12,12 +12,17 @@
         <img 
           v-if="uploadImageUrl"
           :src="uploadImageUrl"
-          alt="Avater"
+          alt="Avatar"
         >
         <img 
           v-else-if="avatar_url"
           :src="avatar_url"
-          alt="Avater"
+          alt="Avatar"
+        >
+        <img
+          v-else
+          src="~/assets/images/default_icon.jpeg"
+          alt="Avatar"
         >
       </v-avatar>
     </v-row>
@@ -46,8 +51,7 @@ export default {
       type: null
     },
     avatar_url: {
-      type: String,
-      required: true
+      type: null,
     },
   },
   data() {

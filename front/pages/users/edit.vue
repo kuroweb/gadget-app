@@ -1,3 +1,4 @@
+<!-- このスパゲッティコードはイケマセン。要修正。 -->
 <template>
   <v-container>
     <LoginDialog
