@@ -29,7 +29,6 @@
     <v-file-input
       v-model="inputValue"
       accept="image/*"
-      label="File input"
       prepend-icon="mdi-image"
       @change="onImagePicked"
       :error-messages="errors"

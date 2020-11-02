@@ -57,23 +57,26 @@ export default {
     ...mapActions('modules/user', ['login', 'setLOADING', 'setFLASH']),
     async signIn () {
       this.setLOADING(true)
-      try {
-        const firebaseUser = await firebaseApp.auth().signInWithEmailAndPassword(this.email, this.password)
-        await this.login(firebaseUser.user)
-        this.setFLASH({
-          status: true,
-          message: "ログインしました"
+      firebaseApp.auth().signInWithEmailAndPassword(this.email, this.password)
+        .then((res) => {
+          this.login(res.user)
         })
-        this.setLOADING(false)
-        this.$router.push("/")
-        setTimeout(() => {
+        .then(() => {
           this.setFLASH({
-            status: false,
-            message: ""
+            status: true,
+            message: "ログインしました"
           })
-        }, 2000)
-      } catch (error) {
-        this.error = (code => {
+          this.setLOADING(false)
+          setTimeout(() => {
+            this.setFLASH({
+              status: false,
+              message: ""
+            })
+          }, 2000)
+          this.$router.push("/")
+        })
+        .catch((error) => {
+          this.error = (code => {
           switch (code) {
             case "auth/user-not-found":
               return "メールアドレスが間違っています";
@@ -83,9 +86,8 @@ export default {
               return "※メールアドレスとパスワードをご確認ください";
             }
           })(error.code);
-      }
-      
-    },
+        })
+    }
   }
 }
 </script>

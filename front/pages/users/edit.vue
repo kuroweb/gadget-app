@@ -13,73 +13,8 @@
       >
       
         <v-tabs-slider></v-tabs-slider>
-        <v-tab>アカウント</v-tab>
         <v-tab>プロフィール</v-tab>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <v-form>
-                <ValidationObserver
-                  v-slot="{ invalid }"
-                >
-                  <div class="email-box">
-                    <h3>メールアドレスを変更</h3>
-                    <TextField
-                      v-model="email"
-                      label="メールアドレス"
-                      rules="max:255|required|email"
-                    />
-                    <v-row justify="center">
-                      <v-btn
-                        color="success"
-                        block
-                        class="white--text"
-                        :disabled="invalid"
-                        @click="openDialogForEmail"
-                      >変更
-                      </v-btn>
-                    </v-row>
-                  </div>
-                </ValidationObserver>
-                <ValidationObserver
-                  v-slot="{ invalid }"
-                >
-                  <div class="password-box">
-                    <h3>パスワードを変更</h3>
-                    <TextField
-                      v-model="password"
-                      label="変更後のパスワード"
-                      rules="required|min:6"
-                      :type="show1 ? 'text' : 'password'"
-                      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                      @click:append="show1 = !show1"
-                      vid="password"
-                    />
-                    <TextField
-                      v-model="passwordConfirm"
-                      label="変更後のパスワード(再入力)"
-                      rules="required|min:6|confirmed:変更後のパスワード"
-                      :type="show2 ? 'text' : 'password'"
-                      :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                      @click:append="show2 = !show2"
-                    />  
-                    <v-row justify="center">
-                      <v-btn
-                        color="success"
-                        block
-                        class="white--text"
-                        :disabled="invalid"
-                        @click="openDialogForPassword"
-                      >変更
-                      </v-btn>
-                    </v-row>
-                  </div>
-                </ValidationObserver>
-                <p v-if="error" class="errors">{{error}}</p>
-              </v-form>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
+        <v-tab>登録情報</v-tab>
         <v-tab-item>
           <v-card flat>
             <v-card-text>
@@ -89,7 +24,7 @@
                     <h3>アバター画像</h3>
                     <FileInput
                       v-model="avatar"
-                      label="画像"
+                      label="画像を選択"
                       rules="size:1000"
                       :avatar_url="avatar_url"
                     />
@@ -98,7 +33,8 @@
                         block
                         color="success"
                         @click="changeUserAvatar"
-                      >画像変更ボタン
+                      >
+                        変更
                       </v-btn>
                     </v-row>
                   </div>
@@ -126,7 +62,8 @@
                         class="white--text"
                         :disabled="invalid"
                         @click="changeUserProfile"
-                      >変更
+                      >
+                        変更
                       </v-btn>
                     </v-row>
                   </div>
@@ -134,20 +71,87 @@
                 <p v-if="error" class="errors">{{error}}</p>
               </v-form>
               <v-form>
-                <div class="delete-box">
-                  <h3>アカウントを削除</h3>
-                  <form>
+              </v-form>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <v-form>
+                <ValidationObserver
+                  v-slot="{ invalid }"
+                >
+                  <div class="email-box">
+                    <h3>メールアドレスを変更する</h3>
+                    <TextField
+                      v-model="email"
+                      label="メールアドレス"
+                      rules="max:255|required|email"
+                    />
                     <v-row justify="center">
                       <v-btn
+                        color="success"
                         block
-                        color="white--text red"
-                        @click="openDialogForDeleteAccount"
-                      >削除
+                        class="white--text"
+                        :disabled="invalid"
+                        @click="openDialogForEmail"
+                      >
+                        変更
                       </v-btn>
                     </v-row>
-                  </form>
-                </div>
+                  </div>
+                </ValidationObserver>
+                <ValidationObserver
+                  v-slot="{ invalid }"
+                >
+                  <div class="password-box">
+                    <h3>パスワードを変更する</h3>
+                    <TextField
+                      v-model="password"
+                      label="変更後のパスワード"
+                      rules="required|min:6"
+                      :type="show1 ? 'text' : 'password'"
+                      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                      @click:append="show1 = !show1"
+                      vid="password"
+                    />
+                    <TextField
+                      v-model="passwordConfirm"
+                      label="変更後のパスワード(再入力)"
+                      rules="required|min:6|confirmed:変更後のパスワード"
+                      :type="show2 ? 'text' : 'password'"
+                      :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                      @click:append="show2 = !show2"
+                    />  
+                    <v-row justify="center">
+                      <v-btn
+                        color="success"
+                        block
+                        class="white--text"
+                        :disabled="invalid"
+                        @click="openDialogForPassword"
+                      >
+                        変更
+                      </v-btn>
+                    </v-row>
+                  </div>
+                </ValidationObserver>
+                <p v-if="error" class="errors">{{error}}</p>
               </v-form>
+              <div class="delete-box">
+                <h3>アカウントを削除する</h3>
+                <form>
+                  <v-row justify="center">
+                    <v-btn
+                      block
+                      color="white--text red"
+                      @click="openDialogForDeleteAccount"
+                    >削除
+                    </v-btn>
+                  </v-row>
+                </form>
+              </div>
             </v-card-text>
           </v-card>
         </v-tab-item>

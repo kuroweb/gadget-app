@@ -45,6 +45,16 @@
       </v-btn>
       <v-btn
         v-if="isAuthenticated"
+        :to="`/users/edit`"
+        text
+        color="white"
+        :outlined="true"
+        small
+      >
+      編集
+      </v-btn>
+      <v-btn
+        v-if="isAuthenticated"
         to="/"
         text
         color="white"

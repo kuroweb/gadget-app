@@ -69,3 +69,7 @@ user
 user.email = "test1@example.com"
 user.save
 exit
+User.all
+user = User.fifth
+user.destroy
+exit
