@@ -35,7 +35,7 @@
       </v-btn>
       <v-btn
         v-if="isAuthenticated"
-        to="/users/edit"
+        :to="`/users/${userId}`"
         text
         color="white"
         :outlined="true"
@@ -64,6 +64,7 @@ import { mapGetters, mapActions } from 'vuex'
     computed: {
       ...mapGetters('modules/user', [
         'isAuthenticated',
+        'userId'
       ])
     },
     methods: {

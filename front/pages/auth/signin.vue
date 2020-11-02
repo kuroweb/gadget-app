@@ -64,7 +64,8 @@ export default {
           status: true,
           message: "ログインしました"
         })
-        await this.$router.push("/")
+        this.setLOADING(false)
+        this.$router.push("/")
         setTimeout(() => {
           this.setFLASH({
             status: false,
@@ -83,7 +84,7 @@ export default {
             }
           })(error.code);
       }
-      this.setLOADING(false)
+      
     },
   }
 }

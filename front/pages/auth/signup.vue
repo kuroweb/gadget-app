@@ -76,45 +76,50 @@ export default {
     }
   },
   methods: {
-    ...mapActions('modules/user', ['login', 'setLOADING', 'setFLASH']),
+    ...mapActions('modules/user', ['login', 'setLOADING', 'setFLASH', 'loadUSERDATA']),
     async signUp () {
       this.setLOADING(true)
-      try {
-        // 要リファクタリング（新規登録、APIリクエスト、それぞれにエラーハンドリングが必要）
-        const firebaseUser = await firebaseApp.auth().createUserWithEmailAndPassword(this.email, this.password)
-        await this.login(firebaseUser.user)
-        const user = await {
-          name: this.name,
-          email: firebaseUser.user.email,
-          uid: firebaseUser.user.uid
-        }
-        this.$axios.$post(process.env.BROWSER_BASE_URL + "/v1/users", { user })
-        this.setFLASH({
-          status: true,
-          message: "登録に成功しました"
+      firebaseApp.auth().createUserWithEmailAndPassword(this.email, this.password)
+        .then((res) => {
+          const user = {
+            name: this.name,
+            email: res.user.email,
+            uid: res.user.uid
+          }
+          this.login(res.user)
+          this.$axios.$post(process.env.BROWSER_BASE_URL + "/v1/users", { user })
+        .then((res) => {
+          this.loadUSERDATA(res.uid)
         })
-        await this.$router.push("/")
-        setTimeout(() => {
+        .then((res) => {
+          this.setLOADING(false)
           this.setFLASH({
-            status: false,
-            message: ""
+            status: true,
+            message: "登録に成功しました"
           })
-        }, 2000)
-      } catch (error) {
-        this.error = (code => {
-          switch (code) {
-            case "auth/email-already-in-use":
-              return "既にそのメールアドレスは使われています";
-            case "auth/wrong-password":
-              return "※パスワードが正しくありません";
-            case "auth/weak-password":
-              return "※パスワードは最低6文字以上にしてください";
-            default:
-              return "※メールアドレスとパスワードをご確認ください";
+          setTimeout(() => {
+            this.setFLASH({
+              status: false,
+              message: ""
+            })
+          }, 2000)
+          this.$router.push("/")
+        })
+        .catch((error) => {
+          this.error = (code => {
+            switch (code) {
+              case "auth/email-already-in-use":
+                return "既にそのメールアドレスは使われています";
+              case "auth/wrong-password":
+                return "※パスワードが正しくありません";
+              case "auth/weak-password":
+                return "※パスワードは最低6文字以上にしてください";
+              default:
+                return "※メールアドレスとパスワードをご確認ください";
             }
           })(error.code);
-      }
-      this.setLOADING(false)
+        })
+      })
     },
   }
 }
@@ -126,4 +131,3 @@ export default {
   }
 
 </style>
-

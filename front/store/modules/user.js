@@ -30,7 +30,8 @@ export const getters = {
   },
 
   userId(state) {
-    return state.userData.id
+    if (state.userData && state.userData.id) return state.userData.id
+    else return null
   },
 
   userData(state) {
@@ -56,9 +57,11 @@ export const actions = {
       email: user.email,
       uid: user.uid
     }
+    const uid = user.uid
 
     Cookies.set('access_token', token) // saving token in cookie for server rendering
     await dispatch('setUSER', userInfo)
+    await dispatch('loadUSERDATA', uid)
     console.log('[STORE ACTIONS] - in login, response:', status)
 
   },
@@ -69,6 +72,7 @@ export const actions = {
 
     Cookies.remove('access_token');
     commit('setUSER', null)
+    commit('setUSERDATA', null)
   },
 
   setUSER({commit}, user) {
@@ -88,7 +92,9 @@ export const actions = {
 
   async loadUSERDATA ({ commit }, payload) {
     try {
-      const data = await this.$axios.$get(process.env.API_BASE_URL + `/v1/users?uid=${payload}`)
+      console.log('test')
+      const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
+      const data = await this.$axios.$get(baseUrl + `/v1/users?uid=${payload}`)
       commit('setUSERDATA', data)
     } catch (e) {
       console.log(e)
