@@ -64,3 +64,8 @@ ENV['AWS_SECRET_ACCESS_KEY']
 exit
 User.second
 exit
+user = User.first
+user
+user.email = "test1@example.com"
+user.save
+exit

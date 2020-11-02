@@ -191,23 +191,25 @@ export default {
     }
   },
   async asyncData({ $axios, store }) {
-    const uid = store.getters['modules/user/uid']
+    const userData = store.getters['modules/user/userData']
     const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
-    const data = await $axios.$get(baseUrl + `/v1/users?uid=${uid}`)
+    const res = await $axios.$get(baseUrl + `/v1/users/${userData.id}`)
     return {
-      email: data.email,
-      emailOriginal: data.email,
-      name: data.name,
-      userId: data.id,
-      profile: data.profile,
-      avatar_url: data.avatar_url
+      email: res.email,
+      emailOriginal: res.email,
+      name: res.name,
+      userId: res.id,
+      profile: res.profile,
+      avatar_url: res.avatar_url
     }
   },
+
   computed: {
-    ...mapGetters('modules/user', [
-      'uid',
-    ])
+    ...mapGetters({
+      userData: 'modules/user/userData',
+    })
   },
+
   methods: {
     ...mapActions('modules/user', ['setLOADING', 'setFLASH', 'logout']),
     loginSuccess() {

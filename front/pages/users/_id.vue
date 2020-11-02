@@ -27,7 +27,7 @@
   </v-card>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   data () {
     return {

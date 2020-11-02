@@ -11,6 +11,7 @@ export const state = () => ({
     status: false,
     message: "",
   },
+  userData: null,
 })
 
 export const getters = {
@@ -28,10 +29,19 @@ export const getters = {
     return !!state.user && !!state.user.uid
   },
 
+  userId(state) {
+    return state.userData.id
+  },
+
+  userData(state) {
+    return state.userData
+  },
+
+  // 要リファクタリング（index.jsに移動）
   loading(state) {
     return state.loading
   },
-
+  // 要リファクタリング（index.jsに移動）
   flash(state) {
     return state.flash
   },
@@ -75,6 +85,15 @@ export const actions = {
     console.log('[STORE ACTIONS] - saveFLASH')
     commit('setFLASH', payload)
   },
+
+  async loadUSERDATA ({ commit }, payload) {
+    try {
+      const data = await this.$axios.$get(process.env.API_BASE_URL + `/v1/users?uid=${payload}`)
+      commit('setUSERDATA', data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 
 export const mutations = {
@@ -93,4 +112,7 @@ export const mutations = {
     console.log('[STORE MUTATIONS] - setFLASH;', payload)
     state.flash = payload
   },
+  setUSERDATA (state, payload) {
+    state.userData = payload
+  }
 }
