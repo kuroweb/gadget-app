@@ -1,0 +1,2 @@
+.less-history-file:
+.search

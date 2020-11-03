@@ -6,13 +6,23 @@ class User < ApplicationRecord
     dependent: :destroy
   has_many :following, through: :active_relationships, source: :followed
 
-
-  # ユーザー登録時のバリデーションを今後実装
-
-
-
   def avatar_url
     avatar.attached? ? url_for(avatar) : nil
   end
   
+  # フォロー関連
+  def follow(other_user)
+    following << other_user
+  end
+
+  def unfollow(other_user)
+    active_relationships.find_by(followed_id: other_user.id).destroy
+  end
+
+  def following?(other_user)
+    following.include?(other_user)
+  end
+
+
+
 end

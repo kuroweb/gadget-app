@@ -73,3 +73,25 @@ User.all
 user = User.fifth
 user.destroy
 exit
+Relationship.all
+User.all
+user = User.find_by(id: 14)
+user.id = 2
+use.save
+user.save
+User.second
+user = User.third
+user.id = 3
+user.save
+user = User.forth
+user = User.fourth
+user.id = 4
+user.save
+User.all
+exit
+Relationship.all
+exit
+Relationship.all
+a = Relationship.first
+a.destroy
+exit
