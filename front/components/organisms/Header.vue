@@ -65,40 +65,80 @@
       ログアウト
       </v-btn>
     </div>
+    <div class="text-center">
+      <v-switch
+        v-model="closeOnClick"
+        label="Close on click"
+      ></v-switch>
+      <v-menu
+        top
+        :close-on-click="closeOnClick"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            color="primary"
+            dark
+            v-bind="attrs"
+            v-on="on"
+          >
+            <img
+            />
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in items"
+            :key="index"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </div>
   </v-app-bar>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-  export default {
-    computed: {
-      ...mapGetters('modules/user', [
-        'isAuthenticated',
-        'userId'
-      ])
-    },
-    methods: {
-      ...mapActions('modules/user', [ 'logout', 'setFLASH' ]),
-      async logOut () {
-        await this.logout()
-        this.$router.push('/')
+export default {
+  data: () => ({
+    items: [
+      { title: 'Click Me' },
+      { title: 'Click Me' },
+      { title: 'Click Me' },
+      { title: 'Click Me 2' },
+    ],
+    closeOnClick: true,
+  }),
+  computed: {
+    ...mapGetters('modules/user', [
+      'isAuthenticated',
+      'userId',
+      'userData'
+    ])
+  },
+  methods: {
+    ...mapActions('modules/user', [ 'logout', 'setFLASH' ]),
+    async logOut () {
+      await this.logout()
+      this.$router.push('/')
+      this.setFLASH({
+        status: true,
+        message: "ログアウトしました"
+      })
+      setTimeout(() => {
         this.setFLASH({
-          status: true,
-          message: "ログアウトしました"
+          status: false,
+          message: ""
         })
-        setTimeout(() => {
-          this.setFLASH({
-            status: false,
-            message: ""
-          })
-        }, 2000)
+      }, 2000)
 
-        // this.logout().then(() => {
-        //   this.$router.push('/')
-        // }).catch((error) => {
-        //   console.log(error.message)
-        // })
-      }
+      // this.logout().then(() => {
+      //   this.$router.push('/')
+      // }).catch((error) => {
+      //   console.log(error.message)
+      // })
     }
   }
+}
 </script>

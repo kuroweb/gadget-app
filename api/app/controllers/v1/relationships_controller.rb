@@ -1,6 +1,8 @@
 class V1::RelationshipsController < ApplicationController
   before_action :set_user
 
+  # 自分自身をフォローできないように要調整
+  ## if文でcurrent_userとother_userを比較すれば良いんじゃ？
   def create
     @current_user.follow(@other_user)
     render json: @other_user

@@ -9,17 +9,17 @@
     >
       <v-form>
         <p v-if="error" class="errors">{{error}}</p>
-        <TextField
+        <TextFieldWithValidation
           v-model="name"
           label="名前"
           rules="max:20|required"
         />
-        <TextField
+        <TextFieldWithValidation
           v-model="email"
           label="メールアドレス"
           rules="max:255|required|email"
         />
-        <TextField
+        <TextFieldWithValidation
           v-model="password"
           label="パスワード"
           rules="required|min:6"
@@ -28,7 +28,7 @@
           @click:append="show1 = !show1"
           vid="password"
         />
-        <TextField
+        <TextFieldWithValidation
           v-model="passwordConfirm"
           label="パスワード(再入力)"
           rules="required|min:6|confirmed:パスワード"
@@ -56,12 +56,12 @@
 <script>
 import { mapActions } from 'vuex'
 import firebaseApp from '@/plugins/firebase'
-import TextField from '~/components/atoms/TextField.vue'
+import TextFieldWithValidation from '~/components/molecules/inputs/TextFieldWithValidation.vue'
 
 export default {
   middleware: 'handle-login-route',
   components: {
-    TextField,
+    TextFieldWithValidation,
   },
   data () {
     return {

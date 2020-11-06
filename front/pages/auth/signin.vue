@@ -9,12 +9,12 @@
     >
       <v-form>
         <p v-if="error" class="errors">{{error}}</p>
-        <TextField
+        <TextFieldWithValidation
           v-model="email"
           label="メールアドレス"
           rules="max:255|required|email"
         />
-        <TextField
+        <TextFieldWithValidation
           v-model="password"
           label="パスワード"
           rules="required|min:6"
@@ -39,10 +39,14 @@
 </template>
 
 <script>
+import TextFieldWithValidation from '~/components/molecules/inputs/TextFieldWithValidation.vue'
 import { mapActions } from 'vuex'
 import firebaseApp from "@/plugins/firebase"
 
 export default {
+  components: {
+    TextFieldWithValidation,
+  },
   data () {
     return {
       email: '',

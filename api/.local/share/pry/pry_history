@@ -95,3 +95,19 @@ Relationship.all
 a = Relationship.first
 a.destroy
 exit
+Relationship.all
+user = Relationship.first
+user = Relationship.second
+user.destroy
+Relationship.all
+exit
+user = User.fist
+user = User.first
+user.following
+user.following.count
+user = User.second
+user.following.count
+exit
+user = User.first
+user.following
+exit

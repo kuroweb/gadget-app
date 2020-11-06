@@ -21,7 +21,7 @@
           <ValidationObserver
             v-slot="{ invalid }"
           >
-            <TextField
+            <TextFieldWithValidation
               v-model="password"
               label="現在のパスワード"
               rules="required|min:6"
@@ -51,11 +51,11 @@
 </template>
   
 <script>
-import TextField from '~/components/atoms/TextField.vue'
+import TextFieldWithValidation from '~/components/molecules/inputs/TextFieldWithValidation.vue'
 import firebaseApp from "@/plugins/firebase"
 export default {
   components: {
-    TextField,
+    TextFieldWithValidation,
   },
   props: {
     dialog: {

@@ -21,10 +21,10 @@
               <v-form>
                 <ValidationObserver>
                   <div class="user-avatar-box">
-                    <EditAvatarForm
+                    <h3>アバター画像</h3>
+                    <FileInput
                       v-model="avatar"
-                      label="アイコン画像"
-                      icon="mdi-account-edit"
+                      label="画像を選択"
                       rules="size:1000"
                       :avatar_url="avatar_url"
                     />
@@ -43,16 +43,16 @@
                   v-slot="{ invalid }"
                 >
                   <div class="profile-box">
-                    <EditTextField
+                    <h3>アカウント名</h3>
+                    <TextField
                       v-model="name"
                       label="名前"
-                      icon="mdi-account-edit"
                       rules="max:30|required"
                     />
-                    <EditTextArea
+                    <h3>プロフィール文</h3>
+                    <TextArea
                       v-model="profile"
                       label="プロフィール"
-                      icon="mdi-account-details"
                       rules="max:300"
                     />
                     <v-row justify="center">
@@ -83,10 +83,10 @@
                   v-slot="{ invalid }"
                 >
                   <div class="email-box">
-                    <EditTextField
+                    <h3>メールアドレスを変更する</h3>
+                    <TextField
                       v-model="email"
                       label="メールアドレス"
-                      icon="mdi-account-edit"
                       rules="max:255|required|email"
                     />
                     <v-row justify="center">
@@ -107,7 +107,7 @@
                 >
                   <div class="password-box">
                     <h3>パスワードを変更する</h3>
-                    <TextFieldWithValidation
+                    <TextField
                       v-model="password"
                       label="変更後のパスワード"
                       rules="required|min:6"
@@ -116,7 +116,7 @@
                       @click:append="show1 = !show1"
                       vid="password"
                     />
-                    <TextFieldWithValidation
+                    <TextField
                       v-model="passwordConfirm"
                       label="変更後のパスワード(再入力)"
                       rules="required|min:6|confirmed:変更後のパスワード"
@@ -161,20 +161,19 @@
 </template>
   
 <script>
-import TextFieldWithValidation from '~/components/molecules/inputs/TextFieldWithValidation.vue'
-import EditAvatarForm from '~/components/organisms/users/EditAvatarForm.vue'
-import EditTextArea from '~/components/organisms/users/EditTextArea.vue'
-import EditTextField from '~/components/organisms/users/EditTextField.vue'
-import LoginDialog from '~/components/organisms/users/LoginDialog.vue'
+import FileInput from '~/components/atoms/FileInput.vue'
+import TextArea from '~/components/atoms/TextArea.vue'
+import LoginDialog from '~/components/organisms/LoginDialog.vue'
 import { mapActions, mapGetters } from 'vuex'
+import TextField from '~/components/atoms/TextField.vue'
 import firebaseApp from "@/plugins/firebase";
 export default {
   middleware: 'authenticated',
   components: {
+    TextField,
     LoginDialog,
-    EditTextField,
-    EditTextArea,
-    EditAvatarForm
+    TextArea,
+    FileInput
   },
   data() {
     return {

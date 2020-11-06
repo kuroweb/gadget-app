@@ -35,7 +35,8 @@ export const getters = {
   },
 
   userData(state) {
-    return state.userData
+    if (state.userData) return state.userData
+    else return null
   },
 
   // 要リファクタリング（index.jsに移動）

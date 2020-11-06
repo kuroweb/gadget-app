@@ -26,16 +26,16 @@
       <v-row justify="center">
         <v-col>
           <p>フォロー</p>
-          <p>人</p>
+          <p>{{ following.length }}人</p>
         </v-col>
         <v-col>
           <p>フォロワー</p>
-          <p>人</p>
+          <p>{{ followers.length }}人</p>
         </v-col>
       </v-row>
       <v-row justify="center">
         <div
-          v-if="created"
+          v-if="created && currentUser.id !== otherUser.id"
         >
           <v-btn
             v-if="!isFollowed"
@@ -50,7 +50,7 @@
             @click="unfollow"
           >
             フォロー解除
-          </v-btn>      
+          </v-btn>
         </div>
       </v-row>
     </v-card-text>
@@ -68,7 +68,13 @@ export default {
   async asyncData({ $axios, params, store, redirect }) {
     const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
     const data = await $axios.$get(baseUrl + `/v1/users/${params.id}`)
+    const following = await $axios.$get(baseUrl + `/v1/users/${params.id}/following/`)
+    const followers = await $axios.$get(baseUrl + `/v1/users/${params.id}/followers/`)
     store.commit('modules/otherUser/setUser', data)
+    return {
+      following: following,
+      followers: followers
+    }
   },
   async mounted() {
     this.$axios.$get(process.env.BROWSER_BASE_URL + '/v1/isFollowed', {
@@ -86,8 +92,9 @@ export default {
 
   computed: {
     ...mapGetters({
-      otherUser: 'modules/otherUser/otherUser'
-    })
+      otherUser: 'modules/otherUser/otherUser',
+      currentUser: 'modules/user/userData',
+    }),
   },
   methods: {
     follow() {
@@ -106,6 +113,9 @@ export default {
           this.isFollowed = Boolean(res)
         })
           console.log("フォローに成功")
+        })
+        .then(() => {
+          this.followers.push(Object)
         })
         .catch(() => {
           console.log("フォローに失敗")
@@ -129,6 +139,9 @@ export default {
           this.isFollowed = Boolean(res)
         })
           console.log("フォロー解除に成功")
+        })
+        .then(() => {
+          this.followers.splice(0, 1)
         })
         .catch(() => {
           console.log("フォロー解除に失敗")

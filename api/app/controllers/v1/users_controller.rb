@@ -1,5 +1,5 @@
 class V1::UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :following, :followers]
 
   def index
     if params[:uid] 
@@ -38,6 +38,14 @@ class V1::UsersController < ApplicationController
 
   def destroy
     @user.destroy
+  end
+
+  def following
+    render json: @user.following
+  end
+
+  def followers
+    render json: @user.followers
   end
 
   private

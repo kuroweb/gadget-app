@@ -6,9 +6,6 @@
     :vid="$attrs.label"
   >
     <v-textarea
-      label="プロフィール"
-      counter
-      rows="10"
       v-model="inputValue"
       :error-messages="errors"
       :success="valid"

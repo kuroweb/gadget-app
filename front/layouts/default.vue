@@ -1,16 +1,16 @@
 <template>
   <v-app style="background-color: #ECEFF1;">
-    <Flash/>
+    <Flash />
     <Loading
       v-if="loading"
     />
-    <Header/>
+    <Header />
     <v-main>
       <v-container>
         <nuxt />
       </v-container>
     </v-main>
-    <Footer/>
+    <Footer />
   </v-app>
 </template>
 <script>
@@ -21,6 +21,7 @@ import Loading from '../components/atoms/Loading.vue'
 import Flash from '../components/atoms/Flash.vue'
 
 export default {
+  name: "default",
 
   components: {
     Header,
