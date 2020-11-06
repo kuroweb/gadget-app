@@ -35,7 +35,7 @@ export const getters = {
   },
 
   userData(state) {
-    if (state.userData) return state.userData
+    if (state.userData && state.userData.id) return state.userData
     else return null
   },
 

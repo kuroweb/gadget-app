@@ -33,94 +33,86 @@
       >
       新規登録
       </v-btn>
-      <v-btn
-        v-if="isAuthenticated"
-        :to="`/users/${userId}`"
-        text
-        color="white"
-        :outlined="true"
-        small
-      >
-      マイページ
-      </v-btn>
-      <v-btn
-        v-if="isAuthenticated"
-        :to="`/users/edit`"
-        text
-        color="white"
-        :outlined="true"
-        small
-      >
-      編集
-      </v-btn>
-      <v-btn
-        v-if="isAuthenticated"
-        to="/"
-        text
-        color="white"
-        :outlined="true"
-        small
-        @click="logOut"
-      >
-      ログアウト
-      </v-btn>
+
     </div>
-    <div class="text-center">
-      <v-switch
-        v-model="closeOnClick"
-        label="Close on click"
-      ></v-switch>
-      <v-menu
-        top
-        :close-on-click="closeOnClick"
+    <v-menu
+      v-model="value"
+      :offset-y="true"
+      :left="true"
+      v-if="userData"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-avatar
+          size="30"
+          v-bind="attrs"
+          v-on="on"
+        >
+          <img
+            v-if="userData.avatar_url"
+            :src="userData.avatar_url"
+          >
+          <img
+            v-else
+            src="~/assets/images/default_icon.jpeg"
+          />
+        </v-avatar>
+      </template>
+      <v-list
+        :dense="true"
+        width="200px"
       >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
-            <img
-            />
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in items"
-            :key="index"
-          >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </div>
+        <v-list-item
+          v-for="(item, index) in items"
+          :key="index"
+          :to="item.to"
+        >
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+        <v-list-item
+          @click="logOut"
+        >
+          ログアウト
+        </v-list-item>
+      </v-list>
+    </v-menu>
   </v-app-bar>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 export default {
-  data: () => ({
-    items: [
-      { title: 'Click Me' },
-      { title: 'Click Me' },
-      { title: 'Click Me' },
-      { title: 'Click Me 2' },
-    ],
-    closeOnClick: true,
-  }),
+  data () {
+    return {
+      value: false,
+    }
+  },
   computed: {
-    ...mapGetters('modules/user', [
-      'isAuthenticated',
-      'userId',
-      'userData'
-    ])
+    currentUser() {
+      return this.$store.state.modules.user.userData
+    },
+    ...mapGetters({
+      isAuthenticated: 'modules/user/isAuthenticated',
+      userData: 'modules/user/userData',
+      userId: 'modules/user/userId'
+    }),
+    items() {
+      const items = [
+        {
+          title: 'マイページ',
+          to: `/users/${this.userId}`
+        },
+        {
+          title: '詳細設定',
+          to: '/users/edit'
+        },
+      ]
+      return items
+    }
   },
   methods: {
     ...mapActions('modules/user', [ 'logout', 'setFLASH' ]),
-    async logOut () {
-      await this.logout()
+    async logOut() {
+      this.logout()
       this.$router.push('/')
       this.setFLASH({
         status: true,
