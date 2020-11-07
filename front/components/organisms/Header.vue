@@ -33,6 +33,16 @@
       >
       新規登録
       </v-btn>
+      <v-btn
+        v-if="isAuthenticated"
+        to="/posts/create"
+        text
+        color="white"
+        :outlined="true"
+        small
+      >
+      投稿する
+      </v-btn>
 
     </div>
     <v-menu
@@ -87,9 +97,6 @@ export default {
     }
   },
   computed: {
-    currentUser() {
-      return this.$store.state.modules.user.userData
-    },
     ...mapGetters({
       isAuthenticated: 'modules/user/isAuthenticated',
       userData: 'modules/user/userData',

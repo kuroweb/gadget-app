@@ -12,7 +12,10 @@ class V1::UsersController < ApplicationController
   end
 
   def show
-    render json: @user
+    render json: @user, include: [
+      :following,
+      :followers
+    ]
   end
     
   def create

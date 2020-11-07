@@ -111,3 +111,5 @@ exit
 user = User.first
 user.following
 exit
+Post.all
+exit
