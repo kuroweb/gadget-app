@@ -1,11 +1,11 @@
 <template>
   <v-container>
     <ErrorCard
-      :display="!otherUser.id"
+      :display="userNotFound"
       title="404NotFound"
       message="ユーザーが存在しません。"
     />
-    <v-card v-if="otherUser.id" class="mx-auto mt-5 pa-5" width="700px">
+    <v-card v-if="!userNotFound" class="mx-auto mt-5 pa-5" width="700px">
       <v-card-text>
         <v-row justify="center">
           <v-avatar 
@@ -41,7 +41,7 @@
         </v-row>
         <v-row justify="center">
           <div
-            v-if="isAuthenticated && userData.id !== otherUser.id"
+            v-if="created && userData.id !== otherUser.id"
           >
             <v-btn
               v-if="!isFollowed"
@@ -65,56 +65,80 @@
 </template>
 <script>
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
-import { mapActions, mapGetters } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   components: {
     ErrorCard
   },
   data () {
     return {
+      isFollowed: false,
+      created: "",
+      userNotFound: false,
     }
   },
-  async fetch({ $axios, params, store }) {
+  async asyncData({ $axios, params, store, redirect }) {
     try {
       const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
       const data = await $axios.$get(baseUrl + `/v1/users/${params.id}`)
-      const res = await $axios.$get(baseUrl + '/v1/isFollowed', {
-        params: {
-          user_id: store.state.modules.user.userData.id,
-          follow_id: data.id
-        }
-      })
-      store.commit('modules/otherUser/setOtherUser', data)
-      store.commit('modules/otherUser/setIsFollowed', Boolean(res))
+      store.commit('modules/otherUser/setUser', data)
+      // chromeでの表示不具合対策（errorを表示した後に、正しいページにアクセスしてもerrorが表示されたままとなる => userNotFoundの初期値がtrueのままになってしまう。原因不明）
+      return {
+        userNotFound: false
+      }
     } catch (error) {
-      console.log('ユーザーが存在しません。')
+      if (error.response.status === 404 ) {
+        return {
+          userNotFound: true
+        }
+      }
     }
+
+  },
+  async mounted() {
+    this.$axios.$get(process.env.BROWSER_BASE_URL + '/v1/isFollowed', {
+      params: {
+        user_id: this.userData.id,
+        follow_id: this.otherUser.id
+      }
+    })
+      .then((res) => {
+        this.isFollowed = Boolean(res)
+        this.created = true
+      })
+      .catch((error) => {
+        console.log('ユーザーが存在しません。')
+      })
   },
 
   computed: {
     ...mapGetters({
-      isAuthenticated: 'modules/user/isAuthenticated',
       otherUser: 'modules/otherUser/otherUser',
       userData: 'modules/user/userData',
       following: 'modules/otherUser/following',
-      followers: 'modules/otherUser/followers',
-      isFollowed: 'modules/otherUser/isFollowed'
+      followers: 'modules/otherUser/followers'
     }),
   },
   methods: {
-    ...mapActions('modules/otherUser', ['setIsFollowed', 'setOtherUser']),
     follow() {
       this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/relationships', {
-        user_id: this.userData.id,
-        follow_id: this.otherUser.id
+        user_id: this.$store.state.modules.user.userData.id,
+        follow_id: this.$store.state.modules.otherUser.otherUser.id
       })
         .then(() => {
-          this.setIsFollowed (true)
-          return this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}`)
-        })
+          this.$axios.$get(process.env.BROWSER_BASE_URL + '/v1/isFollowed', {
+            params: {
+              user_id: this.$store.state.modules.user.userData.id,
+              follow_id: this.$store.state.modules.otherUser.otherUser.id
+            }
+          })
         .then((res) => {
-          this.setOtherUser (res)
-          console.log('フォローに成功')
+          this.isFollowed = Boolean(res)
+        })
+          console.log("フォローに成功")
+        })
+        .then(() => {
+          this.followers.push(Object)
         })
         .catch(() => {
           console.log("フォローに失敗")
@@ -123,17 +147,24 @@ export default {
     unfollow() {
       this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/relationships/delete', {
         params: {
-          user_id: this.userData.id,
-          follow_id: this.otherUser.id
+          user_id: this.$store.state.modules.user.userData.id,
+          follow_id: this.$store.state.modules.otherUser.otherUser.id
         }
       })
         .then(() => {
-          this.setIsFollowed (false)
-          return this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}`)
-        })
+          this.$axios.$get(process.env.BROWSER_BASE_URL + '/v1/isFollowed', {
+            params: {
+              user_id: this.$store.state.modules.user.userData.id,
+              follow_id: this.$store.state.modules.otherUser.otherUser.id
+            }
+          })
         .then((res) => {
-          this.setOtherUser (res)
-          console.log('フォロー解除に成功')
+          this.isFollowed = Boolean(res)
+        })
+          console.log("フォロー解除に成功")
+        })
+        .then(() => {
+          this.followers.splice(0, 1)
         })
         .catch(() => {
           console.log("フォロー解除に失敗")

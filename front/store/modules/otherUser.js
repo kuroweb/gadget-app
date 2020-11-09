@@ -1,7 +1,6 @@
 export const state = () => ({
   otherUser: {},
-  following: null,
-  followers: null
+  isFollowed: null,
 })
 
 export const getters = {
@@ -14,10 +13,25 @@ export const getters = {
   followers(state) {
     return state.otherUser.followers
   },
+  isFollowed(state) {
+    return state.isFollowed
+  }
+}
+
+export const actions = {
+  setOtherUser ({ commit }, payload) {
+    commit('setOtherUser', payload)
+  },
+  setIsFollowed ({ commit }, payload) {
+    commit('setIsFollowed', payload)
+  },
 }
 
 export const mutations = {
-  setUser: (state, payload) => {
+  setOtherUser (state, payload)  {
     state.otherUser = payload
-  }
+  },
+  setIsFollowed (state, payload) {
+    state.isFollowed = payload
+  },
 }
