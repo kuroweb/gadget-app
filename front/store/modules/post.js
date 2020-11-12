@@ -13,7 +13,7 @@ export const actions = {
 }
 
 export const mutations = {
-  setPOST (state, payload) {
+  setPost (state, payload) {
     state.post = payload
   }
 }

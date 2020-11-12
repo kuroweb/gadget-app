@@ -113,3 +113,5 @@ user.following
 exit
 Post.all
 exit
+Post.all
+exit

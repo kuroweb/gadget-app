@@ -9,10 +9,21 @@
     <v-card v-if="post" class="mx-auto mt-5 pa-5" width="700px">
       <v-card-text>
         <v-row>
-          <h3>タイトル</h3>
+          <h3>{{ post.title }}</h3>
         </v-row>
         <v-row>
-          <p>投稿内容</p>
+          <p>{{ post.description }}</p>
+        </v-row>
+        <v-row>
+          <v-avatar size="40">
+            <img v-if="post.user.avatar_url" :src="post.user.avatar_url" />
+            <img v-else src="~/assets/images/default_icon.jpeg" />
+          </v-avatar>
+          <nuxt-link
+            :to="`/users/${post.user.id}`"
+          >
+            {{ post.user.name }}
+          </nuxt-link>
         </v-row>
       </v-card-text>
     </v-card>
@@ -29,11 +40,11 @@ export default {
     return {
     }
   },
-  async fetch({ $axios, params, store}) {
+  async fetch({ $axios, params, store }) {
     try {
       const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
       const data = await $axios.$get(baseUrl + `/v1/posts/${params.id}`)
-      store.commit('modules/post/setPOST', data)
+      store.commit('modules/post/setPost', data)
     } catch (error) {
       console.log('投稿が存在しません。')
     }

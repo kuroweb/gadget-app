@@ -1,12 +1,13 @@
 <template>
-  <ValidationProvider
-    :name="$attrs.label"
-    :rules="rules"
-    v-slot="{ errors, valid }"
-    :vid="$attrs.label"
-  >
-    <div class="input-block">
+  <div class="input-block">
+    <v-container>
       <v-row>
+        <v-icon
+          v-if="uploadImageUrl !== empty"
+          @click="removeImage"
+          >
+            mdi-close-thick
+          </v-icon>
         <v-col>
           <v-icon v-if="icon">{{ icon }}</v-icon>
           <span class="input-label">{{ label }}</span>
@@ -14,44 +15,31 @@
       </v-row>
       <v-row justify="center">
         <v-avatar 
-        size="62"
+          v-if="uploadImageUrl"
+          size="62"
         >
           <img 
-            v-if="uploadImageUrl"
             :src="uploadImageUrl"
-            alt="Avatar"
-          >
-          <img 
-            v-else-if="avatar_url"
-            :src="avatar_url"
-            alt="Avatar"
-          >
-          <img
-            v-else
-            src="~/assets/images/default_icon.jpeg"
-            alt="Avatar"
+            alt="Images"
           >
         </v-avatar>
       </v-row>
       <v-row>
-        <v-col>
+        <div class="input-box">
           <v-file-input
+            v-if="inputValue.length === 0"
             v-model="inputValue"
             accept="image/*"
-            prepend-icon="mdi-image"
+            prepend-icon="mdi-camera"
             @change="onImagePicked"
-            :error-messages="errors"
-            :success="valid"
-            v-bind="$attrs"
-            v-on="$listeners"
-            placeholder="画像を選択してください"
+            hide-input
           >
           </v-file-input>
-        </v-col>
-        <p v-if="error" class="errors">{{ error }}</p>
+        </div>
+
       </v-row>
-    </div>
-  </ValidationProvider>
+    </v-container>
+  </div>
 </template>
 <script>
 export default {
@@ -63,9 +51,6 @@ export default {
     value: {
       type: null
     },
-    avatar_url: {
-      type: null,
-    },
     label: {
       type: String,
       required: true
@@ -75,11 +60,12 @@ export default {
     },
     error: {
       type: String
-    }
+    },
   },
   data() {
     return {
-      uploadImageUrl: ''
+      uploadImageUrl: '',
+      empty: ''
     }
   },
   computed: {
@@ -106,10 +92,16 @@ export default {
       } else {
         this.uploadImageUrl = ''
       }
+    },
+    removeImage() {
+      this.uploadImageUrl = '',
+      this.$emit("input", [])
     }
   }
 }
 </script>
 <style>
-
+.input-box {
+  padding: 0 30%;
+}
 </style>
