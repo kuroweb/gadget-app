@@ -61,6 +61,61 @@
         </v-row>
       </v-card-text>
     </v-card>
+    <v-card
+      v-for="post in this.posts"
+      :key="post.id"
+      class="mx-auto mt-5 pa-5" width="700px"
+    >
+      <v-card-title>
+        <v-row>
+          <v-col>
+            <v-avatar 
+              size="62"
+            >
+              <img 
+                v-if="post.user.avatar_url"
+                :src="post.user.avatar_url"
+                alt="Avatar"
+              >
+              <img
+                v-else
+                src="~/assets/images/default_icon.jpeg"
+                alt="Avatar"
+              >
+            </v-avatar>
+          </v-col>
+          <v-col>
+            <h3>{{ post.user.name }}</h3>
+          </v-col>
+        </v-row>
+      </v-card-title>
+      <v-card-text>
+        <v-row>
+          <p>{{ post.description }}</p>
+        </v-row>
+        <v-row
+          justify="center"
+          v-if="post.images_url !== null"
+        >
+          <v-avatar v-if="post.images_url.length > 0">
+            <img :src="post.images_url[0]">
+          </v-avatar>
+          <v-avatar v-if="post.images_url.length > 1">
+            <img :src="post.images_url[1]">
+          </v-avatar>
+          <v-avatar v-if="post.images_url.length > 2">
+            <img :src="post.images_url[2]">
+          </v-avatar>
+          <v-avatar v-if="post.images_url.length > 3">
+            <img :src="post.images_url[3]">
+          </v-avatar>
+        </v-row>
+      </v-card-text>
+
+
+
+    </v-card>
+
   </v-container>
 </template>
 <script>
@@ -75,20 +130,39 @@ export default {
     }
   },
   async fetch({ $axios, params, store }) {
-    try {
-      const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
-      const data = await $axios.$get(baseUrl + `/v1/users/${params.id}`)
-      const res = await $axios.$get(baseUrl + '/v1/isFollowed', {
-        params: {
-          user_id: store.state.modules.user.userData.id,
-          follow_id: data.id
+    const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
+    await $axios.$get(baseUrl + `/v1/users/${params.id}`)
+      .then((res) => {
+        store.commit('modules/otherUser/setOtherUser', res)
+        return $axios.$get(baseUrl + `/v1/users/${params.id}/following`)
+      })
+      .then((res) => {
+        store.commit('modules/otherUser/setFollowing', res)
+        return $axios.$get(baseUrl + `/v1/users/${params.id}/followers`)
+      })
+      .then((res) => {
+        store.commit('modules/otherUser/setFollowers', res)
+        if (store.state.modules.user.userData !== null ) {
+          return $axios.$get(baseUrl + '/v1/isFollowed', {
+            params: {
+              user_id: store.state.modules.user.userData.id,
+              follow_id: store.state.modules.otherUser.otherUser.id
+            }
+          })
+        } else {
+          return false
         }
       })
-      store.commit('modules/otherUser/setOtherUser', data)
-      store.commit('modules/otherUser/setIsFollowed', Boolean(res))
-    } catch (error) {
-      console.log('ユーザーが存在しません。')
-    }
+      .then((res) => {
+        store.commit('modules/otherUser/setIsFollowed', Boolean(res))
+        return $axios.$get(baseUrl + `/v1/users/${params.id}/posts`)
+      })
+      .then((res) => {
+        store.commit('modules/otherUser/setPosts', res)
+      })
+      .catch((error) => {
+        console.log('ユーザーが存在しません。')
+      })
   },
 
   computed: {
@@ -98,11 +172,12 @@ export default {
       userData: 'modules/user/userData',
       following: 'modules/otherUser/following',
       followers: 'modules/otherUser/followers',
-      isFollowed: 'modules/otherUser/isFollowed'
+      isFollowed: 'modules/otherUser/isFollowed',
+      posts: 'modules/otherUser/posts'
     }),
   },
   methods: {
-    ...mapActions('modules/otherUser', ['setIsFollowed', 'setOtherUser']),
+    ...mapActions('modules/otherUser', ['setIsFollowed', 'setFollowers']),
     follow() {
       this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/relationships', {
         user_id: this.userData.id,
@@ -110,10 +185,10 @@ export default {
       })
         .then(() => {
           this.setIsFollowed (true)
-          return this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}`)
+          return this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}/followers`)
         })
         .then((res) => {
-          this.setOtherUser (res)
+          this.setFollowers (res)
           console.log('フォローに成功')
         })
         .catch(() => {
@@ -129,10 +204,10 @@ export default {
       })
         .then(() => {
           this.setIsFollowed (false)
-          return this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}`)
+          return this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}/followers`)
         })
         .then((res) => {
-          this.setOtherUser (res)
+          this.setFollowers (res)
           console.log('フォロー解除に成功')
         })
         .catch(() => {

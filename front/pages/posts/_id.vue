@@ -8,6 +8,23 @@
     </ErrorCard>
     <v-card v-if="post" class="mx-auto mt-5 pa-5" width="700px">
       <v-card-text>
+        <v-row
+          justify="center"
+          v-if="post.images_url !== null"
+        >
+          <v-avatar v-if="post.images_url.length > 0">
+            <img :src="post.images_url[0]">
+          </v-avatar>
+          <v-avatar v-if="post.images_url.length > 1">
+            <img :src="post.images_url[1]">
+          </v-avatar>
+          <v-avatar v-if="post.images_url.length > 2">
+            <img :src="post.images_url[2]">
+          </v-avatar>
+          <v-avatar v-if="post.images_url.length > 3">
+            <img :src="post.images_url[3]">
+          </v-avatar>
+        </v-row>
         <v-row>
           <h3>{{ post.title }}</h3>
         </v-row>
@@ -38,6 +55,7 @@ export default {
   },
   data () {
     return {
+      imageCount: null
     }
   },
   async fetch({ $axios, params, store }) {
@@ -52,7 +70,7 @@ export default {
   computed: {
     ...mapGetters({
       post: 'modules/post/post'
-    })
+    }),
   }
 }
 </script>

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
         patch '/update_avatar', to: 'users#update_avatar'
         get '/following', to: 'users#following'
         get '/followers', to: 'users#followers'
+        get '/posts', to: 'users#posts'
       end
     end
     resources :relationships, only: [:create, :destroy]

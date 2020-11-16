@@ -115,3 +115,154 @@ Post.all
 exit
 Post.all
 exit
+Post.all
+User.all
+user = User.first
+user.posts
+exit
+Post.all
+exit
+Post.all
+user.all
+User.all
+exit
+Post.last
+Post.last.images
+Post.last.images.attached?
+Post.first.images.attached?
+Post.last.images.attached?
+esit
+exit
+Post.all
+Post.last.images
+for_url(Post.last.images)
+url_for(Post.last.images)
+url_for
+post = Post.last
+url_for(post.images)
+url_for(post)
+post
+post.attached?
+post.images.attached?
+url_for(post.images)
+include Rails.application.route.url_helpers
+include Rails.application.routes.url_helpers
+url_for(post.images)
+url_for(post.images.first)
+url_for(post.images.all)
+url_for(post.images.first)
+url_for(post.images[0])
+url_for(post.images[1])
+url_for(post.images[0])
+exit
+post = Post.last
+post.images[0].attached?
+post.images.attached?
+post.images[1].attached?
+post.images[0].attached?
+post.images.attached?
+include Rails.application.routes.url_helpers
+post.images.attached?
+url_for(post.images[0])
+url_for(post.images[1])
+url_for(post.images.1)
+url_for(post.images.second)
+url_for(post.images.first)
+url_for!(post.images.first)
+!!url_for(post.images.first)
+!!url_for(post.images.second)
+url_for(post.images.second)
+url_for(post.images.first)
+url_for(post.images[0])
+!!url_for(post.images[0])
+!!url_for(post.images[1])
+url_for(post.images[0])
+url_for!(post.images[0])
+url_for!!(post.images[0])
+!url_for(post.images[0])
+!!url_for(post.images[0])
+!!url_for(post.images[1])
+exit
+post = Post.last
+post.attached?
+post.images.attached?
+include Rails.application.routes.url_helpers
+post.images
+url_for(post.images[0])
+url_for(post.images[1])
+url_for(post.images[2])
+url_for(post.images[0])
+url_for(post.images.second)
+url_for(post.images.first)
+exit
+post = Post.last
+include Rails.application.routes.url_helpers
+url_for(post.images.first)
+url_for(post.images.second)
+url_for(post.images.all)
+url_for(post.images[1])
+url_for(post.images[0])
+url_for(post.images)
+url_for(post.images[])
+url_for(post.images[0])
+post.images
+post.images.length
+exit
+include Rails.application.routes.url_helpers
+Post.last
+post.images
+post.images[0]
+post.images
+Post.all
+post.image
+post.images
+post.images.attached?
+post.attached?
+post.images.attached?
+Post.last.images.attached?
+post = Post.last
+Post.last.images.attached?
+post.images.attached?
+post.images[0[
+    post.images[0]
+    exitr
+exit
+post = Post.last
+post.images[0]
+images = []
+images
+images << url_for(post.images[0])
+url_for(post.images[0])
+include Rails.application.routes.url_helpers
+url_for(post.images[0])
+images << url_for(post.images[0])
+images
+images << url_for(post.images[1])
+images << url_for(post.images[2])
+images
+exit
+post = Post.last
+post.images.attached?
+post.images.length
+include Rails.application.routes.url_helpers
+url_for(post.images[0])
+exit
+User.all
+user = User.first
+user.posts
+user = User.secons
+user = User.second
+user.posts
+user.following
+user.followed
+user.followeds
+user.followers
+exit
+user = User.second
+user.following
+user.following.posts
+user.following.post
+user.following.first
+user.following.first.posts
+user.following
+exit

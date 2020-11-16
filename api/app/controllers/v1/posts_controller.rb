@@ -8,14 +8,11 @@ class V1::PostsController < ApplicationController
     render json: @posts
   end
 
-  # GET /posts/1
   def show
     render json: @post
   end
 
-  # POST /posts
   def create
-    @user = User.find(params[:user_id])
     @post = Post.new(post_params)
 
     if @post.save

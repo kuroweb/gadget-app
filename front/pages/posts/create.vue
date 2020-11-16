@@ -96,7 +96,6 @@ export default {
       image4: [],
       images: [],
       imageError: null,
-      blank: []
     }
   },
   computed: {
@@ -107,11 +106,28 @@ export default {
   },
   methods: {
     async createPost () {
-      this.$axios.$post(process.env.BROWSER_BASE_URL + `/v1/posts`, {
-        title: this.title,
-        description: this.description,
-        user_id: this.userData.id
-      })
+      const data = new FormData()
+      const config = {
+        headders: {
+          'content-type': 'multipart/form-data'
+        }
+      }
+      if (this.image1.length !== 0) {
+        data.append('post[images][]', this.image1)
+      }
+      if (this.image2.length !== 0) {
+        data.append('post[images][]', this.image2)
+      }
+      if (this.image3.length !== 0) {
+        data.append('post[images][]', this.image3)
+      }
+      if (this.image4.length !== 0) {
+        data.append('post[images][]', this.image4)
+      }
+      data.append('post[title]', this.title)
+      data.append('post[description]', this.description)
+      data.append('post[user_id]', this.userData.id)
+      this.$axios.$post(process.env.BROWSER_BASE_URL + `/v1/posts`, data, config)
       .then(() => {
         console.log('投稿に成功しました')
       })
@@ -121,27 +137,27 @@ export default {
       })
     },
     addImage (n) {
-    const file = this.$data['image' + n]
-    if (file !== undefined && file !== null) {
-      if (file.size > 1000000) {
-        console.log('ファイルサイズが大きすぎます')
+      const file = this.$data['image' + n]
+      if (file !== undefined && file !== null) {
+        if (file.size > 1000000) {
+          console.log('ファイルサイズが大きすぎます')
+          this.$data['image' + n] = []
+          this.imageError = "画像のファイルサイズが1MBを超えています。"
+        }
+        if (file.size <= 1000000) {
+          const fr = new FileReader()
+          fr.readAsDataURL(file)
+          fr.addEventListener('load', () => {
+          this.$data['image' + n + 'Url'] = fr.result
+          })
+          this.imageError = null
+        }
+      } else {
+        this.$data['image' + n + 'Url'] = []
         this.$data['image' + n] = []
-        this.imageError = "画像のファイルサイズが1MBを超えています。"
-      }
-      if (file.size <= 1000000) {
-        const fr = new FileReader()
-        fr.readAsDataURL(file)
-        fr.addEventListener('load', () => {
-        this.$data['image' + n + 'Url'] = fr.result
-        })
         this.imageError = null
       }
-    } else {
-      this.$data['image' + n + 'Url'] = []
-      this.$data['image' + n] = []
-      this.imageError = null
-    }
-  },
+    },
     removeImage (n) {
       this.$data['image' + n + 'Url'] = []
       this.$data['image' + n] = []
