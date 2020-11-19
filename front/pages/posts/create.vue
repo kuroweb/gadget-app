@@ -49,11 +49,6 @@
               <p v-if="imageError">{{ imageError }}</p>
             </v-row>
             <TextFieldWithValidation
-              v-model="title"
-              label="タイトル"
-              rules="max:80|required"
-            />
-            <TextFieldWithValidation
               v-model="description"
               label="説明文"
               rules="max:80|required"
@@ -83,7 +78,6 @@ export default {
   },
   data () {
     return {
-      title: '',
       description: '',
       maxImageNum: 4,
       image1Url: [],
@@ -124,7 +118,6 @@ export default {
       if (this.image4.length !== 0) {
         data.append('post[images][]', this.image4)
       }
-      data.append('post[title]', this.title)
       data.append('post[description]', this.description)
       data.append('post[user_id]', this.userData.id)
       this.$axios.$post(process.env.BROWSER_BASE_URL + `/v1/posts`, data, config)

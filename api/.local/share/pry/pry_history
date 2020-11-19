@@ -266,3 +266,45 @@ user.following.first
 user.following.first.posts
 user.following
 exit
+Post.find(47)
+post = Post.find(47)
+post.images
+post.images.1
+post.images.first
+post.images.find(1)
+post.images.all
+post.images.find(18)
+post.images.find(18).purge
+exit
+post = Post.find(47)
+post.images.all
+post.images.find(17)
+post
+post.images.first
+image = post.images.first
+post
+image
+post.images.second
+post.images.second = image
+post.images.second
+post.images.second.update
+post.images.second.
+a
+post
+post.update(images: [])
+post
+post.images
+post.images.all
+post = Post.find(46)
+post.images.all
+image = post.images.first
+images.file
+post.update(images: [image])
+post.images.all
+post
+post.images
+post.images.all
+post.images.first
+post.images
+post.destroy
+exit

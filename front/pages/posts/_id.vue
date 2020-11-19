@@ -6,8 +6,37 @@
       message="投稿が存在しません。"
     >
     </ErrorCard>
-    <v-card v-if="post" class="mx-auto mt-5 pa-5" width="700px">
+    <v-card
+      v-if="post"
+      class="mx-auto mt-5 pa-5" width="700px"
+    >
+      <v-card-title>
+        <v-row>
+          <v-col>
+            <v-avatar 
+              size="62"
+            >
+              <img 
+                v-if="post.user.avatar_url"
+                :src="post.user.avatar_url"
+                alt="Avatar"
+              >
+              <img
+                v-else
+                src="~/assets/images/default_icon.jpeg"
+                alt="Avatar"
+              >
+            </v-avatar>
+          </v-col>
+          <v-col>
+            <h3>{{ post.user.name }}</h3>
+          </v-col>
+        </v-row>
+      </v-card-title>
       <v-card-text>
+        <v-row>
+          <p>{{ post.description }}</p>
+        </v-row>
         <v-row
           justify="center"
           v-if="post.images_url !== null"
@@ -25,23 +54,7 @@
             <img :src="post.images_url[3]">
           </v-avatar>
         </v-row>
-        <v-row>
-          <h3>{{ post.title }}</h3>
-        </v-row>
-        <v-row>
-          <p>{{ post.description }}</p>
-        </v-row>
-        <v-row>
-          <v-avatar size="40">
-            <img v-if="post.user.avatar_url" :src="post.user.avatar_url" />
-            <img v-else src="~/assets/images/default_icon.jpeg" />
-          </v-avatar>
-          <nuxt-link
-            :to="`/users/${post.user.id}`"
-          >
-            {{ post.user.name }}
-          </nuxt-link>
-        </v-row>
+
       </v-card-text>
     </v-card>
   </v-container>

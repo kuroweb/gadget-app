@@ -65,6 +65,7 @@
       v-for="post in this.posts"
       :key="post.id"
       class="mx-auto mt-5 pa-5" width="700px"
+      :to="`/posts/${post.id}`"
     >
       <v-card-title>
         <v-row>
@@ -110,10 +111,12 @@
             <img :src="post.images_url[3]">
           </v-avatar>
         </v-row>
+        <v-row>
+          <v-icon>
+            mdi-square-edit-outline
+          </v-icon>
+        </v-row>
       </v-card-text>
-
-
-
     </v-card>
 
   </v-container>
