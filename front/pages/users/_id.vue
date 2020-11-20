@@ -1,11 +1,21 @@
 <template>
   <v-container>
+    <PostEditDialog
+      :dialog="editDialog"
+      :postId="postId"
+      @closeDialog="editDialog = false"
+    />
+    <PostDeleteDialog
+      :dialog="deleteDialog"
+      :postId="postId"
+      @closeDialog="deleteDialog = false"
+    />
     <ErrorCard
       :display="!otherUser.id"
       title="404NotFound"
       message="ユーザーが存在しません。"
     />
-    <v-card v-if="otherUser.id" class="mx-auto mt-5 pa-5" width="700px">
+    <v-card v-if="otherUser.id" class="mx-auto mt-5 pa-5" width="500px">
       <v-card-text>
         <v-row justify="center">
           <v-avatar 
@@ -64,8 +74,7 @@
     <v-card
       v-for="post in this.posts"
       :key="post.id"
-      class="mx-auto mt-5 pa-5" width="700px"
-      :to="`/posts/${post.id}`"
+      class="mx-auto mt-5 pa-5" width="500px"
     >
       <v-card-title>
         <v-row>
@@ -111,9 +120,16 @@
             <img :src="post.images_url[3]">
           </v-avatar>
         </v-row>
-        <v-row>
-          <v-icon>
+        <v-row justify="end">
+          <v-icon
+            @click="openEditDialog(post)"
+          >
             mdi-square-edit-outline
+          </v-icon>
+          <v-icon
+            @click="openDeleteDialog(post)"
+          >
+            mdi-delete
           </v-icon>
         </v-row>
       </v-card-text>
@@ -122,14 +138,21 @@
   </v-container>
 </template>
 <script>
+import PostDeleteDialog from '~/components/organisms/posts/PostDeleteDialog.vue'
+import PostEditDialog from '~/components/organisms/posts/PostEditDialog.vue'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   components: {
-    ErrorCard
+    ErrorCard,
+    PostEditDialog,
+    PostDeleteDialog
   },
   data () {
     return {
+      editDialog: false,
+      deleteDialog: false,
+      postId: '',
     }
   },
   async fetch({ $axios, params, store }) {
@@ -180,6 +203,9 @@ export default {
     }),
   },
   methods: {
+    testButton () {
+      console.log('test')
+    },
     ...mapActions('modules/otherUser', ['setIsFollowed', 'setFollowers']),
     follow() {
       this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/relationships', {
@@ -216,6 +242,14 @@ export default {
         .catch(() => {
           console.log("フォロー解除に失敗")
         })
+    },
+    openEditDialog (post) {
+      this.postId = post.id
+      this.editDialog = true
+    },
+    openDeleteDialog (post) {
+      this.postId = post.id
+      this.deleteDialog = true
     }
   }
 }
