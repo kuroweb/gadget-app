@@ -133,6 +133,12 @@ export default {
       }
       data.append('post[description]', this.description)
       data.append('post[user_id]', this.userData.id)
+      // this.tagsの中身を抽出して配列に格納
+      if (this.tags.length !== 0) {
+        this.tags.forEach(function(tag){
+        data.append('post[tags][]', tag.text)
+        })
+      }
       this.$axios.$post(process.env.BROWSER_BASE_URL + `/v1/posts`, data, config)
       .then(() => {
         console.log('投稿に成功しました')

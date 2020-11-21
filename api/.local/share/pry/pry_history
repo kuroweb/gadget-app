@@ -313,3 +313,130 @@ Tag_Map.all
 Tagmap.all
 TagMap.all
 exit
+Post.all
+post = Post.last
+post.tags
+post.tags = 'test'
+post.tags << 'test'
+post.tags
+exit
+post = Post.last
+post.tags
+exit
+post = Post.last
+post.tags
+tag = "tagtest"
+post.tags
+post.tags << tag
+tag = post.tags
+tag
+tag << "test"
+post
+post.tags
+user = User.first
+user.following
+user2 = User.second
+user
+user.following << user2
+user.following
+post
+post.tag
+post.tags
+Tag.all
+tag = Tag.new
+tag.name = "tagtest"
+tag.tag_name = "tagtest"
+tag
+tag.save
+tag
+post
+post.tag
+post.tags
+post.tags << tag
+post.tags
+post.tags.delete.all
+post.tags.delete
+post.tags
+Tag.all
+tag = Tag.first
+tag.delete
+tag.destroy
+Tag.all
+TagMap.all
+exit
+Tag.all
+Tag.find_or_create_by(tag_name: "test")
+Tag.all
+tag = Tag.first
+tag.destroy
+Tag.all
+exit
+Tag.all
+post = Post.last
+post.tags
+Tag.find_or_create_by(tag_name: "tag")
+Tag.all
+tag
+tag = Tag.first
+tag.destroy
+tag = Tag.find_or_create_by(tag_name: "tag")
+tag
+post
+post.tags << tag
+post.tags
+post
+post.tags.delete
+post.tags
+post.tags.delete(tag_name: "tag")
+post.tags.delete Tag.find_by(tag_name: "tag")
+post.tags
+Tag.all
+tag
+tag.destroy
+Tag.all
+exit
+array = []
+array.push(tag)
+array.push("tag")
+array.push("test")
+array
+array.each do |res|
+  p res
+end
+array.each do |res|
+  Tag.find_or_create_by(tag_name: res)
+end
+Tag.all
+Tag.all.destroy
+Tag.first.destory
+Tag.first.delete
+Tag.all.delete
+Tag.first.delete
+Tag.all
+array
+array2 = []
+array2 - array
+array_res = array2 - array
+array
+array_res
+array2 = nil
+array_res
+array2 - array
+array
+array2
+array2 - array
+exit
+post = Post.last
+post.tags
+exit
+TagMap.all
+post = Post.last
+post
+post.tagmaps
+post.tag_maps
+post.tags
+exit
+post = Post.last
+post.tags
+post
+exit

@@ -96,6 +96,12 @@
           </v-col>
           <v-col>
             <h3>{{ post.user.name }}</h3>
+            <p
+              v-for="tag in post.tags"
+              :key="tag.id"
+            >
+              {{ tag.tag_name }}
+            </p>
           </v-col>
         </v-row>
       </v-card-title>

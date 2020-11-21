@@ -12,10 +12,9 @@ class V1::PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(post_params)
-
+    @post = Post.new(post_content_params)
     if @post.save
-      @post.save_tag(tag_params)
+      @post.save_tag(post_tags_params[:tags])
       render json: @post, status: :created
     else
       render json: @post.errors, status: :unprocessable_entity
@@ -39,11 +38,11 @@ class V1::PostsController < ApplicationController
       @post = Post.find(params[:id])
     end
 
-    def post_params
-      params.require(:post).permit(:description, :user_id, images: [], tags: [])
+    def post_content_params
+      params.require(:post).permit(:description, :user_id, images: [])
     end
 
-    def tags_params
+    def post_tags_params
       params.require(:post).permit(tags: [])
     end
 end
