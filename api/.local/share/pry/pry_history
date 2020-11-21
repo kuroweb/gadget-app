@@ -308,3 +308,8 @@ post.images.first
 post.images
 post.destroy
 exit
+Tag.all
+Tag_Map.all
+Tagmap.all
+TagMap.all
+exit

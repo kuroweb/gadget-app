@@ -53,6 +53,14 @@
               label="説明文"
               rules="max:80|required"
             />
+            <client-only>
+              <VueTagsInput
+                v-model="tag"
+                :tags="tags"
+                @tags-changed="newTags => tags = newTags"
+              />
+            </client-only>
+
             <v-row justify="center">
               <v-btn
                 color="success"
@@ -71,10 +79,14 @@
   
 <script>
 import { mapGetters } from 'vuex'
+
+import TagForm from '~/components/organisms/posts/TagForm.vue'
 import TextFieldWithValidation from '~/components/molecules/inputs/TextFieldWithValidation.vue'
 export default {
   components: {
     TextFieldWithValidation,
+    TagForm,
+    
   },
   data () {
     return {
@@ -89,6 +101,8 @@ export default {
       image3: [],
       image4: [],
       imageError: null,
+      tag: '',
+      tags: []
     }
   },
   computed: {
