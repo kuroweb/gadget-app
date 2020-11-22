@@ -126,12 +126,12 @@ export default {
   watch: {
     async dialog (newValue) {
       this.dialogStatus = newValue
+      // dialogがtrueの時だけ値を取得
       if (this.dialogStatus === true) {
         const res = await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`)
         this.description = res.description
         this.images_url = res.images_url
         // tagの初期化
-        console.log(res.tags)
         if (res.tags.length !== 0) {
           const tagsData = []
           res.tags.forEach(function(tag) {
@@ -143,6 +143,7 @@ export default {
           })
           this.tags = tagsData
         }
+        // プレビュー画像の初期化
         if (this.images_url !== null) {
           let i = 1
           this.images_url.forEach(image_url => {
@@ -150,6 +151,7 @@ export default {
             i += 1
           })
         }
+        // 画像データの初期化
         if (this.images_url !== null) {
           if (this.images_url.length === 1) {
             fetch(`${this.images_url[0]}`)
@@ -240,6 +242,18 @@ export default {
               })
           }
         }
+      // dialogがfalseで値を初期化
+      } else {
+        this.image1Url = []
+        this.image2Url = []
+        this.image3Url = []
+        this.image4Url = []
+        this.image1 = []
+        this.image2 = []
+        this.image3 = []
+        this.image4 = []
+        this.description = ''
+        this.tags = []
       }
     },
   },
