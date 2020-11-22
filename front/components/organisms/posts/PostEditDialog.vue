@@ -65,6 +65,13 @@
                 label="説明文"
                 rules="max:80|required"
               />
+              <client-only>
+                <VueTagsInput
+                  v-model="tag"
+                  :tags="tags"
+                  @tags-changed="newTags => tags = newTags"
+                />
+              </client-only>
               <v-row justify="center">
                 <v-btn
                   color="success"
@@ -111,7 +118,9 @@ export default {
       image4: [],
       imageError: null,
       images_url: [],
-      description: ''
+      description: '',
+      tag: '',
+      tags: []
     }
   },
   watch: {
@@ -121,7 +130,19 @@ export default {
         const res = await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`)
         this.description = res.description
         this.images_url = res.images_url
-        console.log(res)
+        // tagの初期化
+        console.log(res.tags)
+        if (res.tags.length !== 0) {
+          const tagsData = []
+          res.tags.forEach(function(tag) {
+            const tagData = {
+              text: tag.tag_name,
+              tiClasses: ["ti-valid"]
+            }
+            tagsData.push(tagData)
+          })
+          this.tags = tagsData
+        }
         if (this.images_url !== null) {
           let i = 1
           this.images_url.forEach(image_url => {
@@ -249,6 +270,11 @@ export default {
       }
       data.append('post[description]', this.description)
       data.append('post[user_id]', this.userData.id)
+      if (this.tags.length !== 0) {
+        this.tags.forEach(function(tag){
+        data.append('post[tags][]', tag.text)
+        })
+      }
       this.$axios.$patch(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`, data, config)
       .then(() => {
         console.log('投稿に成功しました')

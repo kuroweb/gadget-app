@@ -79,13 +79,10 @@
   
 <script>
 import { mapGetters } from 'vuex'
-
-import TagForm from '~/components/organisms/posts/TagForm.vue'
 import TextFieldWithValidation from '~/components/molecules/inputs/TextFieldWithValidation.vue'
 export default {
   components: {
     TextFieldWithValidation,
-    TagForm,
     
   },
   data () {

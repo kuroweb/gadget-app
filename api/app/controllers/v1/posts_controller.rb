@@ -13,8 +13,9 @@ class V1::PostsController < ApplicationController
 
   def create
     @post = Post.new(post_content_params)
+    sent_tags = post_tags_params[:tags] === nil ? [] : post_tags_params[:tags]
     if @post.save
-      @post.save_tag(post_tags_params[:tags])
+      @post.save_tag(sent_tags)
       render json: @post, status: :created
     else
       render json: @post.errors, status: :unprocessable_entity
@@ -22,7 +23,9 @@ class V1::PostsController < ApplicationController
   end
 
   def update
-    if @post.update(post_params)
+    sent_tags = post_tags_params[:tags] === nil ? [] : post_tags_params[:tags]
+    if @post.update(post_content_params)
+      @post.save_tag(sent_tags)
       render json: @post
     else
       render json: @post.errors, status: :unprocessable_entity
