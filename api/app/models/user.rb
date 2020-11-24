@@ -32,5 +32,8 @@ class User < ApplicationRecord
     followers.include?(other_user)
   end
 
+  def self.search(user_name)
+    User.where(['name LIKE ?', "%#{user_name}%"])
+  end
 
 end

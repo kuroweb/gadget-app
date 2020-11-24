@@ -36,6 +36,13 @@ class V1::PostsController < ApplicationController
     @post.destroy
   end
 
+  def search
+    if params[:post_name]
+      @posts = Post.search(params[:post_name])
+      render json: @posts
+    end
+  end
+
   private
     def set_post
       @post = Post.find(params[:id])

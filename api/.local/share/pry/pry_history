@@ -460,3 +460,8 @@ tag.posts.all
 exit
 Tag.where(['tag_name LIKE ?', 'tag'])
 exit
+User.all
+User.where(['name LIKE ?, '%test%'])
+exit
+User.where(['name LIKE ?', '%test%'])
+exit

@@ -52,6 +52,13 @@ class V1::UsersController < ApplicationController
     render json: @user.posts
   end
 
+  def search
+    if params[:user_name]
+      @users = User.search(params[:user_name])
+      render json: @users
+    end
+  end
+
   private
 
     def user_params

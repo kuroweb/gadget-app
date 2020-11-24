@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   namespace :v1 do
-    get 'tags/search'
-  end
-  namespace :v1 do
     get '/isFollowed', to: 'relationships#isFollowed'
+    get 'tags/search', to: 'tags#search'
+    get 'users/search', to: 'users#search'
+    get 'posts/search', to: 'posts#search'
     resources :users do
       member do
         patch '/update_avatar', to: 'users#update_avatar'
