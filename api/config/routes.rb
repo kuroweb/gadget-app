@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   namespace :v1 do
+    get 'tags/search'
+  end
+  namespace :v1 do
     get '/isFollowed', to: 'relationships#isFollowed'
     resources :users do
       member do

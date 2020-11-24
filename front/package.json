@@ -30,6 +30,7 @@
     "js-cookie": "^2.2.1",
     "jwt-decode": "^3.0.0",
     "loaders.css": "^0.1.2",
+    "lodash": "^4.17.20",
     "nuxt": "^2.14.6",
     "vee-validate": "^3.4.2"
   },

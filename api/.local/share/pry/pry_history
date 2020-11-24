@@ -449,3 +449,14 @@ post.tags.pluck
 post.tags.pluck(:id)
 post.tags.pluck(:tag_name)
 exit
+Tag.all
+tag_list = Tag.all
+tag_list
+tag = Tag.find_by(id: "tag")
+tag = Tag.find_by(tag_name: "tag")
+tag.post
+tag.posts
+tag.posts.all
+exit
+Tag.where(['tag_name LIKE ?', 'tag'])
+exit

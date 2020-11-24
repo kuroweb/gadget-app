@@ -2,4 +2,7 @@ class Tag < ApplicationRecord
   has_many :tag_maps, dependent: :destroy, foreign_key: 'tag_id'
   has_many :posts, through: :tag_maps
 
+  def self.search(tag_name)
+    Tag.where(['tag_name LIKE ?', "%#{tag_name}%"])
+  end
 end

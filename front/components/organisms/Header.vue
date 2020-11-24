@@ -41,9 +41,18 @@
         :outlined="true"
         small
       >
-      投稿する
+      投稿
       </v-btn>
-
+      <v-btn
+        v-if="isAuthenticated"
+        to="/search"
+        text
+        color="white"
+        :outlined="true"
+        small
+      >
+        検索
+      </v-btn>
     </div>
     <v-menu
       v-model="value"
