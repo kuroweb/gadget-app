@@ -26,6 +26,10 @@ class V1::PostsController < ApplicationController
     sent_tags = post_tags_params[:tags] === nil ? [] : post_tags_params[:tags]
     if @post.update(post_content_params)
       @post.save_tag(sent_tags)
+      # imagesが空の場合に、updateメソッドで初期化
+      if post_content_params[:images] === nil
+        @post.update(images: nil)
+      end
       render json: @post
     else
       render json: @post.errors, status: :unprocessable_entity

@@ -9,9 +9,9 @@
 import { mapGetters } from 'vuex'
 export default {
   computed: {
-    ...mapGetters('modules/user', [
-      'flash',
-    ])
+    ...mapGetters({
+      flash: 'modules/info/flash'
+    })
   }
 }
 </script>

@@ -10,12 +10,14 @@ class User < ApplicationRecord
   has_many :following, through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
   has_many :posts, dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :liked_posts, through: :likes, source: :post
 
   def avatar_url
     avatar.attached? ? url_for(avatar) : nil
   end
   
-  # フォロー関連
+  # フォロー機能
   def follow(other_user)
     following << other_user
   end

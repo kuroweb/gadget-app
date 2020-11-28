@@ -30,9 +30,9 @@ export default {
     Flash,
   },
   computed: {
-    ...mapGetters('modules/user', [
-      'loading',
-    ])
+    ...mapGetters({
+      loading: 'modules/info/loading'
+    })
   }
 }
 </script>

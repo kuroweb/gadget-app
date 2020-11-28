@@ -51,7 +51,7 @@
         </v-row>
         <v-row justify="center">
           <div
-            v-if="isAuthenticated && currentUser.id !== otherUser.id"
+            v-if="isAuthenticated && userData.id !== otherUser.id"
           >
             <v-btn
               v-if="!isFollowed"
@@ -140,6 +140,7 @@
         </v-row>
       </v-card-text>
     </v-card>
+
   </v-container>
 </template>
 <script>
@@ -155,7 +156,6 @@ export default {
   },
   data () {
     return {
-      isFollowed: false,
       editDialog: false,
       deleteDialog: false,
       postId: '',
@@ -164,61 +164,68 @@ export default {
   async fetch({ $axios, params, store }) {
     const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
     await $axios.$get(baseUrl + `/v1/users/${params.id}`)
-      .then(res => {
-        // アクセス先ユーザーの基本情報をコミット
-        const data = {
-          id: res.id,
-          name: res.name,
-          profile: res.profile,
-          avatar_url: res.avatar_url,
+      .then((res) => {
+        store.commit('modules/otherUser/setOtherUser', res)
+        return $axios.$get(baseUrl + `/v1/users/${params.id}/following`)
+      })
+      .then((res) => {
+        store.commit('modules/otherUser/setFollowing', res)
+        return $axios.$get(baseUrl + `/v1/users/${params.id}/followers`)
+      })
+      .then((res) => {
+        store.commit('modules/otherUser/setFollowers', res)
+        if (store.state.modules.user.userData !== null ) {
+          return $axios.$get(baseUrl + '/v1/isFollowed', {
+            params: {
+              user_id: store.state.modules.user.userData.id,
+              follow_id: store.state.modules.otherUser.otherUser.id
+            }
+          })
+        } else {
+          return false
         }
-        store.commit('modules/otherUser/setData', data)
-        // アクセス先ユーザーのフォロー・フォロワー情報をコミット
-        store.commit('modules/otherUser/setFollowing', res.following)
-        store.commit('modules/otherUser/setFollowers', res.followers)
-        // アクセス先ユーザーの投稿情報をコミット
-        store.commit('modules/otherUser/setPosts', res.posts)
       })
-      .catch(error => {
-        console.log(error)
+      .then((res) => {
+        store.commit('modules/otherUser/setIsFollowed', Boolean(res))
+        return $axios.$get(baseUrl + `/v1/users/${params.id}/posts`)
       })
-  },
-  async mounted () {
-    await this.$axios.$get(process.env.BROWSER_BASE_URL + '/v1/users/isFollowed', {
-      params: {
-        current_user: this.$store.state.modules.user.data.id,
-        other_user: this.$store.state.modules.otherUser.data.id
-      }
-    })
-      .then(res => {
-        this.isFollowed = res
+      .then((res) => {
+        store.commit('modules/otherUser/setPosts', res)
       })
-      .catch(error => {
-        console.log(error)
+      .catch((error) => {
+        console.log('ユーザーが存在しません。')
       })
   },
+
   computed: {
     ...mapGetters({
-      currentUser: 'modules/user/data',
       isAuthenticated: 'modules/user/isAuthenticated',
-      otherUser: 'modules/otherUser/data',
+      otherUser: 'modules/otherUser/otherUser',
+      userData: 'modules/user/userData',
       following: 'modules/otherUser/following',
       followers: 'modules/otherUser/followers',
+      isFollowed: 'modules/otherUser/isFollowed',
       posts: 'modules/otherUser/posts'
-    })
+    }),
   },
   methods: {
-    ...mapActions('modules/otherUser', ['setFollowers']),
+    testButton () {
+      console.log('test')
+    },
+    ...mapActions({
+      setIsFollowed: 'modules/otherUser/setIsFollowed',
+      setFollowers: 'modules/otherUser/setFollowers'
+    }),
     follow() {
       this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/relationships', {
-          user_id: this.currentUser.id,
-          follow_id: this.otherUser.id
+        user_id: this.userData.id,
+        follow_id: this.otherUser.id
       })
-        .then(res => {
-          this.isFollowed = true
+        .then(() => {
+          this.setIsFollowed (true)
           return this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}/followers`)
         })
-        .then(res => {
+        .then((res) => {
           this.setFollowers (res)
           console.log('フォローに成功')
         })
@@ -229,15 +236,15 @@ export default {
     unfollow() {
       this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/relationships/delete', {
         params: {
-          user_id: this.currentUser.id,
+          user_id: this.userData.id,
           follow_id: this.otherUser.id
         }
       })
-        .then(res => {
-          this.isFollowed = false
+        .then(() => {
+          this.setIsFollowed (false)
           return this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}/followers`)
         })
-        .then(res => {
+        .then((res) => {
           this.setFollowers (res)
           console.log('フォロー解除に成功')
         })
@@ -254,7 +261,6 @@ export default {
       this.deleteDialog = true
     }
   }
-
 }
 </script>
 <style>

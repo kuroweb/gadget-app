@@ -5,15 +5,16 @@ class V1::RelationshipsController < ApplicationController
   ## if文でcurrent_userとother_userを比較すれば良いんじゃ？
   def create
     @current_user.follow(@other_user)
-    render json: @other_user
+    render json: @other_user, include: []
   end
 
   def destroy
     @current_user.unfollow(@other_user)
-    render json: @other_user
+    render json: @other_user, include: []
   end
   
   # フォロー済みかどうかを判断
+  # リファクタリング => Userモデルに移動
   def isFollowed
     isFollowed = @current_user.following?(@other_user)
     render json: isFollowed

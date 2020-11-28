@@ -212,7 +212,7 @@ export default {
   computed: {
     ...mapGetters({
       isAuthenticated: 'modules/user/isAuthenticated',
-      userData: 'modules/user/userData',
+      currentUser: 'modules/user/data',
     }),
   },
   methods: {
@@ -236,7 +236,7 @@ export default {
         data.append('post[images][]', this.image4)
       }
       data.append('post[description]', this.description)
-      data.append('post[user_id]', this.userData.id)
+      data.append('post[user_id]', this.currentUser.id)
       this.$axios.$patch(process.env.BROWSER_BASE_URL + `/v1/posts/2`, data, config)
       .then(() => {
         console.log('投稿に成功しました')

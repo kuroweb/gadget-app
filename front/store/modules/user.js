@@ -4,14 +4,8 @@ import Cookies from 'js-cookie'
 export const state = () => ({
   // firebaseの認証情報
   user: null,
-  // ローディング画面
-  loading: false,
-  // フラッシュメッセージ
-  flash: {
-    status: false,
-    message: "",
-  },
-  userData: null,
+  // APIにあるユーザー情報
+  data: null,
 })
 
 export const getters = {
@@ -29,23 +23,13 @@ export const getters = {
     return !!state.user && !!state.user.uid
   },
 
+  // 削除予定
   userId(state) {
-    if (state.userData && state.userData.id) return state.userData.id
-    else return null
+    return state.data.id
   },
 
-  userData(state) {
-    if (state.userData && state.userData.id) return state.userData
-    else return null
-  },
-
-  // 要リファクタリング（index.jsに移動）
-  loading(state) {
-    return state.loading
-  },
-  // 要リファクタリング（index.jsに移動）
-  flash(state) {
-    return state.flash
+  data(state) {
+    return state.data
   },
 }
 
@@ -61,8 +45,8 @@ export const actions = {
     const uid = user.uid
 
     Cookies.set('access_token', token) // saving token in cookie for server rendering
-    await dispatch('setUSER', userInfo)
-    await dispatch('loadUSERDATA', uid)
+    await dispatch('setUser', userInfo)
+    await dispatch('loadData', uid)
     console.log('[STORE ACTIONS] - in login, response:', status)
 
   },
@@ -72,31 +56,21 @@ export const actions = {
     await firebaseApp.auth().signOut()
 
     Cookies.remove('access_token');
-    commit('setUSER', null)
-    commit('setUSERDATA', null)
+    commit('setUser', null)
+    commit('setData', null)
   },
 
-  setUSER({commit}, user) {
+  setUser({commit}, user) {
     console.log('[STORE ACTIONS] - saveUSER')
-    commit('setUSER', user)
+    commit('setUser', user)
   },
 
-  setLOADING({commit}, payload) {
-    console.log('[STORE ACTIONS] - saveLOADING')
-    commit('setLOADING', payload)
-  },
-
-  setFLASH({commit}, payload) {
-    console.log('[STORE ACTIONS] - saveFLASH')
-    commit('setFLASH', payload)
-  },
-
-  async loadUSERDATA ({ commit }, payload) {
+  async loadData ({ commit }, payload) {
     try {
       console.log('test')
       const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
       const data = await this.$axios.$get(baseUrl + `/v1/users?uid=${payload}`)
-      commit('setUSERDATA', data)
+      commit('setData', data)
     } catch (e) {
       console.log(e)
     }
@@ -105,21 +79,12 @@ export const actions = {
 
 export const mutations = {
 
-  setUSER (state, user) {
-    console.log('[STORE MUTATIONS] - setUSER:', user)
+  setUser (state, user) {
+    console.log('[STORE MUTATIONS] - setUser:', user)
     state.user = user
   },
-
-  setLOADING (state, payload) {
-    console.log('[STORE MUTATIONS] - setLOADING;', payload)
-    state.loading = payload
-  },
-
-  setFLASH (state, payload) {
-    console.log('[STORE MUTATIONS] - setFLASH;', payload)
-    state.flash = payload
-  },
-  setUSERDATA (state, payload) {
-    state.userData = payload
+  
+  setData (state, payload) {
+    state.data = payload
   }
 }

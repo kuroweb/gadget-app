@@ -58,7 +58,7 @@
       v-model="value"
       :offset-y="true"
       :left="true"
-      v-if="userData"
+      v-if="currentUser"
     >
       <template v-slot:activator="{ on, attrs }">
         <v-avatar
@@ -67,8 +67,8 @@
           v-on="on"
         >
           <img
-            v-if="userData.avatar_url"
-            :src="userData.avatar_url"
+            v-if="currentUser.avatar_url"
+            :src="currentUser.avatar_url"
           >
           <img
             v-else
@@ -108,14 +108,13 @@ export default {
   computed: {
     ...mapGetters({
       isAuthenticated: 'modules/user/isAuthenticated',
-      userData: 'modules/user/userData',
-      userId: 'modules/user/userId'
+      currentUser: 'modules/user/data',
     }),
     items() {
       const items = [
         {
           title: 'マイページ',
-          to: `/users/${this.userId}`
+          to: `/users/${this.currentUser.id}`
         },
         {
           title: '詳細設定',
@@ -126,16 +125,19 @@ export default {
     }
   },
   methods: {
-    ...mapActions('modules/user', [ 'logout', 'setFLASH' ]),
+    ...mapActions({
+      logout: 'modules/user/logout',
+      setFlash: 'modules/info/setFlash'
+    }),
     async logOut() {
       this.logout()
       this.$router.push('/')
-      this.setFLASH({
+      this.setFlash({
         status: true,
         message: "ログアウトしました"
       })
       setTimeout(() => {
-        this.setFLASH({
+        this.setFlash({
           status: false,
           message: ""
         })

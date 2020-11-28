@@ -4,10 +4,10 @@ class Post < ApplicationRecord
   belongs_to :user
   has_many :tag_maps, dependent: :destroy
   has_many :tags, through: :tag_maps
+  has_many :likes, dependent: :destroy
+  has_many :liked_users, through: :likes, source: :user
 
   def images_url
-    ##images.attached? ? url_for(images[0]) : nil
-
     if images.attached?
       i = 0
       count = images.length

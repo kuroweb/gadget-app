@@ -30,12 +30,14 @@ export default {
     Flash,
   },
   computed: {
-    ...mapGetters('modules/user', [
-      'loading',
-    ])
+    ...mapGetters({
+      loading: 'modules/info/loading'
+    })
   },
   methods: {
-    ...mapActions('modules/user', [ 'logout' ]),
+    ...mapActions({
+      logout: 'modules/user/logout'
+    }),
     async signout () {
       await this.logout()
       this.$router.push('/')

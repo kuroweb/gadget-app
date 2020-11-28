@@ -259,7 +259,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userData: 'modules/user/userData',
+      currentUser: 'modules/user/data',
     }),
   },
   methods: {
@@ -283,7 +283,7 @@ export default {
         data.append('post[images][]', this.image4)
       }
       data.append('post[description]', this.description)
-      data.append('post[user_id]', this.userData.id)
+      data.append('post[user_id]', this.currentUser.id)
       if (this.tags.length !== 0) {
         this.tags.forEach(function(tag){
         data.append('post[tags][]', tag.text)

@@ -76,9 +76,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions('modules/user', ['login', 'setLOADING', 'setFLASH', 'loadUSERDATA']),
+    ...mapActions({
+      login: 'modules/user/login',
+      loadData: 'modules/user/loadData',
+      setLoading: 'modules/info/setLoading',
+      setFlash: 'modules/info/setFlash'
+    }),
     async signUp () {
-      this.setLOADING(true)
+      this.setLoading(true)
       firebaseApp.auth().createUserWithEmailAndPassword(this.email, this.password)
         .then((res) => {
           const user = {
@@ -89,16 +94,16 @@ export default {
           this.login(res.user)
           this.$axios.$post(process.env.BROWSER_BASE_URL + "/v1/users", { user })
         .then((res) => {
-          this.loadUSERDATA(res.uid)
+          this.loadData(res.uid)
         })
         .then((res) => {
-          this.setLOADING(false)
-          this.setFLASH({
+          this.setLoading(false)
+          this.setFlash({
             status: true,
             message: "登録に成功しました"
           })
           setTimeout(() => {
-            this.setFLASH({
+            this.setFlash({
               status: false,
               message: ""
             })

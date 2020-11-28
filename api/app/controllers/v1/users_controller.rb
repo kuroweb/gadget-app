@@ -3,16 +3,19 @@ class V1::UsersController < ApplicationController
 
   def index
     if params[:uid] 
-      current_user = User.find_by(uid: params[:uid])
-      render json: current_user
+      @current_user = User.find_by(uid: params[:uid])
+      render json: @current_user, include: []
     else
       @users = User.all
-      render json: @users
+      render json: @users, include: []
     end
   end
 
+  # ユーザー詳細ページに必要な情報をインクルードして返す。
   def show
-    render json: @user
+    render json: @user, include: [
+      {posts: [:user, :tags]}, :following, :followers
+    ]
   end
     
   def create
@@ -41,15 +44,22 @@ class V1::UsersController < ApplicationController
   end
 
   def following
-    render json: @user.following
+    render json: @user.following, include: []
   end
 
   def followers
-    render json: @user.followers
+    render json: @user.followers, include: []
+  end
+
+  def isFollowed
+    @current_user = User.find(params[:current_user])
+    @other_user = User.find(params[:other_user])
+    isFollowed = @current_user.following?(@other_user)
+    render json: isFollowed
   end
 
   def posts
-    render json: @user.posts
+    render json: @user, include: [:posts]
   end
 
   def search

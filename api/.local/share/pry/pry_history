@@ -465,3 +465,62 @@ User.where(['name LIKE ?, '%test%'])
 exit
 User.where(['name LIKE ?', '%test%'])
 exit
+@like = Like.new(post_id: "40", user_id: "1")
+Like.all
+@like
+@like.save
+Like.all
+user = User.find(1)
+user.likes
+user.likes.post
+user.likes.posts
+user.likes
+user
+user.likes
+user.liked_post
+user.liked_posts
+post = Post.find(40)
+post.likes
+post.likes.count
+post.liked_users
+post = Post.find(40)
+post
+user.liked_posts.include?(post)
+user
+user.liked_posts
+post.liked_users
+post.likes.count
+exit
+user = User.first
+user.posts
+user.posts.first
+user.posts.first.images
+exit
+post = Post.last
+post.images
+post.images.all
+post.images.destroy
+post.images.delete
+post.images.all
+images = post.images.all
+images.delete
+images.destroy
+images
+post.update(images: nil)
+post
+post.images
+post.images.all
+post.images
+post = Post.first
+post.images
+post.images.all
+post = Post.second
+post.images
+post.images.all
+post = Post.find(15)
+post.images.all
+exit
+Tag.all
+tag = Tag.find(14)
+tag.destroy
+exit

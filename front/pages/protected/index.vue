@@ -28,10 +28,10 @@
       }
     },
     computed: {
-      ...mapGetters('modules/user', [
-        'uid',
-        'user'
-      ])
+      ...mapGetters({
+        uid: 'modules/user/uid',
+        user: 'modules/user/user'
+      })
     },
     mounted: function () {
       this.$nextTick(() => {

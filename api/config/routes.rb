@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     get 'tags/search', to: 'tags#search'
     get 'users/search', to: 'users#search'
     get 'posts/search', to: 'posts#search'
+    get 'users/isFollowed', to: 'users#isFollowed'
     resources :users do
       member do
         patch '/update_avatar', to: 'users#update_avatar'
@@ -14,5 +15,6 @@ Rails.application.routes.draw do
     end
     resources :relationships, only: [:create, :destroy]
     resources :posts
+    resources :likes, only: [:create, :destroy]
   end
 end

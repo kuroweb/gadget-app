@@ -58,21 +58,25 @@ export default {
   },
   middleware: ['handle-login-route'],
   methods: {
-    ...mapActions('modules/user', ['login', 'setLOADING', 'setFLASH']),
+    ...mapActions({
+      login: 'modules/user/login',
+      setLoading: 'modules/info/setLoading',
+      setFlash: 'modules/info/setFlash'
+    }),
     async signIn () {
-      this.setLOADING(true)
+      this.setLoading(true)
       firebaseApp.auth().signInWithEmailAndPassword(this.email, this.password)
         .then((res) => {
           this.login(res.user)
         })
         .then(() => {
-          this.setFLASH({
+          this.setFlash({
             status: true,
             message: "ログインしました"
           })
-          this.setLOADING(false)
+          this.setLoading(false)
           setTimeout(() => {
-            this.setFLASH({
+            this.setFlash({
               status: false,
               message: ""
             })

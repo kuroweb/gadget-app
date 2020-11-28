@@ -195,9 +195,9 @@ export default {
     }
   },
   async asyncData({ $axios, store }) {
-    const userData = store.getters['modules/user/userData']
+    const currentUser = store.getters['modules/user/data']
     const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
-    const res = await $axios.$get(baseUrl + `/v1/users/${userData.id}`)
+    const res = await $axios.$get(baseUrl + `/v1/users/${currentUser.id}`)
     return {
       email: res.email,
       emailOriginal: res.email,
@@ -210,12 +210,12 @@ export default {
 
   computed: {
     ...mapGetters({
-      userData: 'modules/user/userData',
+      currentUser: 'modules/user/data',
     })
   },
 
   methods: {
-    ...mapActions('modules/user', ['setLOADING', 'setFLASH', 'logout']),
+    ...mapActions('modules/user', ['setLOADING', 'setFlash', 'logout']),
     loginSuccess() {
       if(this.isEmail) {
         this.isEmail = false
@@ -249,12 +249,12 @@ export default {
           this.$axios.$patch(process.env.BROWSER_BASE_URL + `/v1/users/${this.userId}`, { user: { email: this.email }})
             .then((res) => {
               this.emailOriginal = res.email
-              this.setFLASH({
+              this.setFlash({
                 status: true,
                 message: 'メールアドレスを変更しました'
               })
               setTimeout(() => {
-                this.setFLASH({
+                this.setFlash({
                   status: false,
                   message: ""
                 })
@@ -266,12 +266,12 @@ export default {
       const user = await firebaseApp.auth().currentUser
       user.updatePassword(this.password)
         .then(() => {
-          this.setFLASH({
+          this.setFlash({
             status: true,
             message: 'パスワードを変更しました'
           })
           setTimeout(() => {
-            this.setFLASH({
+            this.setFlash({
               status: false,
               message: ""
             })
@@ -287,12 +287,12 @@ export default {
       })
         .then((res) => {
           this.name = res.name
-          this.setFLASH({
+          this.setFlash({
             status: true,
             message: "プロフィールを変更しました"
           })
           setTimeout(() => {
-            this.setFLASH({
+            this.setFlash({
               status: false,
               message: ""
             })
@@ -310,24 +310,24 @@ export default {
       this.$axios.$patch(process.env.BROWSER_BASE_URL + `/v1/users/${this.userId}/update_avatar`, formData, config)
         .then((res) => {
           this.avatar = res.avatar
-          this.setFLASH({
+          this.setFlash({
             status: true,
             message: "画像を変更しました"
           })
           setTimeout(() => {
-            this.setFLASH({
+            this.setFlash({
               status: false,
               message: ""
             })
           }, 2000)
         })
         .catch((error) => {
-          this.setFLASH({
+          this.setFlash({
             status: true,
             message: "画像の更新に失敗しました。"
           })
           setTimeout(() => {
-            this.setFLASH({
+            this.setFlash({
               status: false,
               message: ""
             })
@@ -342,12 +342,12 @@ export default {
         })
           .then(() => {
             this.logout()
-            this.setFLASH({
+            this.setFlash({
               status: true,
               message: "ユーザーを削除しました"
             })
             setTimeout(() => {
-              this.setFLASH({
+              this.setFlash({
                 status: false,
                 message: ""
               })
