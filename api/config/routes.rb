@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     get 'users/search', to: 'users#search'
     get 'posts/search', to: 'posts#search'
     get 'users/isFollowed', to: 'users#isFollowed'
+    get 'users/test', to: 'users#test'
     resources :users do
       member do
         patch '/update_avatar', to: 'users#update_avatar'

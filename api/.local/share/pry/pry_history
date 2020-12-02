@@ -524,3 +524,35 @@ Tag.all
 tag = Tag.find(14)
 tag.destroy
 exit
+post
+post = Post.first
+post.likes
+post.liked_user
+post.liked_users
+post.liked_users.count
+post.likes
+post.likes.count
+exit
+like = Like.new(user_id: 1, post_id: 15)
+like.save
+exit
+post = Post.find(15)
+post.likes
+post.likes.count
+post.liked_user
+post.liked_users
+post.liked_user\
+exit
+@users = User.includes(:posts)
+@users
+@user = @users.find(1)
+@users
+@users = User.includes(posts: {tag_maps: :tag})
+@user
+@user.posts
+reset
+@user
+@user = User.find(1)
+@user = User.first
+User.all
+exit

@@ -94,6 +94,7 @@ export default {
               return "※メールアドレスとパスワードをご確認ください";
             }
           })(error.code);
+          this.setLoading(false)
         })
     }
   }

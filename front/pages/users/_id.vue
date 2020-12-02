@@ -72,7 +72,7 @@
       </v-card-text>
     </v-card>
     <v-card
-      v-for="post in this.posts"
+      v-for="post in sortById()"
       :key="post.id"
       class="mx-auto mt-5 pa-5" width="500px"
     >
@@ -143,6 +143,7 @@
   </v-container>
 </template>
 <script>
+import _ from 'lodash'
 import PostDeleteDialog from '~/components/organisms/posts/PostDeleteDialog.vue'
 import PostEditDialog from '~/components/organisms/posts/PostEditDialog.vue'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
@@ -167,15 +168,15 @@ export default {
       .then(res => {
         // アクセス先ユーザーの基本情報をコミット
         const data = {
-          id: res.id,
-          name: res.name,
-          profile: res.profile,
-          avatar_url: res.avatar_url,
+          id: res.user.id,
+          name: res.user.name,
+          profile: res.user.profile,
+          avatar_url: res.user.avatar_url,
         }
         store.commit('modules/otherUser/setData', data)
         // アクセス先ユーザーのフォロー・フォロワー情報をコミット
-        store.commit('modules/otherUser/setFollowing', res.following)
-        store.commit('modules/otherUser/setFollowers', res.followers)
+        store.commit('modules/otherUser/setFollowing', res.user.following)
+        store.commit('modules/otherUser/setFollowers', res.user.followers)
         // アクセス先ユーザーの投稿情報をコミット
         store.commit('modules/otherUser/setPosts', res.posts)
       })
@@ -252,6 +253,10 @@ export default {
     openDeleteDialog (post) {
       this.postId = post.id
       this.deleteDialog = true
+    },
+    // 一時的にフロント側でソートしてるだけ。後々バックエンド側で日付順ソートを実装する。
+    sortById () {
+      return _.orderBy(this.posts, 'id', 'desc')
     }
   }
 

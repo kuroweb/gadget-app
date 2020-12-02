@@ -61,13 +61,12 @@ export const actions = {
   },
 
   setUser({commit}, user) {
-    console.log('[STORE ACTIONS] - saveUSER')
+    console.log('[STORE ACTIONS] - saveUser')
     commit('setUser', user)
   },
 
   async loadData ({ commit }, payload) {
     try {
-      console.log('test')
       const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
       const data = await this.$axios.$get(baseUrl + `/v1/users?uid=${payload}`)
       commit('setData', data)

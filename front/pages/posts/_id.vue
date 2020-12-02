@@ -68,22 +68,24 @@ export default {
   },
   data () {
     return {
-      imageCount: null
+      imageCount: null,
+      post: null
     }
   },
-  async fetch({ $axios, params, store }) {
+  async asyncData({ $axios, params }) {
     try {
       const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
-      const data = await $axios.$get(baseUrl + `/v1/posts/${params.id}`)
-      store.commit('modules/post/setPost', data)
-    } catch (error) {
+      const res = await $axios.$get(baseUrl + `/v1/posts/${params.id}`)
+      return {
+        post: res
+      }
+    } catch {
       console.log('投稿が存在しません。')
     }
   },
+
   computed: {
-    ...mapGetters({
-      post: 'modules/post/post'
-    }),
+
   }
 }
 </script>
