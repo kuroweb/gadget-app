@@ -72,7 +72,7 @@
       </v-card-text>
     </v-card>
     <v-card
-      v-for="post in sortById()"
+      v-for="post in posts"
       :key="post.id"
       class="mx-auto mt-5 pa-5" width="500px"
     >
@@ -126,6 +126,21 @@
             <img :src="post.images_url[3]">
           </v-avatar>
         </v-row>
+        <v-row>
+          <v-icon
+            v-if="post.isLikedPost === false"
+            @click="createLikePost(post)"
+          >
+            mdi-heart
+          </v-icon>
+          <v-icon
+            v-if="post.isLikedPost === true"
+            @click="destroyLikePost(post)"
+          >
+            mdi-heart-outline
+          </v-icon>
+          <p>{{ post.liked_users_count }}</p>
+        </v-row>
         <v-row justify="end">
           <v-icon
             @click="openEditDialog(post)"
@@ -178,25 +193,27 @@ export default {
         store.commit('modules/otherUser/setFollowing', res.user.following)
         store.commit('modules/otherUser/setFollowers', res.user.followers)
         // アクセス先ユーザーの投稿情報をコミット
-        store.commit('modules/otherUser/setPosts', res.posts)
+        store.dispatch('modules/otherUser/setPosts', res.posts)
       })
       .catch(error => {
         console.log(error)
       })
   },
   async mounted () {
-    await this.$axios.$get(process.env.BROWSER_BASE_URL + '/v1/users/isFollowed', {
-      params: {
-        current_user: this.$store.state.modules.user.data.id,
-        other_user: this.$store.state.modules.otherUser.data.id
-      }
-    })
-      .then(res => {
-        this.isFollowed = res
+    if (this.currentUser !== null) {
+      await this.$axios.$get(process.env.BROWSER_BASE_URL + '/v1/users/isFollowed', {
+        params: {
+          current_user: this.$store.state.modules.user.data.id,
+          other_user: this.$store.state.modules.otherUser.data.id
+        }
       })
-      .catch(error => {
-        console.log(error)
-      })
+        .then(res => {
+          this.isFollowed = res
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }
   },
   computed: {
     ...mapGetters({
@@ -209,7 +226,13 @@ export default {
     })
   },
   methods: {
-    ...mapActions('modules/otherUser', ['setFollowers']),
+    ...mapActions({
+      setFollowers: 'modules/otherUser/setFollowers',
+      setLikedUsersCountUp: 'modules/otherUser/setLikedUsersCountUp',
+      setLikedUsersCountDown: 'modules/otherUser/setLikedUsersCountDown',
+      setIsLikedPostTrue: 'modules/otherUser/setIsLikedPostTrue',
+      setIsLikedPostFalse: 'modules/otherUser/setIsLikedPostFalse',
+    }),
     follow() {
       this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/relationships', {
           user_id: this.currentUser.id,
@@ -254,9 +277,27 @@ export default {
       this.postId = post.id
       this.deleteDialog = true
     },
-    // 一時的にフロント側でソートしてるだけ。後々バックエンド側で日付順ソートを実装する。
-    sortById () {
-      return _.orderBy(this.posts, 'id', 'desc')
+    createLikePost (post) {
+      const likeParams = {
+        user_id: this.currentUser.id,
+        post_id: post.id
+      }
+      this.$axios.$post(process.env.BROWSER_BASE_URL + `/v1/likes/`, { like: likeParams })
+        .then(() => {
+          this.setLikedUsersCountUp (post)
+          this.setIsLikedPostTrue (post)
+        })
+    },
+    destroyLikePost (post) {
+      const likeParams = {
+        user_id: this.currentUser.id,
+        post_id: post.id
+      }
+      this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/likes/delete', { params: { like: likeParams } })
+        .then(res => {
+          this.setLikedUsersCountDown (post)
+          this.setIsLikedPostFalse (post)
+        })
     }
   }
 

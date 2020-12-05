@@ -3,17 +3,20 @@ class V1::LikesController < ApplicationController
   def create
     @like = Like.new(like_post_params)
     if @like.save
-      render status: :created
+      render status: :created, json: true
     end
   end
 
   def destroy
-    @like = Like.find_by(post_id: like_post_params[:post_id], user_id: like_post_params[:user_id])
+    liked = JSON.parse(params['like'])
+    like = Like.find_by(liked)
+    like.destroy!
+    render status: 200, json: false
   end
 
   private
     def like_post_params
-      params.require(:like).permit(:post_id, :user_id)
+      params.require(:like).permit(:user_id, :post_id)
     end
 
 end

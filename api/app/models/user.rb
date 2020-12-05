@@ -13,8 +13,6 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :liked_posts, through: :likes, source: :post
 
-  scope :includes_posts, -> { includes(:posts) }
-
   def avatar_url
     avatar.attached? ? url_for(avatar) : nil
   end

@@ -13,7 +13,7 @@ class V1::UsersController < ApplicationController
 
   # ユーザー詳細ページに必要な情報をインクルードして返す。
   def show
-    @user = User.with_attached_avatar.includes(:following, :followers).find(1)
+    @user = User.with_attached_avatar.includes(:following, :followers).find(params[:id])
     posts = @user.posts.with_attached_images.includes(:user, :tags, :liked_users)
     render json: {
       user: @user.as_json(methods: :avatar_url, include: [:following, :followers]),
