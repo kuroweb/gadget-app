@@ -26,6 +26,12 @@
       :parentComment="parentComment"
       @closeDialog="replyDialog = false"
     />
+    <PostCommentDeleteDialog
+      :dialog="commentDeleteDialog"
+      :postId="postId"
+      :comment="comment"
+      @closeDialog="commentDeleteDialog = false"
+    />
 
     <v-card v-if="otherUser.id" class="mx-auto mt-5 pa-5" width="500px">
       <v-card-text>
@@ -191,6 +197,13 @@
               <p>{{ comment.user.name }}</p>
             </v-row>
             <p>{{ comment.description }}</p>
+            <v-row justify="end">
+              <v-icon
+                @click="openCommentDeleteDialog(post, comment)"
+              >
+                mdi-delete
+              </v-icon>
+            </v-row>
           </v-card>
           <v-card
             class="mx-auto mt-5 pa-5"
@@ -216,6 +229,13 @@
               <p>{{ child.user.name }}</p>
             </v-row>
             <p>{{ child.description }}</p>
+            <v-row justify="end">
+              <v-icon
+                @click="openCommentDeleteDialog(post, child)"
+              >
+                mdi-delete
+              </v-icon>
+            </v-row>
           </v-card>
           <v-row justify="center">
             <v-btn
@@ -240,6 +260,7 @@
 </template>
 <script>
 import _ from 'lodash'
+import PostCommentDeleteDialog from '~/components/organisms/posts/PostCommentDeleteDialog.vue'
 import PostReplyDialog from '~/components/organisms/posts/PostReplyDialog.vue'
 import PostCommentDialog from '~/components/organisms/posts/PostCommentDialog.vue'
 import PostDeleteDialog from '~/components/organisms/posts/PostDeleteDialog.vue'
@@ -253,16 +274,19 @@ export default {
     PostDeleteDialog,
     PostCommentDialog,
     PostReplyDialog,
+    PostCommentDeleteDialog
   },
   data () {
     return {
       isFollowed: false,
       editDialog: false,
       deleteDialog: false,
+      commentDeleteDialog: false,
       commentDialog: false,
       replyDialog: false,
       postId: '',
       parentComment: '',
+      comment: ''
     }
   },
   async fetch({ $axios, params, store }) {
@@ -377,6 +401,11 @@ export default {
       this.postId = post.id
       this.parentComment = comment
       this.replyDialog = true
+    },
+    openCommentDeleteDialog (post, comment) {
+      this.postId = post.id
+      this.comment = comment
+      this.commentDeleteDialog = true
     },
 
     // ライクボタン関連

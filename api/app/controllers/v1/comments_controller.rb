@@ -9,8 +9,18 @@ class V1::CommentsController < ApplicationController
     end
   end
 
-  def destory
-
+  def destroy
+    @comment = Comment.find_by(id: params[:comment_id])
+    # 親コメントを削除する場合、小コメントも併せて削除する
+    if params[:reply_comment_id] === nil
+      child_comments = Comment.where(reply_comment_id: params[:comment_id])
+      child_comments.each do |comment|
+        comment.destroy
+      end
+      @comment.destroy
+    else
+      @comment.destroy
+    end
   end
 
   private

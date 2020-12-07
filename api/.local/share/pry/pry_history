@@ -619,3 +619,28 @@ Comment.all
 exit
 Comment.all
 exit
+comments = Comment.find_by(id: 4)
+comments = Comment.find_by(reply_comment_id: 4)
+comments = Comment.find_by(reply_comment_id: 3)
+comments = Comment.find_by(reply_comment_id: 5)
+comments = Comment.find_by(reply_comment_id: 6)
+comments = Comment.find_by(reply_comment_id: 7)
+comments = Comment.find_by(reply_comment_id: 1)
+comments = Comment.find_by(reply_comment_id: 2)
+comments = Comment.find_by(reply_comment_id: 3)
+comments = Comment.find_by(reply_comment_id: 9)
+Comment.all
+comments = Comment.find_by(reply_comment_id: 4)
+comments
+comments = Comment.find_by(reply_comment_id: 4)
+comments = Comment.where(reply_comment_id: 4)
+comments
+comments.destroy
+comments.delete
+comments.first.destroy
+comments
+Comment.all
+comments = Comment.where(reply_comment_id: 4)
+comments
+comments = Comment.where(reply_comment_id: 4)
+exit
