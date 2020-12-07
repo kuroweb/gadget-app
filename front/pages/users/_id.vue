@@ -1,5 +1,10 @@
 <template>
   <v-container>
+    <ErrorCard
+      :display="!otherUser.id"
+      title="404NotFound"
+      message="ユーザーが存在しません。"
+    />
     <PostEditDialog
       :dialog="editDialog"
       :postId="postId"
@@ -10,11 +15,18 @@
       :postId="postId"
       @closeDialog="deleteDialog = false"
     />
-    <ErrorCard
-      :display="!otherUser.id"
-      title="404NotFound"
-      message="ユーザーが存在しません。"
+    <PostCommentDialog
+      :dialog="commentDialog"
+      :postId="postId"
+      @closeDialog="commentDialog = false"
     />
+    <PostReplyDialog
+      :dialog="replyDialog"
+      :postId="postId"
+      :parentComment="parentComment"
+      @closeDialog="replyDialog = false"
+    />
+
     <v-card v-if="otherUser.id" class="mx-auto mt-5 pa-5" width="500px">
       <v-card-text>
         <v-row justify="center">
@@ -153,12 +165,83 @@
             mdi-delete
           </v-icon>
         </v-row>
+        <v-card
+          v-for="comment in post.comments"
+          :key="comment.id"
+          flat
+        >
+          <v-card
+            class="mx-auto mt-5 pa-5"
+          >
+            <v-row>
+              <v-avatar 
+                size="62"
+              >
+                <img 
+                  v-if="comment.user.avatar_url"
+                  :src="comment.user.avatar_url"
+                  alt="Avatar"
+                >
+                <img
+                  v-else
+                  src="~/assets/images/default_icon.jpeg"
+                  alt="Avatar"
+                >
+              </v-avatar>
+              <p>{{ comment.user.name }}</p>
+            </v-row>
+            <p>{{ comment.description }}</p>
+          </v-card>
+          <v-card
+            class="mx-auto mt-5 pa-5"
+            v-for="child in comment.childComments"
+            :key="child.id"
+          >
+            <p>@返信コメント</p>
+            <v-row>
+              <v-avatar 
+                size="62"
+              >
+                <img 
+                  v-if="child.user.avatar_url"
+                  :src="child.user.avatar_url"
+                  alt="Avatar"
+                >
+                <img
+                  v-else
+                  src="~/assets/images/default_icon.jpeg"
+                  alt="Avatar"
+                >
+              </v-avatar>
+              <p>{{ child.user.name }}</p>
+            </v-row>
+            <p>{{ child.description }}</p>
+          </v-card>
+          <v-row justify="center">
+            <v-btn
+              color="success"
+              @click="openReplyDialog(post, comment)"
+            >
+              返信する
+            </v-btn>
+          </v-row>
+        </v-card>
+        <v-row justify="center">
+          <v-btn
+            color="success"
+            @click="openCommentDialog(post)"
+          >
+            コメントする
+          </v-btn>
+        </v-row>
       </v-card-text>
     </v-card>
   </v-container>
 </template>
 <script>
 import _ from 'lodash'
+import PostReplyDialog from '~/components/organisms/posts/PostReplyDialog.vue'
+import PostCommentDialog from '~/components/organisms/posts/PostCommentDialog.vue'
 import PostDeleteDialog from '~/components/organisms/posts/PostDeleteDialog.vue'
 import PostEditDialog from '~/components/organisms/posts/PostEditDialog.vue'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
@@ -167,14 +250,19 @@ export default {
   components: {
     ErrorCard,
     PostEditDialog,
-    PostDeleteDialog
+    PostDeleteDialog,
+    PostCommentDialog,
+    PostReplyDialog,
   },
   data () {
     return {
       isFollowed: false,
       editDialog: false,
       deleteDialog: false,
+      commentDialog: false,
+      replyDialog: false,
       postId: '',
+      parentComment: '',
     }
   },
   async fetch({ $axios, params, store }) {
@@ -233,6 +321,8 @@ export default {
       setIsLikedPostTrue: 'modules/otherUser/setIsLikedPostTrue',
       setIsLikedPostFalse: 'modules/otherUser/setIsLikedPostFalse',
     }),
+
+    // フォローボタン関連
     follow() {
       this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/relationships', {
           user_id: this.currentUser.id,
@@ -269,6 +359,8 @@ export default {
           console.log("フォロー解除に失敗")
         })
     },
+
+    // ダイアログ関連
     openEditDialog (post) {
       this.postId = post.id
       this.editDialog = true
@@ -277,6 +369,17 @@ export default {
       this.postId = post.id
       this.deleteDialog = true
     },
+    openCommentDialog (post) {
+      this.postId = post.id
+      this.commentDialog = true
+    },
+    openReplyDialog (post, comment) {
+      this.postId = post.id
+      this.parentComment = comment
+      this.replyDialog = true
+    },
+
+    // ライクボタン関連
     createLikePost (post) {
       const likeParams = {
         user_id: this.currentUser.id,

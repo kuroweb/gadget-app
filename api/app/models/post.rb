@@ -6,6 +6,7 @@ class Post < ApplicationRecord
   has_many :tags, through: :tag_maps
   has_many :likes, dependent: :destroy
   has_many :liked_users, through: :likes, source: :user
+  has_many :comments, dependent: :destroy
 
   def images_url
     if images.attached?

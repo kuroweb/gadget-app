@@ -556,3 +556,66 @@ reset
 @user = User.first
 User.all
 exit
+@comment = Comment.new(description: 'test', post_id: 15, user_id: '    if @post.save
+      @post.save_tag(sent_tags)
+      render json: @post, status: :created
+    else
+      render json: @post.errors, status: :unprocessable_entity
+exit
+User.all
+user = User.first
+User.all
+if @post.save
+  @post.save_tag(sent_tags)
+  render json: @post, status: :created
+else
+  render json: @post.errors, status: :unprocessable_entity
+end
+reset
+comment = Comment.new(description: 'test', post_id: 15, user_id: 1)
+exit
+comment = Comment.new(description: 'test', post_id: 15, user_id: 1)
+comment.save
+Comment.all
+comment
+Comment.create(description: 'test', post_id: 15, user_id: 1)
+exit
+Comment.create(description: 'test', post_id: 15, user_id: 1)
+Comment.create(id: 1, description: 'test', post_id: 15, user_id: 1)
+Comment.all
+Comment.create(description: 'test', post_id: 15, user_id: 1)
+exit
+Comment.create(description: 'test', post_id: 15, user_id: 1)
+exit
+Comment.create(description: 'test', post_id: 15, user_id: 1)
+eixt
+exit
+Comment.create(description: 'test', post_id: 15, user_id: 1)
+exot
+exit
+Comment.create(description: 'test', post_id: 15, user_id: 1)
+Comment.all
+Comment.create(description: 'test_reply', post_id: 15, user_id: 1, reply_comment_id: 1)
+exit
+comment = Comment.first
+comment = Comment.all
+User.all
+comment = Comment.new(description: 'test', user_id: 1, post_id: 15)
+comment.save
+Comment.all
+exit
+Comment.all
+Comment.create(description: 'test', user_id: 1, post_id: 15)
+Comment.create(description: 'test', user_id: 1, post_id: 15, reply_comment_id: 1)
+Comment.all
+Comment.create(description: 'test', user_id: 2, post_id: 15, reply_comment_id: 1)
+Comment.all
+exit
+Comment.create(description: '最初のコメント', user_id: 1, post_id: 13)
+Comment.all
+Comment.create(description: '最初のコメントへの返信', reply_comment_id: 4, user_id: 2, post_id: 13)
+Comment.create(description: '最初のコメントへの返信への返信', reply_comment_id: 4, user_id: 1, post_id: 13)
+Comment.all
+exit
+Comment.all
+exit
