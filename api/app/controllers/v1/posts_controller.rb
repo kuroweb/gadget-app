@@ -1,5 +1,5 @@
 class V1::PostsController < ApplicationController
-  before_action :set_post, only: [:show, :update, :destroy]
+  before_action :set_post, only: [:update, :destroy]
 
   def index
     @posts = Post.all
@@ -8,7 +8,8 @@ class V1::PostsController < ApplicationController
   end
 
   def show
-    render json: @post
+    @post = Post.with_attached_images.includes(:tags).find(params[:id])
+    render json: @post.as_json(methods: :images_url, include: :tags)
   end
 
   def create

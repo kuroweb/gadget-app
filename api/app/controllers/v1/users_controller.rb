@@ -14,7 +14,7 @@ class V1::UsersController < ApplicationController
   # ユーザー詳細ページに必要な情報をインクルードして返す。
   def show
     @user = User.with_attached_avatar.includes(:following, :followers).find(params[:id])
-    posts = @user.posts.with_attached_images.includes(:user, :tags, :liked_users, :comments)
+    posts = @user.posts.with_attached_images.order(created_at: 'DESC').includes(:user, :tags, :liked_users, :comments)
     render json: {
       user: @user.as_json(methods: :avatar_url, include: [:following, :followers]),
       posts: posts.as_json(methods: :images_url, include: [{user: {methods: :avatar_url}}, :tags, :liked_users, {comments: {include: {user: {methods: :avatar_url}}}}])

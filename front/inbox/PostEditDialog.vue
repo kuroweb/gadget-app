@@ -125,9 +125,8 @@ export default {
   },
   watch: {
     async dialog (newValue) {
-      // モーダルウィンドウを表示
       this.dialogStatus = newValue
-      // モーダルウィンドウ内に必要なデータの初期化
+      // dialogがtrueの時だけ値を取得
       if (this.dialogStatus === true) {
         const res = await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`)
         this.description = res.description
@@ -243,7 +242,7 @@ export default {
               })
           }
         }
-      // モーダルウィンドウを閉じたらモーダル内のデータを初期化
+      // dialogがfalseで値を初期化
       } else {
         this.image1Url = []
         this.image2Url = []
