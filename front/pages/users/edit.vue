@@ -200,12 +200,12 @@ export default {
     const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
     const res = await $axios.$get(baseUrl + `/v1/users/${currentUser.id}`)
     return {
-      email: res.email,
-      emailOriginal: res.email,
-      name: res.name,
-      userId: res.id,
-      profile: res.profile,
-      avatar_url: res.avatar_url
+      email: res.user.email,
+      emailOriginal: res.user.email,
+      name: res.user.name,
+      userId: res.user.id,
+      profile: res.user.profile,
+      avatar_url: res.user.avatar_url
     }
   },
 

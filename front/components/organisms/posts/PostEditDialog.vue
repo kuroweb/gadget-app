@@ -135,7 +135,7 @@ export default {
         // tagの初期化
         if (res.tags.length !== 0) {
           const tagsData = []
-          res.tags.forEach(function(tag) {
+          res.tags.forEach(tag => {
             const tagData = {
               text: tag.tag_name,
               tiClasses: ["ti-valid"]
