@@ -644,3 +644,13 @@ comments = Comment.where(reply_comment_id: 4)
 comments
 comments = Comment.where(reply_comment_id: 4)
 exit
+Board.all
+exit
+Board.all
+exit
+Board.all
+board = Board.first
+board.images
+exit
+BoardComment.all
+exit

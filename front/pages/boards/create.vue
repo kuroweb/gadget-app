@@ -2,11 +2,11 @@
   <v-container>
     <v-card class="mx-auto mt-5 pa-5" width="400px">
       <v-card-title>
-        <h2 class="create-post-h2">新規投稿</h2>
+        <h2>掲示板を作成</h2>
       </v-card-title>
       <v-form>
         <ValidationObserver v-slot="ObserverProps">
-          <div class="create-post-box">
+          <div class="create-board-box">
             <v-row>
               <v-col cols=3 sm=3 md=3 lg=3 xl=3
                 align-self="center"
@@ -65,9 +65,9 @@
               <v-btn
                 color="success"
                 class="white--text"
-                @click="createPost"
+                @click="createBoard"
                 :disabled="ObserverProps.invalid || !ObserverProps.validated"
-              >投稿
+              >作成
               </v-btn>
             </v-row>
           </div>
@@ -109,7 +109,7 @@ export default {
     }),
   },
   methods: {
-    async createPost () {
+    async createBoard () {
       const data = new FormData()
       const config = {
         headders: {
@@ -117,31 +117,31 @@ export default {
         }
       }
       if (this.image1.length !== 0) {
-        data.append('post[images][]', this.image1)
+        data.append('board[images][]', this.image1)
       }
       if (this.image2.length !== 0) {
-        data.append('post[images][]', this.image2)
+        data.append('board[images][]', this.image2)
       }
       if (this.image3.length !== 0) {
-        data.append('post[images][]', this.image3)
+        data.append('board[images][]', this.image3)
       }
       if (this.image4.length !== 0) {
-        data.append('post[images][]', this.image4)
+        data.append('board[images][]', this.image4)
       }
-      data.append('post[description]', this.description)
-      data.append('post[user_id]', this.currentUser.id)
+      data.append('board[description]', this.description)
+      data.append('board[user_id]', this.currentUser.id)
       // this.tagsの中身を抽出して配列に格納
       if (this.tags.length !== 0) {
         this.tags.forEach(function(tag){
-        data.append('post[tags][]', tag.text)
+        data.append('board[tags][]', tag.text)
         })
       }
-      this.$axios.$post(process.env.BROWSER_BASE_URL + `/v1/posts`, data, config)
+      this.$axios.$post(process.env.BROWSER_BASE_URL + `/v1/boards`, data, config)
       .then(() => {
-        console.log('投稿に成功しました')
+        console.log('作成に成功しました')
       })
       .catch((error) => {
-        console.log('投稿に失敗しました')
+        console.log('作成に失敗しました')
         console.log(error)
       })
     },
@@ -180,7 +180,7 @@ export default {
   padding: 0 30%;
 }
 
-.create-post-h2 {
+.create-board-h2 {
   font-size: 24px;
 }
 </style>

@@ -171,6 +171,14 @@
             mdi-delete
           </v-icon>
         </v-row>
+        <v-row justify="center">
+          <v-btn
+            color="success"
+            @click="openCommentDialog(post)"
+          >
+            コメントする
+          </v-btn>
+          </v-row>
         <v-card
           v-for="comment in post.comments"
           :key="comment.id"
@@ -237,7 +245,7 @@
               </v-icon>
             </v-row>
           </v-card>
-          <v-row justify="center">
+          <v-row justify="end">
             <v-btn
               color="success"
               @click="openReplyDialog(post, comment)"
@@ -246,14 +254,6 @@
             </v-btn>
           </v-row>
         </v-card>
-        <v-row justify="center">
-          <v-btn
-            color="success"
-            @click="openCommentDialog(post)"
-          >
-            コメントする
-          </v-btn>
-        </v-row>
       </v-card-text>
     </v-card>
   </v-container>
