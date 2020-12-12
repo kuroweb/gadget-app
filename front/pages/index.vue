@@ -1,20 +1,77 @@
 <template>
-  <section>
-    <div>
-      <h2>Indexページです。</h2>
-    </div>
-  </section>
+  <v-container>
+    <v-row justify="center">
+      <v-col lg="3" sm="8" cols="12">
+        <SideMenu
+          @openMicropostFeed="openMicropostFeed"
+          @openBoardList="openBoardList"
+          @openGadgetList="openGadgetList"
+        />
+      </v-col>
+      <!-- メニュークリックに併せて表示内容を切り替え -->
+      <v-col lg="6" sm="8" cols="12">
+        <MicropostFeed
+          :render="micropostFeed"
+        />
+        <BoardList
+          :render="boardList"
+        />
+        <GadgetList
+          :render="gadgetList"
+        />
+      </v-col>
+      <v-col lg="3" sm="8" cols="12">
+        <v-card>
+          <v-list>
+            <v-subheader>ランキング</v-subheader>
+          </v-list>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-
+import MicropostFeed from '~/components/organisms/feeds/MicropostFeed.vue'
+import BoardList from '~/components/organisms/feeds/BoardList.vue'
+import GadgetList from '~/components/organisms/feeds/GadgetList.vue'
+import SideMenu from '~/components/organisms/feeds/SideMenu.vue'
 export default {
-
+  components: {
+    MicropostFeed,
+    BoardList,
+    GadgetList,
+    SideMenu
+  },
+  data () {
+    return {
+      micropostFeed: true,
+      boardList: false,
+      gadgetList: false
+    }
+  },
+  computed: {
+  },
+  methods: {
+    // メインコンテンツ表示切り替え関連
+    openMicropostFeed () {
+      this.micropostFeed = true
+      this.boardList = false
+      this.gadgetList = false
+    },
+    openBoardList () {
+      this.micropostFeed = false
+      this.boardList = true
+      this.gadgetList = false
+    },
+    openGadgetList () {
+      this.micropostFeed = false
+      this.boardList = false
+      this.gadgetList = true
+    }
+  }
 }
 </script>
 
 <style>
-  a {
-    padding: 5px;
-  }
 </style>

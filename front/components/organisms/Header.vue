@@ -1,4 +1,3 @@
-
 <template>
   <v-app-bar
     color="cyan darken-2" 

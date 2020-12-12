@@ -3,11 +3,11 @@ class V1::UsersController < ApplicationController
 
   def index
     if params[:uid] 
-      @current_user = User.find_by(uid: params[:uid])
-      render json: @current_user, include: []
+      @current_user = User.with_attached_avatar.find_by(uid: params[:uid])
+      render json: @current_user.as_json(methods: :avatar_url)
     else
       @users = User.all
-      render json: @users, include: []
+      render json: @users
     end
   end
 
@@ -51,11 +51,11 @@ class V1::UsersController < ApplicationController
   end
 
   def following
-    render json: @user.following, include: []
+    render json: @user.following
   end
 
   def followers
-    render json: @user.followers, include: []
+    render json: @user.followers
   end
 
   def isFollowed

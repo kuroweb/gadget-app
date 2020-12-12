@@ -14,7 +14,9 @@
 import "loaders.css";
 export default {
   data() {
-    return {};
+    return {
+      
+    }
   },
 };
 </script>

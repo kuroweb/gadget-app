@@ -2,8 +2,11 @@ class V1::PostsController < ApplicationController
   before_action :set_post, only: [:update, :destroy]
 
   def index
-    @posts = Post.all
-    render json: @posts
+    @posts = Post.with_attached_images.includes({user: {avatar_attachment: :blob}}, :tags, {comments: {user: {avatar_attachment: :blob}}}).all
+    render json: @posts.as_json(include: [{user: {methods: :avatar_url}},
+                                          :tags,
+                                          {comments: {include: {user: {methods: :avatar_url}}}}],
+                                methods: :images_url)
   end
 
   def show
