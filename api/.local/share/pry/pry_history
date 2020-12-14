@@ -654,3 +654,7 @@ board.images
 exit
 BoardComment.all
 exit
+board = Board.first
+board.destroy
+Board.all
+exit

@@ -1,43 +1,42 @@
 <template>
   <v-card
-  class="mx-auto mt-5 pa-5"
+    class="mx-auto mt-5 pa-5"
   >
-    <v-card-title>
-      <v-row justify="center">
-        <v-col>
-          <v-avatar 
-          size="62"
-          >
-            <img 
-              v-if="post.user.avatar_url"
-              :src="post.user.avatar_url"
-              alt="Avatar"
-            >
-            <img
-              v-else
-              src="~/assets/images/default_icon.jpeg"
-              alt="Avatar"
-            >
-          </v-avatar>
-        </v-col>
-        <v-col
-          align-self="center"
+    <v-row justify="center">
+      <v-col>
+        <v-avatar 
+        size="62"
         >
-          <h3>{{ post.user.name }}</h3>
-        </v-col>
-      </v-row>
-    </v-card-title>
-    <v-card-subtitle>
-      <Tags
-        :tags="post.tags"
-      />
-    </v-card-subtitle>
-    <v-card-text>
+          <img 
+            v-if="post.user.avatar_url"
+            :src="post.user.avatar_url"
+            alt="Avatar"
+          >
+          <img
+            v-else
+            src="~/assets/images/default_icon.jpeg"
+            alt="Avatar"
+          >
+        </v-avatar>
+      </v-col>
+      <v-col
+        align-self="center"
+      >
+        <h3>{{ post.user.name }}</h3>
+      </v-col>
+    </v-row>
+    <v-card
+      flat
+      :to="`/posts/${post.id}`"
+    >
       <p>{{ post.description }}</p>
-    </v-card-text>
+    </v-card>
     <!-- 投稿画像用のコンポーネントを作成 -->
     <Images
       :images="post.images_url"
+    />
+    <Tags
+      :tags="post.tags"
     />
     <v-row>
       <v-col>

@@ -7,7 +7,7 @@
   >
     <v-toolbar-title>
       <n-link to="/" style="color:white; text-decoration:none">
-        <h2 class="app-title">ガジェコミ！</h2>
+        <h2 class="app-title">ポートフォリオ</h2>
       </n-link>
     </v-toolbar-title>
     <v-spacer />

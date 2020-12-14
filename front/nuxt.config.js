@@ -51,4 +51,9 @@ export default {
       "vee-validate/dist/rules"
     ],
   },
+
+  vuetify: {
+    customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
+  }
 }

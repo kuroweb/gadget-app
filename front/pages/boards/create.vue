@@ -48,7 +48,19 @@
               </v-col>
               <p v-if="imageError">{{ imageError }}</p>
             </v-row>
+
+            <SelectFormWithValidation
+              v-model="type"
+              :items="items"
+              label="掲示板タイプ"
+              rules="required"
+            />
             <TextFieldWithValidation
+              v-model="title"
+              label="タイトル"
+              rules="max:255|required"
+            />
+            <TextAreaWithValidation
               v-model="description"
               label="説明文"
               rules="max:255|required"
@@ -60,7 +72,6 @@
                 @tags-changed="newTags => tags = newTags"
               />
             </client-only>
-
             <v-row justify="center">
               <v-btn
                 color="success"
@@ -80,13 +91,17 @@
 <script>
 import { mapGetters } from 'vuex'
 import TextFieldWithValidation from '~/components/molecules/inputs/TextFieldWithValidation.vue'
+import TextAreaWithValidation from '~/components/molecules/inputs/TextAreaWithValidation.vue'
+import SelectFormWithValidation from '~/components/molecules/inputs/SelectFormWithValidation.vue'
 export default {
   components: {
     TextFieldWithValidation,
-    
+    TextAreaWithValidation,
+    SelectFormWithValidation,
   },
   data () {
     return {
+      title: '',
       description: '',
       maxImageNum: 4,
       image1Url: [],
@@ -99,7 +114,10 @@ export default {
       image4: [],
       imageError: null,
       tag: '',
-      tags: []
+      tags: [],
+      items: ['雑談',　'質問'],
+      value: '',
+      type: ''
     }
   },
   computed: {
@@ -128,6 +146,8 @@ export default {
       if (this.image4.length !== 0) {
         data.append('board[images][]', this.image4)
       }
+      data.append('board[board_type]]', this.type)
+      data.append('board[title]', this.title)
       data.append('board[description]', this.description)
       data.append('board[user_id]', this.currentUser.id)
       // this.tagsの中身を抽出して配列に格納

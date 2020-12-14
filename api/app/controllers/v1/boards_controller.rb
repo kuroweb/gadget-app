@@ -2,8 +2,12 @@ class V1::BoardsController < ApplicationController
   
   # 掲示板一覧
   def index
-    @boards = Board.all
-    render json: @boards
+    if params[:board_type]
+      @boards = Board.includes(:tags).where(board_type: params[:board_type])
+    else
+      @boards = Board.all
+    end
+    render json: @boards.as_json(include: :tags)
   end
 
   # 掲示板詳細
@@ -41,7 +45,7 @@ class V1::BoardsController < ApplicationController
   private
 
     def board_content_params
-      params.require(:board).permit(:description, :user_id, images: [])
+      params.require(:board).permit(:title, :description, :board_type, :user_id, images: [])
     end
 
     def board_tags_params

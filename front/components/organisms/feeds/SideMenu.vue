@@ -1,9 +1,17 @@
 <template>
     <v-card>
+      <v-toolbar
+        color="cyan darken-1"
+        dark
+        flat
+      >
+        <v-toolbar-title>Menu</v-toolbar-title>
+      </v-toolbar>
       <v-list>
-        <v-subheader>MENU</v-subheader>
-        <v-divider class="my-2"></v-divider>
-        <v-list-item-group color="primary">
+        <v-list-item-group
+          color="orange"
+          mandatory
+        >
           <v-list-item
             v-for="item in menuItems"
             :key="item.id"
