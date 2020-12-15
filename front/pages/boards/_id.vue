@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <ErrorCard
-      :display="!board"
+      :display="error"
       title="404NotFount"
       message="掲示板が存在しません。"
     />
@@ -22,14 +22,16 @@
       :comment="comment"
       @closeDialog="deleteCommentDialog = false"
     />
-    <v-row justify="center">
+    <v-row
+      justify="center"
+      v-if="error === false"
+    >
       <v-col lg="3" sm="8" cols="12">
         <v-card>
           <p>関連投稿を表示</p>
         </v-card>
       </v-col>
       <v-col lg="6" sm="8" cols="12">
-        <!-- v-if要修正。errorcardと切り替えできるように -->
         <v-card
           v-if="board"
         >
@@ -86,15 +88,13 @@
                 コメントする
               </v-btn>
             </v-row>
-          </v-container>
-          <v-container>
             <v-card
               v-for="comment in board.board_comments"
               :key="comment.id"
               flat
             >
               <v-card
-                class="mx-auto pa-5"
+                class="mx-auto pa-5 mt-5"
               >
                 <v-row>
                   <v-col>
@@ -118,6 +118,11 @@
                   </v-col>
                 </v-row>
                 <p>{{ comment.description }}</p>
+                <v-row>
+                  <Images
+                    :images="comment.images_url"
+                  />
+                </v-row>
                 <v-row
                   justify="end"
                 >
@@ -167,8 +172,8 @@
                             size="48"
                           >
                             <img 
-                              v-if="comment.user.avatar_url"
-                              :src="comment.user.avatar_url"
+                              v-if="child.user.avatar_url"
+                              :src="child.user.avatar_url"
                               alt="Avatar"
                             >
                             <img
@@ -179,13 +184,12 @@
                           </v-avatar>
                         </v-col>
                         <v-col align-self="center">
-                          <h3>{{ comment.user.name }}</h3>
+                          <h3>{{ child.user.name }}</h3>
                         </v-col>
                       </v-row>
                       <p>{{ child.description }}</p>
                     </v-card-text>
                   </v-card>
-
                 </v-timeline-item>
               </v-timeline>
             </v-card>
@@ -198,8 +202,6 @@
         </v-card>
       </v-col>
     </v-row>
-
-
   </v-container>
 </template>
 <script>
@@ -235,9 +237,10 @@ export default {
       .then(res => {
         // 掲示板の情報をコミット
         store.dispatch('modules/board/setData', res)
+        store.commit('modules/info/setError', false)
       })
       .catch(error => {
-        console.log('掲示板が存在しません。')
+        store.commit('modules/info/setError', true)
       })
   },
 
@@ -246,7 +249,8 @@ export default {
     ...mapGetters({
       currentUser: 'modules/user/data',
       isAuthenticated: 'modules/user/isAuthenticated',
-      board: 'modules/board/data'
+      board: 'modules/board/data',
+      error: 'modules/info/error'
     })
   },
 

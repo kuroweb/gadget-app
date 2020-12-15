@@ -6,82 +6,41 @@
       </v-card-title>
       <v-form>
         <ValidationObserver v-slot="ObserverProps">
-          <div class="create-board-box">
-            <v-row>
-              <v-col cols=3 sm=3 md=3 lg=3 xl=3
-                align-self="center"
-                v-for="n in maxImageNum"
-                :key="n.id"
-              >
-                <v-row justify="center">
-                  <v-avatar
-                    justify="center"
-                    v-if="$data['image' + n].length != 0"
-                    size="62"
-                  >
-                    <img
-                      v-if="$data['image' + n + 'Url']"
-                      :src="$data['image' + n + 'Url']"
-                    />
-                  </v-avatar>
-                </v-row>
-                <v-row justify="center">
-                  <v-btn
-                    v-if="$data['image' + n].length != 0"
-                    color="success"
-                    @click="removeImage(n)"
-                  >
-                    削除
-                  </v-btn>
-                </v-row>
-                <div class="input-box">
-                  <v-file-input
-                    v-if="$data['image' + n].length == 0"
-                    accept="image/*"
-                    v-model="$data['image' + n]"
-                    @change="addImage(n)"
-                    prepend-icon="mdi-camera"
-                    label="File input"
-                    hide-input
-                  />
-                </div>
-              </v-col>
-              <p v-if="imageError">{{ imageError }}</p>
-            </v-row>
-
-            <SelectFormWithValidation
-              v-model="type"
-              :items="items"
-              label="掲示板タイプ"
-              rules="required"
+          <ImagesForm
+            @setImages="setImages"
+          />
+          <SelectFormWithValidation
+            v-model="type"
+            :items="items"
+            label="掲示板タイプ"
+            rules="required"
+          />
+          <TextFieldWithValidation
+            v-model="title"
+            label="タイトル"
+            rules="max:255|required"
+          />
+          <TextAreaWithValidation
+            v-model="description"
+            label="説明文"
+            rules="max:255|required"
+          />
+          <client-only>
+            <VueTagsInput
+              v-model="tag"
+              :tags="tags"
+              @tags-changed="newTags => tags = newTags"
             />
-            <TextFieldWithValidation
-              v-model="title"
-              label="タイトル"
-              rules="max:255|required"
-            />
-            <TextAreaWithValidation
-              v-model="description"
-              label="説明文"
-              rules="max:255|required"
-            />
-            <client-only>
-              <VueTagsInput
-                v-model="tag"
-                :tags="tags"
-                @tags-changed="newTags => tags = newTags"
-              />
-            </client-only>
-            <v-row justify="center">
-              <v-btn
-                color="success"
-                class="white--text"
-                @click="createBoard"
-                :disabled="ObserverProps.invalid || !ObserverProps.validated"
-              >作成
-              </v-btn>
-            </v-row>
-          </div>
+          </client-only>
+          <v-row justify="center">
+            <v-btn
+              color="success"
+              class="white--text"
+              @click="createBoard"
+              :disabled="ObserverProps.invalid || !ObserverProps.validated"
+            >作成
+            </v-btn>
+          </v-row>
         </ValidationObserver>
       </v-form>
     </v-card>
@@ -93,31 +52,24 @@ import { mapGetters } from 'vuex'
 import TextFieldWithValidation from '~/components/molecules/inputs/TextFieldWithValidation.vue'
 import TextAreaWithValidation from '~/components/molecules/inputs/TextAreaWithValidation.vue'
 import SelectFormWithValidation from '~/components/molecules/inputs/SelectFormWithValidation.vue'
+import ImagesForm from '~/components/molecules/inputs/ImagesForm.vue'
 export default {
   components: {
     TextFieldWithValidation,
     TextAreaWithValidation,
     SelectFormWithValidation,
+    ImagesForm
   },
   data () {
     return {
       title: '',
       description: '',
-      maxImageNum: 4,
-      image1Url: [],
-      image2Url: [],
-      image3Url: [],
-      image4Url: [],
-      image1: [],
-      image2: [],
-      image3: [],
-      image4: [],
-      imageError: null,
       tag: '',
       tags: [],
       items: ['雑談',　'質問'],
       value: '',
-      type: ''
+      type: '',
+      images: []
     }
   },
   computed: {
@@ -134,18 +86,9 @@ export default {
           'content-type': 'multipart/form-data'
         }
       }
-      if (this.image1.length !== 0) {
-        data.append('board[images][]', this.image1)
-      }
-      if (this.image2.length !== 0) {
-        data.append('board[images][]', this.image2)
-      }
-      if (this.image3.length !== 0) {
-        data.append('board[images][]', this.image3)
-      }
-      if (this.image4.length !== 0) {
-        data.append('board[images][]', this.image4)
-      }
+      this.images.forEach(image => {
+        data.append('board[images][]', image)
+      })
       data.append('board[board_type]]', this.type)
       data.append('board[title]', this.title)
       data.append('board[description]', this.description)
@@ -157,13 +100,13 @@ export default {
         })
       }
       this.$axios.$post(process.env.BROWSER_BASE_URL + `/v1/boards`, data, config)
-      .then(() => {
-        console.log('作成に成功しました')
-      })
-      .catch((error) => {
-        console.log('作成に失敗しました')
-        console.log(error)
-      })
+        .then(() => {
+          console.log('作成に成功しました')
+        })
+        .catch((error) => {
+          console.log('作成に失敗しました')
+          console.log(error)
+        })
     },
     addImage (n) {
       const file = this.$data['image' + n]
@@ -191,6 +134,9 @@ export default {
       this.$data['image' + n + 'Url'] = []
       this.$data['image' + n] = []
       this.imageError = null
+    },
+    setImages (payload) {
+      this.images = payload
     }
   }
 }
@@ -198,9 +144,5 @@ export default {
 <style>
 .input-box {
   padding: 0 30%;
-}
-
-.create-board-h2 {
-  font-size: 24px;
 }
 </style>

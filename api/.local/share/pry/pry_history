@@ -658,3 +658,26 @@ board = Board.first
 board.destroy
 Board.all
 exit
+Board_comment.all
+BoardComment.all
+comment = BoardComment.last
+comment.attached
+comment.attached?
+comment.images
+comment.images.all
+include Rails.application.routes.url_helpers
+url_for(comment.images[0])
+comment.images
+comment.images.first
+board = Board.last
+board.images
+board.images.all
+comment.images.all
+comment.images
+exit
+comment = BoardComment.last
+comment.images.all
+comment.images
+comment.images.first
+comment.images.all
+exit

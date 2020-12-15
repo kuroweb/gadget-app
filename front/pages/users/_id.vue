@@ -1,108 +1,22 @@
 <template>
   <v-container>
     <ErrorCard
-      :display="!otherUser.id"
+      :display="error"
       title="404NotFound"
       message="ユーザーが存在しません。"
     />
-    <PostEditDialog
-      :dialog="editDialog"
-      :postId="postId"
-      @closeDialog="editDialog = false"
-    />
-    <PostDeleteDialog
-      :dialog="deleteDialog"
-      :postId="postId"
-      @closeDialog="deleteDialog = false"
-    />
-    <PostCommentDialog
-      :dialog="commentDialog"
-      :postId="postId"
-      @closeDialog="commentDialog = false"
-    />
-    <PostReplyDialog
-      :dialog="replyDialog"
-      :postId="postId"
-      :parentComment="parentComment"
-      @closeDialog="replyDialog = false"
-    />
-    <PostCommentDeleteDialog
-      :dialog="commentDeleteDialog"
-      :postId="postId"
-      :comment="comment"
-      @closeDialog="commentDeleteDialog = false"
-    />
-
-    <v-card v-if="otherUser.id" class="mx-auto mt-5 pa-5" width="500px">
-      <v-card-text>
-        <v-row justify="center">
-          <v-avatar 
-          size="62"
-          >
-            <img 
-              v-if="otherUser.avatar_url"
-              :src="otherUser.avatar_url"
-              alt="Avatar"
-            >
-            <img
-              v-else
-              src="~/assets/images/default_icon.jpeg"
-              alt="Avatar"
-            >
-          </v-avatar>
-        </v-row>
-        <v-row justify="center">
-          <h3>{{ otherUser.name }} さん</h3>
-        </v-row>
-        <v-row justify="center">
-          <p>{{ otherUser.profile }}</p>
-        </v-row>
-        <v-row justify="center">
-          <v-col>
-            <p>フォロー</p>
-            <p>{{ following.length }}人</p>
-          </v-col>
-          <v-col>
-            <p>フォロワー</p>
-            <p>{{ followers.length }}人</p>
-          </v-col>
-        </v-row>
-        <v-row justify="center">
-          <div
-            v-if="isAuthenticated && currentUser.id !== otherUser.id"
-          >
-            <v-btn
-              v-if="!isFollowed"
-              color="success"
-              @click="follow"
-            >
-              フォローする
-            </v-btn>
-            <v-btn
-              v-else
-              color="white--text red"
-              @click="unfollow"
-            >
-              フォロー解除
-            </v-btn>
-          </div>
-        </v-row>
-      </v-card-text>
-    </v-card>
-    <v-card
-      v-for="post in posts"
-      :key="post.id"
-      class="mx-auto mt-5 pa-5" width="500px"
+    <div
+      v-if="error === false" 
     >
-      <v-card-title>
-        <v-row>
-          <v-col>
+      <v-card class="mx-auto mt-5 pa-5" width="500px">
+        <v-card-text>
+          <v-row justify="center">
             <v-avatar 
-              size="62"
+            size="62"
             >
               <img 
-                v-if="post.user.avatar_url"
-                :src="post.user.avatar_url"
+                v-if="otherUser.avatar_url"
+                :src="otherUser.avatar_url"
                 alt="Avatar"
               >
               <img
@@ -111,89 +25,59 @@
                 alt="Avatar"
               >
             </v-avatar>
-          </v-col>
-          <v-col>
-            <h3>{{ post.user.name }}</h3>
-            <p
-              v-for="tag in post.tags"
-              :key="tag.id"
-            >
-              {{ tag.tag_name }}
-            </p>
-          </v-col>
-        </v-row>
-      </v-card-title>
-      <v-card-text>
-        <v-row>
-          <p>{{ post.description }}</p>
-        </v-row>
-        <v-row
-          justify="center"
-          v-if="post.images_url !== null"
-        >
-          <v-avatar v-if="post.images_url.length > 0">
-            <img :src="post.images_url[0]">
-          </v-avatar>
-          <v-avatar v-if="post.images_url.length > 1">
-            <img :src="post.images_url[1]">
-          </v-avatar>
-          <v-avatar v-if="post.images_url.length > 2">
-            <img :src="post.images_url[2]">
-          </v-avatar>
-          <v-avatar v-if="post.images_url.length > 3">
-            <img :src="post.images_url[3]">
-          </v-avatar>
-        </v-row>
-        <v-row>
-          <v-icon
-            v-if="post.isLikedPost === false"
-            @click="createLikePost(post)"
-          >
-            mdi-heart
-          </v-icon>
-          <v-icon
-            v-if="post.isLikedPost === true"
-            @click="destroyLikePost(post)"
-          >
-            mdi-heart-outline
-          </v-icon>
-          <p>{{ post.liked_users_count }}</p>
-        </v-row>
-        <v-row justify="end">
-          <v-icon
-            @click="openEditDialog(post)"
-          >
-            mdi-square-edit-outline
-          </v-icon>
-          <v-icon
-            @click="openDeleteDialog(post)"
-          >
-            mdi-delete
-          </v-icon>
-        </v-row>
-        <v-row justify="center">
-          <v-btn
-            color="success"
-            @click="openCommentDialog(post)"
-          >
-            コメントする
-          </v-btn>
           </v-row>
-        <v-card
-          v-for="comment in post.comments"
-          :key="comment.id"
-          flat
-        >
-          <v-card
-            class="mx-auto mt-5 pa-5"
-          >
-            <v-row>
+          <v-row justify="center">
+            <h3>{{ otherUser.name }} さん</h3>
+          </v-row>
+          <v-row justify="center">
+            <p>{{ otherUser.profile }}</p>
+          </v-row>
+          <v-row justify="center">
+            <v-col>
+              <p>フォロー</p>
+              <p>{{ following.length }}人</p>
+            </v-col>
+            <v-col>
+              <p>フォロワー</p>
+              <p>{{ followers.length }}人</p>
+            </v-col>
+          </v-row>
+          <v-row justify="center">
+            <div
+              v-if="isAuthenticated && currentUser.id !== otherUser.id"
+            >
+              <v-btn
+                v-if="!isFollowed"
+                color="success"
+                @click="follow"
+              >
+                フォローする
+              </v-btn>
+              <v-btn
+                v-else
+                color="white--text red"
+                @click="unfollow"
+              >
+                フォロー解除
+              </v-btn>
+            </div>
+          </v-row>
+        </v-card-text>
+      </v-card>
+      <v-card
+        v-for="post in posts"
+        :key="post.id"
+        class="mx-auto mt-5 pa-5" width="500px"
+      >
+        <v-card-title>
+          <v-row>
+            <v-col>
               <v-avatar 
                 size="62"
               >
                 <img 
-                  v-if="comment.user.avatar_url"
-                  :src="comment.user.avatar_url"
+                  v-if="post.user.avatar_url"
+                  :src="post.user.avatar_url"
                   alt="Avatar"
                 >
                 <img
@@ -202,79 +86,161 @@
                   alt="Avatar"
                 >
               </v-avatar>
-              <p>{{ comment.user.name }}</p>
-            </v-row>
-            <p>{{ comment.description }}</p>
-            <v-row justify="end">
-              <v-icon
-                @click="openCommentDeleteDialog(post, comment)"
+            </v-col>
+            <v-col>
+              <h3>{{ post.user.name }}</h3>
+              <p
+                v-for="tag in post.tags"
+                :key="tag.id"
               >
-                mdi-delete
-              </v-icon>
-            </v-row>
-          </v-card>
-          <v-card
-            class="mx-auto mt-5 pa-5"
-            v-for="child in comment.childComments"
-            :key="child.id"
+                {{ tag.tag_name }}
+              </p>
+            </v-col>
+          </v-row>
+        </v-card-title>
+        <v-card-text>
+          <v-row>
+            <p>{{ post.description }}</p>
+          </v-row>
+          <v-row
+            justify="center"
+            v-if="post.images_url !== null"
           >
-            <p>@返信コメント</p>
-            <v-row>
-              <v-avatar 
-                size="62"
-              >
-                <img 
-                  v-if="child.user.avatar_url"
-                  :src="child.user.avatar_url"
-                  alt="Avatar"
-                >
-                <img
-                  v-else
-                  src="~/assets/images/default_icon.jpeg"
-                  alt="Avatar"
-                >
-              </v-avatar>
-              <p>{{ child.user.name }}</p>
-            </v-row>
-            <p>{{ child.description }}</p>
-            <v-row justify="end">
-              <v-icon
-                @click="openCommentDeleteDialog(post, child)"
-              >
-                mdi-delete
-              </v-icon>
-            </v-row>
-          </v-card>
+            <v-avatar v-if="post.images_url.length > 0">
+              <img :src="post.images_url[0]">
+            </v-avatar>
+            <v-avatar v-if="post.images_url.length > 1">
+              <img :src="post.images_url[1]">
+            </v-avatar>
+            <v-avatar v-if="post.images_url.length > 2">
+              <img :src="post.images_url[2]">
+            </v-avatar>
+            <v-avatar v-if="post.images_url.length > 3">
+              <img :src="post.images_url[3]">
+            </v-avatar>
+          </v-row>
+          <v-row>
+            <v-icon
+              v-if="post.isLikedPost === false"
+              @click="createLikePost(post)"
+            >
+              mdi-heart
+            </v-icon>
+            <v-icon
+              v-if="post.isLikedPost === true"
+              @click="destroyLikePost(post)"
+            >
+              mdi-heart-outline
+            </v-icon>
+            <p>{{ post.liked_users_count }}</p>
+          </v-row>
           <v-row justify="end">
+            <v-icon
+              @click="openEditDialog(post)"
+            >
+              mdi-square-edit-outline
+            </v-icon>
+            <v-icon
+              @click="openDeleteDialog(post)"
+            >
+              mdi-delete
+            </v-icon>
+          </v-row>
+          <v-row justify="center">
             <v-btn
               color="success"
-              @click="openReplyDialog(post, comment)"
+              @click="openCommentDialog(post)"
             >
-              返信する
+              コメントする
             </v-btn>
-          </v-row>
-        </v-card>
-      </v-card-text>
-    </v-card>
+            </v-row>
+          <v-card
+            v-for="comment in post.comments"
+            :key="comment.id"
+            flat
+          >
+            <v-card
+              class="mx-auto mt-5 pa-5"
+            >
+              <v-row>
+                <v-avatar 
+                  size="62"
+                >
+                  <img 
+                    v-if="comment.user.avatar_url"
+                    :src="comment.user.avatar_url"
+                    alt="Avatar"
+                  >
+                  <img
+                    v-else
+                    src="~/assets/images/default_icon.jpeg"
+                    alt="Avatar"
+                  >
+                </v-avatar>
+                <p>{{ comment.user.name }}</p>
+              </v-row>
+              <p>{{ comment.description }}</p>
+              <v-row justify="end">
+                <v-icon
+                  @click="openCommentDeleteDialog(post, comment)"
+                >
+                  mdi-delete
+                </v-icon>
+              </v-row>
+            </v-card>
+            <v-card
+              class="mx-auto mt-5 pa-5"
+              v-for="child in comment.childComments"
+              :key="child.id"
+            >
+              <p>@返信コメント</p>
+              <v-row>
+                <v-avatar 
+                  size="62"
+                >
+                  <img 
+                    v-if="child.user.avatar_url"
+                    :src="child.user.avatar_url"
+                    alt="Avatar"
+                  >
+                  <img
+                    v-else
+                    src="~/assets/images/default_icon.jpeg"
+                    alt="Avatar"
+                  >
+                </v-avatar>
+                <p>{{ child.user.name }}</p>
+              </v-row>
+              <p>{{ child.description }}</p>
+              <v-row justify="end">
+                <v-icon
+                  @click="openCommentDeleteDialog(post, child)"
+                >
+                  mdi-delete
+                </v-icon>
+              </v-row>
+            </v-card>
+            <v-row justify="end">
+              <v-btn
+                color="success"
+                @click="openReplyDialog(post, comment)"
+              >
+                返信する
+              </v-btn>
+            </v-row>
+          </v-card>
+        </v-card-text>
+      </v-card>
+    </div>
   </v-container>
 </template>
 <script>
 import _ from 'lodash'
-import PostCommentDeleteDialog from '~/components/organisms/posts/PostCommentDeleteDialog.vue'
-import PostReplyDialog from '~/components/organisms/posts/PostReplyDialog.vue'
-import PostCommentDialog from '~/components/organisms/posts/PostCommentDialog.vue'
-import PostDeleteDialog from '~/components/organisms/posts/PostDeleteDialog.vue'
-import PostEditDialog from '~/components/organisms/posts/PostEditDialog.vue'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   components: {
     ErrorCard,
-    PostEditDialog,
-    PostDeleteDialog,
-    PostCommentDialog,
-    PostReplyDialog,
-    PostCommentDeleteDialog
   },
   data () {
     return {
@@ -306,9 +272,10 @@ export default {
         store.commit('modules/otherUser/setFollowers', res.user.followers)
         // アクセス先ユーザーの投稿情報をコミット
         store.dispatch('modules/otherUser/setPosts', res.posts)
+        store.commit('modules/info/setError', false)
       })
       .catch(error => {
-        console.log(error)
+        store.commit('modules/info/setError', true)
       })
   },
   async mounted () {
@@ -334,7 +301,8 @@ export default {
       otherUser: 'modules/otherUser/data',
       following: 'modules/otherUser/following',
       followers: 'modules/otherUser/followers',
-      posts: 'modules/otherUser/posts'
+      posts: 'modules/otherUser/posts',
+      error: 'modules/info/error'
     })
   },
   methods: {

@@ -12,10 +12,15 @@ class V1::BoardsController < ApplicationController
 
   # 掲示板詳細
   def show
-    @board = Board.includes({user: {avatar_attachment: :blob}}, :tags, :board_comments).find(params[:id])
+    @board = Board.includes({images_attachments: :blob},
+                            {user: {avatar_attachment: :blob}},
+                            :tags,
+                            {board_comments: [{user: {avatar_attachment: :blob}},
+                                              {images_attachments: :blob}]}).find(params[:id])
     render json: @board.as_json(include: [{user: {methods: :avatar_url}},
                                             :tags,
-                                            {board_comments: {include: {user: {methods: :avatar_url}}}}],
+                                            {board_comments: {include: {user: {methods: :avatar_url}},
+                                                              methods: :images_url}}],
                                 methods: :images_url)
   end
 

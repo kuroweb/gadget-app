@@ -26,7 +26,7 @@ class V1::BoardCommentsController < ApplicationController
   private
 
     def comment_params
-      comment_params = params.require(:board_comment).permit(:description, :board_id, :reply_comment_id, :user_id)
+      comment_params = params.require(:board_comment).permit(:description, :board_id, :reply_comment_id, :user_id, images: [])
     end
 
 end

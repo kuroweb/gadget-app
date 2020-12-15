@@ -1,196 +1,221 @@
 <template>
   <v-container>
     <ErrorCard
-      :display="!board"
+      :display="error"
       title="404NotFount"
-      message="掲示板が存在しません。"
+      message="投稿が存在しません。"
     />
     <CreateCommentDialog
       :dialog="commentDialog"
-      :boardId="boardId"
+      :postId="postId"
       @closeDialog="commentDialog = false"
     />
     <CreateReplyDialog
       :dialog="replyDialog"
-      :boardId="boardId"
+      :postId="postId"
       :parentComment="parentComment"
       @closeDialog="replyDialog = false"
     />
     <DeleteCommentDialog
       :dialog="deleteCommentDialog"
-      :boardId="boardId"
-      :comment="comment"
+      :postId="postId"
       @closeDialog="deleteCommentDialog = false"
     />
-    <v-card
-      v-if="board"
-      class="mx-auto mt-5 pa-5"
+    <v-row
+      justify="center"
+      v-if="error === false"
     >
-      <v-card-title>
-        <v-row>
-          <v-col>
-            <v-avatar 
-              size="62"
+      <v-col lg="3" sm="8" cols="12">
+        <v-card>
+          <p>関連投稿を表示</p>
+        </v-card>
+      </v-col>
+      <v-col lg="6" sm="8" cols="12">
+        <v-card>
+          <v-toolbar
+            color="cyan darken-1"
+            dark
+            flat
+          >
+            <v-toolbar-title>{{ post.user.name }}さんの投稿</v-toolbar-title>
+          </v-toolbar>
+          <v-container>
+            <v-card
+              class="mx-auto pa-5"
             >
-              <img 
-                v-if="board.user.avatar_url"
-                :src="board.user.avatar_url"
-                alt="Avatar"
-              >
-              <img
-                v-else
-                src="~/assets/images/default_icon.jpeg"
-                alt="Avatar"
-              >
-            </v-avatar>
-          </v-col>
-          <v-col>
-            <h3>{{ board.user.name }}</h3>
-          </v-col>
-        </v-row>
-        <v-row>
-          <p
-            v-for="tag in board.tags"
-            :key="tag.id"
-          >
-            {{tag.tag_name}}
-          </p>
-        </v-row>
-      </v-card-title>
-      <v-card-text>
-        <v-row>
-          <p>{{ board.description }}</p>
-        </v-row>
-        <v-row
-          justify="center"
-          v-if="board.images_url !== null"
-        >
-          <v-avatar v-if="board.images_url.length > 0">
-            <img :src="board.images_url[0]">
-          </v-avatar>
-          <v-avatar v-if="board.images_url.length > 1">
-            <img :src="board.images_url[1]">
-          </v-avatar>
-          <v-avatar v-if="board.images_url.length > 2">
-            <img :src="board.images_url[2]">
-          </v-avatar>
-          <v-avatar v-if="board.images_url.length > 3">
-            <img :src="board.images_url[3]">
-          </v-avatar>
-        </v-row>
-      </v-card-text>
-      <v-row justify="center">
-        <v-btn
-          color="success"
-          class="white--text"
-          @click="openCommentDialog"
-        >
-          コメントする
-        </v-btn>
-      </v-row>
-    </v-card>
-    <v-card
-      v-for="comment in board.board_comments"
-      :key="comment.id"
-      flat
-    >
-      <v-card
-        class="mx-auto mt-5 pa-5"
-      >
-        <v-row>
-          <v-col>
-            <v-avatar 
-              size="62"
+              <v-row>
+                <v-col>
+                  <v-avatar
+                    size="84"
+                  >
+                    <img 
+                      v-if="post.user.avatar_url"
+                      :src="post.user.avatar_url"
+                      alt="Avatar"
+                    >
+                    <img
+                      v-else
+                      src="~/assets/images/default_icon.jpeg"
+                      alt="Avatar"
+                    >
+                  </v-avatar>
+                </v-col>
+                <v-col align-self="center">
+                  <h3>{{ post.user.name }}</h3>
+                  <Tags
+                    :tags="post.tags"
+                  />
+                </v-col>
+              </v-row>
+              <p>{{ post.description }}</p>
+              <Images
+                :images="post.images_url"
+              />
+            </v-card>
+            <v-row
+              class="pa-3"
             >
-              <img 
-                v-if="comment.user.avatar_url"
-                :src="comment.user.avatar_url"
-                alt="Avatar"
+              <v-btn
+                block
+                color="orange"
+                dark
+                rounded
+                @click="openCommentDialog"
               >
-              <img
-                v-else
-                src="~/assets/images/default_icon.jpeg"
-                alt="Avatar"
+                コメントする
+              </v-btn>
+            </v-row>
+            <v-card
+              v-for="comment in post.comments"
+              :key="comment.id"
+              flat
+            >
+              <v-card
+                class="mx-auto pa-5 mt-5"
               >
-            </v-avatar>
-          </v-col>
-          <v-col>
-            <h3>{{ comment.user.name }}</h3>
-          </v-col>
-        </v-row>
-        <v-row>
-          <p>{{ comment.description }}</p>
-        </v-row>
-        <v-row
-          justify="end"
-        >
-          <v-btn
-            color="success"
-            class="white--text"
-            @click="openReplyDialog(comment)"
-          >
-            返信する
-          </v-btn>
-        </v-row>
-        <v-row justify="end">
-          <v-icon
-            @click="openDeleteCommentDialog(comment)"
-          >
-            mdi-delete
-          </v-icon>
-        </v-row>
-      </v-card>
-      <v-card
-        v-for="child in comment.childComments"
-        :key="child.id"
-        class="mx-auto mt-5 pa-5"
-      >
-        <p>@返信コメント</p>
-        <v-row>
-          <v-avatar 
-            size="62"
-          >
-            <img 
-              v-if="child.user.avatar_url"
-              :src="child.user.avatar_url"
-              alt="Avatar"
-            >
-            <img
-              v-else
-              src="~/assets/images/default_icon.jpeg"
-              alt="Avatar"
-            >
-          </v-avatar>
-          <p>{{ child.user.name }}</p>
-        </v-row>
-        <p>{{ child.description }}</p>
-        <v-row justify="end">
-          <v-icon
-            @click="openDeleteCommentDialog(child)"
-          >
-            mdi-delete
-          </v-icon>
-        </v-row>
-      </v-card>
-    </v-card>
+                <v-row>
+                  <v-col>
+                    <v-avatar 
+                      size="84"
+                    >
+                      <img 
+                        v-if="comment.user.avatar_url"
+                        :src="comment.user.avatar_url"
+                        alt="Avatar"
+                      >
+                      <img
+                        v-else
+                        src="~/assets/images/default_icon.jpeg"
+                        alt="Avatar"
+                      >
+                    </v-avatar>
+                  </v-col>
+                  <v-col align-self="center">
+                    <h3>{{ comment.user.name }}</h3>
+                  </v-col>
+                </v-row>
+                <p>{{ comment.description }}</p>
+                <v-row
+                  justify="end"
+                >
+                  <v-btn
+                    rounded
+                    color="success"
+                    class="cyan darken-1"
+                    @click="openReplyDialog(comment)"
+                  >
+                    返信
+                  </v-btn>
+                </v-row>
+                <v-row justify="end">
+                  <v-icon
+                    @click="openDeleteCommentDialog(comment)"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </v-row>
+              </v-card>
+              <v-timeline
+                v-if="comment.childComments.length !== 0"
+                align-top
+              >
+                <v-timeline-item
+                  v-for="child in comment.childComments"
+                  :key="child.id"
+                  small
+                  fill-dot
+                  color="grey"
+                  right
+                  hide-dot
+                >
+                  <v-card
+                    color="grey"
+                    dark
+                    
+                  >
+                    <v-card-title class="title">
+                      <v-icon dark>mdi-reply</v-icon>
+                      返信コメント
+                    </v-card-title>
+                    <v-card-text class="white text--primary">
+                      <v-row>
+                        <v-col>
+                          <v-avatar 
+                            size="48"
+                          >
+                            <img 
+                              v-if="child.user.avatar_url"
+                              :src="child.user.avatar_url"
+                              alt="Avatar"
+                            >
+                            <img
+                              v-else
+                              src="~/assets/images/default_icon.jpeg"
+                              alt="Avatar"
+                            >
+                          </v-avatar>
+                        </v-col>
+                        <v-col align-self="center">
+                          <h3>{{ child.user.name }}</h3>
+                        </v-col>
+                      </v-row>
+                      <p>{{ child.description }}</p>
+                    </v-card-text>
+                  </v-card>
+                </v-timeline-item>
+              </v-timeline>
+            </v-card>
+          </v-container>
+        </v-card>
+      </v-col>
+      <v-col lg="3" sm="8" cols="12">
+        <v-card>
+          <p>関連ガジェットを表示</p>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
-import CreateCommentDialog from '~/components/organisms/boards/CreateCommentDialog.vue'
-import CreateReplyDialog from '~/components/organisms/boards/CreateReplyDialog.vue'
-import DeleteCommentDialog from '~/components/organisms/boards/DeleteCommentDialog.vue'
+import Tags from '~/components/atoms/Tags.vue'
+import Images from '~/components/atoms/Images.vue'
+import CreateCommentDialog from '~/components/organisms/posts/CreateCommentDialog.vue'
+import CreateReplyDialog from '~/components/organisms/posts/CreateReplyDialog.vue'
+import DeleteCommentDialog from '~/components/organisms/posts/DeleteCommentDialog.vue'
 export default {
   components: {
     ErrorCard,
+    Tags,
+    Images,
     CreateCommentDialog,
     CreateReplyDialog,
     DeleteCommentDialog
   },
   data () {
     return {
-      boardId: '',
+      postId: '',
       commentDialog: false,
       replyDialog: false,
       deleteCommentDialog: false,
@@ -200,13 +225,14 @@ export default {
   },
   async fetch ({ $axios, params, store }) {
     const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
-    await $axios.$get(baseUrl + `/v1/boards/${params.id}`)
+    await $axios.$get(baseUrl + `/v1/posts/${params.id}`)
       .then(res => {
         // 掲示板の情報をコミット
-        store.dispatch('modules/board/setData', res)
+        store.dispatch('modules/post/setData', res)
+        store.commit('modules/info/setError', false)
       })
       .catch(error => {
-        console.log('掲示板が存在しません。')
+        store.commit('modules/info/setError', true)
       })
   },
 
@@ -215,23 +241,24 @@ export default {
     ...mapGetters({
       currentUser: 'modules/user/data',
       isAuthenticated: 'modules/user/isAuthenticated',
-      board: 'modules/board/data'
+      post: 'modules/post/data',
+      error: 'modules/info/error'
     })
   },
 
   methods: {
     // ダイアログ関連
     openCommentDialog () {
-      this.boardId = this.board.id
+      this.postId = this.post.id
       this.commentDialog = true
     },
     openReplyDialog (comment) {
-      this.boardId = this.board.id
+      this.postId = this.post.id
       this.parentComment = comment
       this.replyDialog = true
     },
     openDeleteCommentDialog (comment) {
-      this.boardId = this.board.id
+      this.postId = this.post.id
       this.comment = comment
       this.deleteCommentDialog = true
     }

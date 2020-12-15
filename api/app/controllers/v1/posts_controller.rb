@@ -1,19 +1,29 @@
 class V1::PostsController < ApplicationController
   before_action :set_post, only: [:update, :destroy]
 
+  # 投稿一覧
   def index
-    @posts = Post.with_attached_images.includes({user: {avatar_attachment: :blob}}, :tags, {comments: {user: {avatar_attachment: :blob}}}).all
+    @posts = Post.with_attached_images.includes({user: {avatar_attachment: :blob}},
+                                                :tags,
+                                                {comments: {user: {avatar_attachment: :blob}}}).all
     render json: @posts.as_json(include: [{user: {methods: :avatar_url}},
                                           :tags,
                                           {comments: {include: {user: {methods: :avatar_url}}}}],
                                 methods: :images_url)
   end
 
+  # 投稿詳細
   def show
-    @post = Post.with_attached_images.includes(:tags).find(params[:id])
-    render json: @post.as_json(methods: :images_url, include: :tags)
+    @post = Post.with_attached_images.includes({user: {avatar_attachment: :blob}},
+                                                :tags,
+                                                {comments: {user: {avatar_attachment: :blob}}}).find(params[:id])
+    render json: @post.as_json(include: [{user: {methods: :avatar_url}},
+                                          :tags,
+                                          {comments: {include: {user: {methods: :avatar_url}}}}],
+                                methods: :images_url)
   end
 
+  # 投稿新規作成
   def create
     @post = Post.new(post_content_params)
     sent_tags = post_tags_params[:tags] === nil ? [] : post_tags_params[:tags]
@@ -25,6 +35,7 @@ class V1::PostsController < ApplicationController
     end
   end
 
+  # 投稿更新
   def update
     sent_tags = post_tags_params[:tags] === nil ? [] : post_tags_params[:tags]
     if @post.update(post_content_params)
@@ -39,10 +50,12 @@ class V1::PostsController < ApplicationController
     end
   end
 
+  # 投稿削除
   def destroy
     @post.destroy
   end
 
+  # 投稿検索
   def search
     if params[:post_name]
       @posts = Post.search(params[:post_name])

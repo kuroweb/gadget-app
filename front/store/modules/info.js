@@ -5,7 +5,8 @@ export const state = () => ({
   flash: {
     status: false,
     message: "",
-  }
+  },
+  error: false
 })
 
 export const getters = {
@@ -16,6 +17,10 @@ export const getters = {
 
   flash(state) {
     return state.flash
+  },
+
+  error(state) {
+    return state.error
   }
 }
 
@@ -27,6 +32,10 @@ export const actions = {
 
   setFlash({commit}, payload) {
     commit('setFlash', payload)
+  },
+
+  setError({commit}, payload) {
+    commit('setError', payload)
   }
 }
 
@@ -38,5 +47,9 @@ export const mutations = {
 
   setFlash (state, payload) {
     state.flash = payload
+  },
+
+  setError (state, payload) {
+    state.error = payload
   }
 }

@@ -18,7 +18,10 @@
       <v-card-text>
         <v-form>
           <ValidationObserver v-slot="ObserverProps">
-            <TextFieldWithValidation
+            <ImagesForm
+              @setImages="setImages"
+            />
+            <TextAreaWithValidation
               v-model="description"
               label="コメント内容"
               rules="max:255|required"
@@ -39,10 +42,12 @@
   </v-dialog>
 </template>
 <script>
-import TextFieldWithValidation from '~/components/molecules/inputs/TextFieldWithValidation.vue'
+import TextAreaWithValidation from '~/components/molecules/inputs/TextAreaWithValidation.vue'
+import ImagesForm from '~/components/molecules/inputs/ImagesForm.vue'
 export default {
   components: {
-    TextFieldWithValidation,
+    TextAreaWithValidation,
+    ImagesForm
   },
   props: {
     dialog: {
@@ -56,7 +61,8 @@ export default {
   data () {
     return {
       dialogStatus: this.dialog,
-      description: ''
+      description: '',
+      images: []
     }
   },
   watch: {
@@ -68,16 +74,35 @@ export default {
   },
   methods: {
     async createComment () {
-      this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/board_comments', {
-        user_id: this.$store.state.modules.user.data.id,
-        board_id: this.boardId,
-        description: this.description,
-        reply_comment_id: null
+      const data = new FormData()
+      const config = {
+        headders: {
+          'content-type': 'multipart/form-data'
+        }
+      }
+      this.images.forEach(image => {
+        data.append('board_comment[images][]', image)
       })
+      data.append('board_comment[description]', this.description)
+      data.append('board_comment[board_id]', this.boardId)
+      data.append('board_comment[reply_id]', null)
+      data.append('board_comment[user_id]', this.$store.state.modules.user.data.id)
+
+      this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/board_comments', data, config)
+        .then(() => {
+          console.log('投稿に成功しました')
+        })
+        .catch((error) => {
+          console.log('投稿に失敗しました')
+          console.log('error')
+        })
     },
     closeDialog () {
       this.$emit('closeDialog')
     },
+    setImages (payload) {
+      this.images = payload
+    }
   }
 }
 </script>
