@@ -6,9 +6,11 @@ class V1::PostsController < ApplicationController
     # 要リファクタリング
     @posts = Post.with_attached_images.includes({user: {avatar_attachment: :blob}},
                                                 :tags,
+                                                :liked_users,
                                                 {comments: {user: {avatar_attachment: :blob}}}).all
     render json: @posts.as_json(include: [{user: {methods: :avatar_url}},
                                           :tags,
+                                          :liked_users,
                                           {comments: {include: {user: {methods: :avatar_url}}}}],
                                 methods: :images_url)
   end

@@ -8,7 +8,7 @@
     <div
       v-if="error === false" 
     >
-      <v-card class="mx-auto mt-5 pa-5" width="500px">
+      <v-card class="mx-auto mt-5 pa-5" width="700px">
         <v-card-text>
           <v-row justify="center">
             <v-avatar 
@@ -64,173 +64,11 @@
           </v-row>
         </v-card-text>
       </v-card>
-      <v-card
+      <PostCard
         v-for="post in posts"
         :key="post.id"
-        class="mx-auto mt-5 pa-5" width="500px"
-      >
-        <v-card-title>
-          <v-row>
-            <v-col>
-              <v-avatar 
-                size="62"
-              >
-                <img 
-                  v-if="post.user.avatar_url"
-                  :src="post.user.avatar_url"
-                  alt="Avatar"
-                >
-                <img
-                  v-else
-                  src="~/assets/images/default_icon.jpeg"
-                  alt="Avatar"
-                >
-              </v-avatar>
-            </v-col>
-            <v-col>
-              <h3>{{ post.user.name }}</h3>
-              <p
-                v-for="tag in post.tags"
-                :key="tag.id"
-              >
-                {{ tag.tag_name }}
-              </p>
-            </v-col>
-          </v-row>
-        </v-card-title>
-        <v-card-text>
-          <v-row>
-            <p>{{ post.description }}</p>
-          </v-row>
-          <v-row
-            justify="center"
-            v-if="post.images_url !== null"
-          >
-            <v-avatar v-if="post.images_url.length > 0">
-              <img :src="post.images_url[0]">
-            </v-avatar>
-            <v-avatar v-if="post.images_url.length > 1">
-              <img :src="post.images_url[1]">
-            </v-avatar>
-            <v-avatar v-if="post.images_url.length > 2">
-              <img :src="post.images_url[2]">
-            </v-avatar>
-            <v-avatar v-if="post.images_url.length > 3">
-              <img :src="post.images_url[3]">
-            </v-avatar>
-          </v-row>
-          <v-row>
-            <v-icon
-              v-if="post.isLikedPost === false"
-              @click="createLikePost(post)"
-            >
-              mdi-heart
-            </v-icon>
-            <v-icon
-              v-if="post.isLikedPost === true"
-              @click="destroyLikePost(post)"
-            >
-              mdi-heart-outline
-            </v-icon>
-            <p>{{ post.liked_users_count }}</p>
-          </v-row>
-          <v-row justify="end">
-            <v-icon
-              @click="openEditDialog(post)"
-            >
-              mdi-square-edit-outline
-            </v-icon>
-            <v-icon
-              @click="openDeleteDialog(post)"
-            >
-              mdi-delete
-            </v-icon>
-          </v-row>
-          <v-row justify="center">
-            <v-btn
-              color="success"
-              @click="openCommentDialog(post)"
-            >
-              コメントする
-            </v-btn>
-            </v-row>
-          <v-card
-            v-for="comment in post.comments"
-            :key="comment.id"
-            flat
-          >
-            <v-card
-              class="mx-auto mt-5 pa-5"
-            >
-              <v-row>
-                <v-avatar 
-                  size="62"
-                >
-                  <img 
-                    v-if="comment.user.avatar_url"
-                    :src="comment.user.avatar_url"
-                    alt="Avatar"
-                  >
-                  <img
-                    v-else
-                    src="~/assets/images/default_icon.jpeg"
-                    alt="Avatar"
-                  >
-                </v-avatar>
-                <p>{{ comment.user.name }}</p>
-              </v-row>
-              <p>{{ comment.description }}</p>
-              <v-row justify="end">
-                <v-icon
-                  @click="openCommentDeleteDialog(post, comment)"
-                >
-                  mdi-delete
-                </v-icon>
-              </v-row>
-            </v-card>
-            <v-card
-              class="mx-auto mt-5 pa-5"
-              v-for="child in comment.childComments"
-              :key="child.id"
-            >
-              <p>@返信コメント</p>
-              <v-row>
-                <v-avatar 
-                  size="62"
-                >
-                  <img 
-                    v-if="child.user.avatar_url"
-                    :src="child.user.avatar_url"
-                    alt="Avatar"
-                  >
-                  <img
-                    v-else
-                    src="~/assets/images/default_icon.jpeg"
-                    alt="Avatar"
-                  >
-                </v-avatar>
-                <p>{{ child.user.name }}</p>
-              </v-row>
-              <p>{{ child.description }}</p>
-              <v-row justify="end">
-                <v-icon
-                  @click="openCommentDeleteDialog(post, child)"
-                >
-                  mdi-delete
-                </v-icon>
-              </v-row>
-            </v-card>
-            <v-row justify="end">
-              <v-btn
-                color="success"
-                @click="openReplyDialog(post, comment)"
-              >
-                返信する
-              </v-btn>
-            </v-row>
-          </v-card>
-        </v-card-text>
-      </v-card>
+        :post="post"
+      />
     </div>
   </v-container>
 </template>

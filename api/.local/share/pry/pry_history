@@ -692,3 +692,10 @@ end
 exit
 BoardComment.where(reply_comment_id: 0)
 exit
+Comment.all
+comments = Comment.where(post_id: 9)
+comments.each do |comment|
+  comment.destroy
+end
+Comment.all
+exit

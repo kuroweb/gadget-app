@@ -21,6 +21,7 @@
   </v-container>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import PostCard from '~/components/molecules/PostCard.vue'
 export default {
   components: {
@@ -29,20 +30,24 @@ export default {
   data () {
     return {
       loading: true,
-      posts: []
     }
   },
   async mounted () {
     await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`)
       .then(res => {
+        this.setPosts(res)
         setTimeout(this.stopLoading, 1000)
-        return res
-      })
-      .then(res => {
-        this.posts = res
       })
   },
+  computed: {
+    ...mapGetters({
+      posts: 'modules/post/posts'
+    })
+  },
   methods: {
+    ...mapActions({
+      setPosts: 'modules/post/setPosts'
+    }),
     stopLoading () {
       this.loading = false
     }

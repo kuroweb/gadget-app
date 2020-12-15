@@ -31,7 +31,6 @@
     >
       <p>{{ post.description }}</p>
     </v-card>
-    <!-- 投稿画像用のコンポーネントを作成 -->
     <Images
       :images="post.images_url"
     />
@@ -43,8 +42,16 @@
         <p>{{ post.created_at }}</p>
       </v-col>
       <v-col>
-        
+        <v-icon @click="toggleCommentFeed">
+          mdi-comment
+        </v-icon>
       </v-col>
+    </v-row>
+    <v-row>
+      <CommentFeed
+        :display="commentFeed"
+        :comments="post.comments"
+      />
     </v-row>
   </v-card>
 </template>
@@ -52,14 +59,26 @@
 <script>
 import Tags from "~/components/atoms/Tags.vue"
 import Images from "~/components/atoms/Images.vue"
+import CommentFeed from "~/components/molecules/CommentFeed.vue"
 export default {
   components: {
     Tags,
-    Images
+    Images,
+    CommentFeed
   },
   props: {
     post: {
       type: Object
+    }
+  },
+  data () {
+    return {
+      commentFeed: false
+    }
+  },
+  methods: {
+    toggleCommentFeed () {
+      this.commentFeed = !this.commentFeed
     }
   }
 }
