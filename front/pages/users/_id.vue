@@ -5,71 +5,85 @@
       title="404NotFound"
       message="ユーザーが存在しません。"
     />
-    <div
-      v-if="error === false" 
-    >
-      <v-card class="mx-auto mt-5 pa-5" width="700px">
-        <v-card-text>
-          <v-row justify="center">
-            <v-avatar 
-            size="62"
-            >
-              <img 
-                v-if="otherUser.avatar_url"
-                :src="otherUser.avatar_url"
-                alt="Avatar"
-              >
-              <img
-                v-else
-                src="~/assets/images/default_icon.jpeg"
-                alt="Avatar"
-              >
-            </v-avatar>
-          </v-row>
-          <v-row justify="center">
-            <h3>{{ otherUser.name }} さん</h3>
-          </v-row>
-          <v-row justify="center">
-            <p>{{ otherUser.profile }}</p>
-          </v-row>
-          <v-row justify="center">
-            <v-col>
-              <p>フォロー</p>
-              <p>{{ following.length }}人</p>
-            </v-col>
-            <v-col>
-              <p>フォロワー</p>
-              <p>{{ followers.length }}人</p>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <div
-              v-if="isAuthenticated && currentUser.id !== otherUser.id"
-            >
-              <v-btn
-                v-if="!isFollowed"
-                color="success"
-                @click="follow"
-              >
-                フォローする
-              </v-btn>
-              <v-btn
-                v-else
-                color="white--text red"
-                @click="unfollow"
-              >
-                フォロー解除
-              </v-btn>
-            </div>
-          </v-row>
-        </v-card-text>
-      </v-card>
-      <PostCard
-        v-for="post in posts"
-        :key="post.id"
-        :post="post"
-      />
-    </div>
+    <v-row justify="center">
+      <v-col lg="3" sm="8" cols="12">
+        <v-card>
+          <p>サイドメニュー</p>
+        </v-card>
+      </v-col>
+      <v-col lg="6" sm="8" cols="12">
+        <div
+          v-if="error === false" 
+        >
+          <v-card class="mx-auto pa-5">
+            <v-card-text>
+              <v-row justify="center">
+                <v-avatar 
+                size="62"
+                >
+                  <img 
+                    v-if="otherUser.avatar_url"
+                    :src="otherUser.avatar_url"
+                    alt="Avatar"
+                  >
+                  <img
+                    v-else
+                    src="~/assets/images/default_icon.jpeg"
+                    alt="Avatar"
+                  >
+                </v-avatar>
+              </v-row>
+              <v-row justify="center">
+                <h3>{{ otherUser.name }} さん</h3>
+              </v-row>
+              <v-row justify="center">
+                <p>{{ otherUser.profile }}</p>
+              </v-row>
+              <v-row justify="center">
+                <v-col>
+                  <p>フォロー</p>
+                  <p>{{ following.length }}人</p>
+                </v-col>
+                <v-col>
+                  <p>フォロワー</p>
+                  <p>{{ followers.length }}人</p>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <div
+                  v-if="isAuthenticated && currentUser.id !== otherUser.id"
+                >
+                  <v-btn
+                    v-if="!isFollowed"
+                    color="success"
+                    @click="follow"
+                  >
+                    フォローする
+                  </v-btn>
+                  <v-btn
+                    v-else
+                    color="white--text red"
+                    @click="unfollow"
+                  >
+                    フォロー解除
+                  </v-btn>
+                </div>
+              </v-row>
+            </v-card-text>
+          </v-card>
+          <PostCard
+            v-for="post in posts"
+            :key="post.id"
+            :post="post"
+          />
+        </div>
+      </v-col>
+      <v-col lg="3" sm="8" cols="12">
+        <v-card>
+          <p>サイドメニュー</p>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 <script>
