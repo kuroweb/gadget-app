@@ -7,20 +7,23 @@
   >
     <v-card
       class="mx-auto"
-      aspect-ratio="1"
     >
       <v-toolbar
         class="cyan darken-1"
         flat
       >
-        <v-toolbar-title class="white--text font-weight-bold">画像</v-toolbar-title>
+        <v-toolbar-title
+          class="white--text font-weight-bold"
+        >
+          画像
+        </v-toolbar-title>
         <v-spacer></v-spacer>
-          <v-icon
-            dark
-            @click="closePreview"
-          >
-            mdi-close
-          </v-icon>
+        <v-icon
+          dark
+          @click="closePreview"
+        >
+          mdi-close
+        </v-icon>
       </v-toolbar>
       <v-carousel
         v-model="selectImageNum"

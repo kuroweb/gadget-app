@@ -1,20 +1,27 @@
 <template>
   <v-dialog
     v-model="dialogStatus"
-    max-width="400px"
+    max-width="500px"
     persistent
   >
-    <v-card width="500px" class="mx-auto">
-    <v-toolbar flat>
-      <v-toolbar-title>コメントする</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn 
-        @click="closeDialog"
-        icon
+    <v-card class="mx-auto">
+      <v-toolbar
+        class="cyan darken-1"
+        flat
       >
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-    </v-toolbar>
+        <v-toolbar-title
+          class="white--text font-weight-bold"
+        >
+          コメントする
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-icon
+          dark
+          @click="closeDialog"
+        >
+          mdi-close
+        </v-icon>
+      </v-toolbar>
       <v-card-text>
         <v-form>
           <ValidationObserver v-slot="ObserverProps">
@@ -70,8 +77,6 @@ export default {
       this.dialogStatus = newValue
     },
   },
-  computed: {
-  },
   methods: {
     async createComment () {
       const data = new FormData()
@@ -85,7 +90,7 @@ export default {
       })
       data.append('board_comment[description]', this.description)
       data.append('board_comment[board_id]', this.boardId)
-      data.append('board_comment[reply_id]', null)
+      data.append('board_comment[reply_comment_id]', '')
       data.append('board_comment[user_id]', this.$store.state.modules.user.data.id)
 
       this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/board_comments', data, config)

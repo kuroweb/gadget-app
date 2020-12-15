@@ -5,18 +5,18 @@
       title="404NotFount"
       message="掲示板が存在しません。"
     />
-    <CreateCommentDialog
+    <CreateBoardCommentDialog
       :dialog="commentDialog"
       :boardId="boardId"
       @closeDialog="commentDialog = false"
     />
-    <CreateReplyDialog
+    <CreateBoardReplyDialog
       :dialog="replyDialog"
       :boardId="boardId"
       :parentComment="parentComment"
       @closeDialog="replyDialog = false"
     />
-    <DeleteCommentDialog
+    <DeleteBoardCommentDialog
       :dialog="deleteCommentDialog"
       :boardId="boardId"
       :comment="comment"
@@ -118,11 +118,9 @@
                   </v-col>
                 </v-row>
                 <p>{{ comment.description }}</p>
-                <v-row>
-                  <Images
-                    :images="comment.images_url"
-                  />
-                </v-row>
+                <Images
+                  :images="comment.images_url"
+                />
                 <v-row
                   justify="end"
                 >
@@ -159,7 +157,6 @@
                   <v-card
                     color="grey"
                     dark
-                    
                   >
                     <v-card-title class="title">
                       <v-icon dark>mdi-reply</v-icon>
@@ -188,6 +185,9 @@
                         </v-col>
                       </v-row>
                       <p>{{ child.description }}</p>
+                      <Images
+                        :images="child.images_url"
+                      />
                     </v-card-text>
                   </v-card>
                 </v-timeline-item>
@@ -207,17 +207,17 @@
 <script>
 import { mapGetters } from 'vuex'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
-import CreateCommentDialog from '~/components/organisms/boards/CreateCommentDialog.vue'
-import CreateReplyDialog from '~/components/organisms/boards/CreateReplyDialog.vue'
-import DeleteCommentDialog from '~/components/organisms/boards/DeleteCommentDialog.vue'
+import CreateBoardCommentDialog from '~/components/organisms/boards/CreateBoardCommentDialog.vue'
+import CreateBoardReplyDialog from '~/components/organisms/boards/CreateBoardReplyDialog.vue'
+import DeleteBoardCommentDialog from '~/components/organisms/boards/DeleteBoardCommentDialog.vue'
 import Tags from "~/components/atoms/Tags.vue"
 import Images from "~/components/atoms/Images.vue"
 export default {
   components: {
     ErrorCard,
-    CreateCommentDialog,
-    CreateReplyDialog,
-    DeleteCommentDialog,
+    CreateBoardCommentDialog,
+    CreateBoardReplyDialog,
+    DeleteBoardCommentDialog,
     Tags,
     Images
   },

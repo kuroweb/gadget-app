@@ -681,3 +681,14 @@ comment.images
 comment.images.first
 comment.images.all
 exit
+Comment.all
+exit
+comments = Comment.where(reply_comment_id: 0)
+comments.destroy
+comments.delete
+comments.each do |comment|
+  comment.destroy
+end
+exit
+BoardComment.where(reply_comment_id: 0)
+exit

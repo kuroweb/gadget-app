@@ -5,18 +5,18 @@
       title="404NotFount"
       message="投稿が存在しません。"
     />
-    <CreateCommentDialog
+    <CreatePostCommentDialog
       :dialog="commentDialog"
       :postId="postId"
       @closeDialog="commentDialog = false"
     />
-    <CreateReplyDialog
+    <CreatePostReplyDialog
       :dialog="replyDialog"
       :postId="postId"
       :parentComment="parentComment"
       @closeDialog="replyDialog = false"
     />
-    <DeleteCommentDialog
+    <DeletePostCommentDialog
       :dialog="deleteCommentDialog"
       :postId="postId"
       @closeDialog="deleteCommentDialog = false"
@@ -115,6 +115,9 @@
                   </v-col>
                 </v-row>
                 <p>{{ comment.description }}</p>
+                <Images
+                  :images="comment.images_url"
+                />
                 <v-row
                   justify="end"
                 >
@@ -180,6 +183,9 @@
                         </v-col>
                       </v-row>
                       <p>{{ child.description }}</p>
+                      <Images
+                        :images="child.images_url"
+                      />
                     </v-card-text>
                   </v-card>
                 </v-timeline-item>
@@ -201,17 +207,17 @@ import { mapGetters } from 'vuex'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
 import Tags from '~/components/atoms/Tags.vue'
 import Images from '~/components/atoms/Images.vue'
-import CreateCommentDialog from '~/components/organisms/posts/CreateCommentDialog.vue'
-import CreateReplyDialog from '~/components/organisms/posts/CreateReplyDialog.vue'
-import DeleteCommentDialog from '~/components/organisms/posts/DeleteCommentDialog.vue'
+import CreatePostCommentDialog from '~/components/organisms/posts/CreatePostCommentDialog.vue'
+import CreatePostReplyDialog from '~/components/organisms/posts/CreatePostReplyDialog.vue'
+import DeletePostCommentDialog from '~/components/organisms/posts/DeletePostCommentDialog.vue'
 export default {
   components: {
     ErrorCard,
     Tags,
     Images,
-    CreateCommentDialog,
-    CreateReplyDialog,
-    DeleteCommentDialog
+    CreatePostCommentDialog,
+    CreatePostReplyDialog,
+    DeletePostCommentDialog
   },
   data () {
     return {

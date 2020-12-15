@@ -3,6 +3,7 @@ class V1::PostsController < ApplicationController
 
   # 投稿一覧
   def index
+    # 要リファクタリング
     @posts = Post.with_attached_images.includes({user: {avatar_attachment: :blob}},
                                                 :tags,
                                                 {comments: {user: {avatar_attachment: :blob}}}).all
@@ -14,12 +15,15 @@ class V1::PostsController < ApplicationController
 
   # 投稿詳細
   def show
-    @post = Post.with_attached_images.includes({user: {avatar_attachment: :blob}},
-                                                :tags,
-                                                {comments: {user: {avatar_attachment: :blob}}}).find(params[:id])
+    @post = Post.includes({images_attachments: :blob},
+                          {user: {avatar_attachment: :blob}},
+                          :tags,
+                          {comments: [{user: {avatar_attachment: :blob}},
+                                      {images_attachments: :blob}]}).find(params[:id])
     render json: @post.as_json(include: [{user: {methods: :avatar_url}},
                                           :tags,
-                                          {comments: {include: {user: {methods: :avatar_url}}}}],
+                                          {comments: {include: {user: {methods: :avatar_url}},
+                                                      methods: :images_url}}],
                                 methods: :images_url)
   end
 
