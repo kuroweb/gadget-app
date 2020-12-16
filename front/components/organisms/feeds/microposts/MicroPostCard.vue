@@ -61,10 +61,13 @@
       <v-col cols="10">
         <p>{{ post.created_at }}</p>
       </v-col>
-      <v-col>
-        <v-icon cols="2" @click="toggleCommentFeed">
-          mdi-comment
-        </v-icon>
+      <v-col cols="2" >
+        <v-row>
+          <v-icon @click="toggleCommentFeed">
+            mdi-comment
+          </v-icon>
+          <span class="ml-1">{{ post.commentCounts }}</span>
+        </v-row>
       </v-col>
     </v-row>
     <v-container
@@ -182,6 +185,14 @@
                 <Images
                   :images="child.images_url"
                 />
+                <v-row justify="end">
+                  <v-icon
+                    color="grey darken-1"
+                    @click="openDeleteCommentDialog(child)"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </v-row>
               </v-card-text>
             </v-card>
           </v-timeline-item>

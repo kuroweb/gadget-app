@@ -4,10 +4,17 @@
     max-width="400px"
     persistent
   >
-    <v-card width="500px" class="mx-auto">
-    <v-toolbar flat>
-      <v-toolbar-title>コメント削除</v-toolbar-title>
-      <v-spacer></v-spacer>
+    <v-card class="mx-auto">
+      <v-toolbar
+        class="cyan darken-1"
+        flat
+      >
+        <v-toolbar-title
+          class="white--text font-weight-bold"
+        >
+          コメントを削除
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
       <v-btn 
         @click="closeDialog"
         icon
@@ -16,6 +23,9 @@
       </v-btn>
     </v-toolbar>
       <v-card-text>
+        <v-row class="mt-5 mb-5" justify="center">
+          <h3>本当にコメントを削除しますか？</h3>
+        </v-row>
         <v-row justify="center">
           <v-btn
             color="white--text red"

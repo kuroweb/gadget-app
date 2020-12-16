@@ -71,6 +71,10 @@ export const actions = {
       post.isLikedPost = isLikedPost
       likeData.push(post)
     })
+    // コメント総数プロパティを追加
+    posts.forEach(post => {
+      post.commentCounts = post.comments.length
+    })
     // 投稿へのコメントを整理
     const commentData = []
     posts.forEach(post => {
@@ -130,6 +134,7 @@ export const mutations = {
   updataPost (state, comment) {
     state.posts.forEach(post => {
       if (post.id === comment.post_id) {
+        post.commentCounts += 1
         if (comment.reply_comment_id === null) {
           post.comments.push(comment)
         } else {
@@ -154,10 +159,20 @@ export const mutations = {
           post.comments.forEach((c, index) => {
             if (c.id === comment.id) {
               post.comments.splice(index, 1)
+              post.commentCounts -= 1
             }
           })
         } else {
-
+          post.comments.forEach(c => {
+            if ('childComments' in c) {
+              c.childComments.forEach((child, index) => {
+                if (child.id === comment.id) {
+                  c.childComments.splice(index, 1)
+                  post.commentCounte -= 1
+                }
+              })
+            }
+          })
         }
       }
     })

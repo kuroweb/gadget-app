@@ -13,7 +13,7 @@ class V1::UsersController < ApplicationController
 
   # ユーザー詳細ページに必要な情報をインクルードして返す。
   def show
-    # 要リファクタリング
+    # 要リファクタリング　コメント画像をアタッチできていない
     @user = User.with_attached_avatar.includes(:following, :followers).find(params[:id])
     posts = @user.posts.with_attached_images.order(created_at: 'DESC').includes(:user, :tags, :liked_users, :comments)
     render json: {
