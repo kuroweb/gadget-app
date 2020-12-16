@@ -2,6 +2,26 @@
   <v-card
     class="mx-auto mt-5 pa-5"
   >
+    <CreatePostCommentDialog
+      :dialog="commentDialog"
+      :postId="postId"
+      @createPostComment="createPostComment"
+      @closeDialog="commentDialog = false"
+    />
+    <CreatePostReplyDialog
+      :dialog="replyDialog"
+      :postId="postId"
+      :parentComment="parentComment"
+      @createPostReply="createPostReply"
+      @closeDialog="replyDialog = false"
+    />
+    <DeletePostCommentDialog
+      :dialog="deleteCommentDialog"
+      :postId="postId"
+      :comment="comment"
+      @deletePostComment="deletePostComment"
+      @closeDialog="deleteCommentDialog = false"
+    />
     <v-row justify="center">
       <v-col>
         <v-avatar 
@@ -58,7 +78,7 @@
           color="orange"
           dark
           rounded
-
+          @click="openCommentDialog"
         >
           コメントする
         </v-btn>
@@ -103,28 +123,27 @@
               rounded
               color="success"
               class="cyan darken-1"
-
+              @click="openReplyDialog(comment)"
             >
               返信
             </v-btn>
           </v-row>
           <v-row justify="end">
             <v-icon
-
+              @click="openDeleteCommentDialog(comment)"
             >
               mdi-delete
             </v-icon>
           </v-row>
         </v-card>
         <v-timeline
-          v-if="comment.childComments.length !== 0"
+          v-if="'childComments' in comment"
           align-top
         >
           <v-timeline-item
             v-for="child in comment.childComments"
             :key="child.id"
             small
-            fill-dot
             color="grey"
             right
             hide-dot
@@ -132,7 +151,6 @@
             <v-card
               color="grey"
               dark
-              
             >
               <v-card-title class="title">
                 <v-icon dark>mdi-reply</v-icon>
@@ -174,12 +192,19 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import Tags from "~/components/atoms/Tags.vue"
 import Images from "~/components/atoms/Images.vue"
+import CreatePostCommentDialog from '~/components/organisms/posts/CreatePostCommentDialog.vue'
+import CreatePostReplyDialog from '~/components/organisms/posts/CreatePostReplyDialog.vue'
+import DeletePostCommentDialog from '~/components/organisms/posts/DeletePostCommentDialog.vue'
 export default {
   components: {
     Tags,
     Images,
+    CreatePostCommentDialog,
+    CreatePostReplyDialog,
+    DeletePostCommentDialog
   },
   props: {
     post: {
@@ -188,13 +213,46 @@ export default {
   },
   data () {
     return {
-      commentFeed: false
+      commentFeed: false,
+      postId: '',
+      commentDialog: false,
+      replyDialog: false,
+      deleteCommentDialog: false,
+      parentComment: '',
+      comment: '',
     }
   },
   methods: {
+    ...mapActions({
+      updatePost: 'modules/post/updatePost',
+      deleteComment: 'modules/post/deleteComment'
+    }),
     toggleCommentFeed () {
       this.commentFeed = !this.commentFeed
-    }
+    },
+    openCommentDialog () {
+      this.postId = this.post.id
+      this.commentDialog = true
+    },
+    openReplyDialog (comment) {
+      this.postId = this.post.id
+      this.parentComment = comment
+      this.replyDialog = true
+    },
+    openDeleteCommentDialog (comment) {
+      this.postId = this.post.id
+      this.comment = comment
+      this.deleteCommentDialog = true
+    },
+    createPostComment (payload) {
+      this.updatePost(payload)
+    },
+    createPostReply (payload) {
+      this.updatePost(payload)
+    },
+    deletePostComment (payload) {
+      this.deleteComment(payload)
+    },
   }
 }
 </script>

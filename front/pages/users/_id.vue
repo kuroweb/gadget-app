@@ -71,7 +71,7 @@
               </v-row>
             </v-card-text>
           </v-card>
-          <UsersPostCard
+          <MicroPostCard
             v-for="post in posts"
             :key="post.id"
             :post="post"
@@ -89,12 +89,12 @@
 <script>
 import _ from 'lodash'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
-import UsersPostCard from '~/components/organisms/users/UsersPostCard.vue'
+import MicroPostCard from '~/components/organisms/feeds/microposts/MicroPostCard.vue'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   components: {
     ErrorCard,
-    UsersPostCard
+    MicroPostCard
   },
   data () {
     return {
