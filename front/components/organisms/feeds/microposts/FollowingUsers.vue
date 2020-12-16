@@ -12,7 +12,7 @@
       flat
       v-if="loading === false"
     >
-      <PostCard
+      <MicroPostCard
         v-for="post in posts"
         :key="post.id"
         :post="post"
@@ -21,28 +21,33 @@
   </v-container>
 </template>
 <script>
-import PostCard from '~/components/molecules/PostCard.vue'
+import { mapActions, mapGetters } from 'vuex'
+import MicroPostCard from '~/components/organisms/feeds/microposts/MicroPostCard.vue'
 export default {
   components: {
-    PostCard,
+    MicroPostCard,
   },
   data () {
     return {
       loading: true,
-      posts: []
     }
   },
   async mounted () {
     await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`)
       .then(res => {
+        this.setPosts(res)
         setTimeout(this.stopLoading, 1000)
-        return res
-      })
-      .then(res => {
-        this.posts = res
       })
   },
+  computed: {
+    ...mapGetters({
+      posts: 'modules/post/posts'
+    })
+  },
   methods: {
+    ...mapActions({
+      setPosts: 'modules/post/setPosts'
+    }),
     stopLoading () {
       this.loading = false
     }

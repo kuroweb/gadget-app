@@ -12,7 +12,7 @@
       flat
       v-if="loading === false"
     >
-      <PostCard
+      <MicroPostCard
         v-for="post in posts"
         :key="post.id"
         :post="post"
@@ -22,10 +22,10 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import PostCard from '~/components/molecules/PostCard.vue'
+import MicroPostCard from '~/components/organisms/feeds/microposts/MicroPostCard.vue'
 export default {
   components: {
-    PostCard,
+    MicroPostCard,
   },
   data () {
     return {

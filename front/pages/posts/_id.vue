@@ -154,7 +154,6 @@
                   <v-card
                     color="grey"
                     dark
-                    
                   >
                     <v-card-title class="title">
                       <v-icon dark>mdi-reply</v-icon>

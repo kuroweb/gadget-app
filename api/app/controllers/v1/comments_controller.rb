@@ -3,7 +3,9 @@ class V1::CommentsController < ApplicationController
   def create
     @comment = Comment.new(comment_params)
     if @comment.save
-      render json: @comment, status: :created
+      render json: @comment.as_json(include: [{user: {methods: :avatar_url}},
+                                              :post],
+                                    methods: :images_url), status: :created
     else
       render json: @comment.errors, status: :unprocessable_entity
     end

@@ -7,6 +7,7 @@
   >
     <v-card
       class="mx-auto"
+      v-if="previewStatus"
     >
       <v-toolbar
         class="cyan darken-1"

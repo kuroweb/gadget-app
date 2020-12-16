@@ -22,7 +22,7 @@
           mdi-close
         </v-icon>
       </v-toolbar>
-      <v-card-text>
+      <v-card-text v-if="dialogStatus">
         <v-form>
           <ValidationObserver v-slot="ObserverProps">
             <ImagesForm
@@ -97,8 +97,10 @@ export default {
       data.append('comment[user_id]', this.$store.state.modules.user.data.id)
 
       this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/comments', data, config)
-        .then(() => {
+        .then(res => {
           console.log('投稿に成功しました')
+          this.$emit('createPostReply', res)
+          this.$emit('closeDialog')
         })
         .catch((error) => {
           console.log('投稿に失敗しました')

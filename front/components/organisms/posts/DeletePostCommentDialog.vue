@@ -63,6 +63,10 @@ export default {
           reply_comment_id: this.comment.reply_comment_id
         }
       })
+        .then(() => {
+          this.$emit('deletePostComment', this.comment)
+          this.$emit('closeDialog')
+        })
     },
     closeDialog () {
       this.$emit('closeDialog')

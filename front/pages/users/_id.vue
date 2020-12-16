@@ -71,7 +71,7 @@
               </v-row>
             </v-card-text>
           </v-card>
-          <PostCard
+          <UsersPostCard
             v-for="post in posts"
             :key="post.id"
             :post="post"
@@ -89,10 +89,12 @@
 <script>
 import _ from 'lodash'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
+import UsersPostCard from '~/components/organisms/users/UsersPostCard.vue'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   components: {
     ErrorCard,
+    UsersPostCard
   },
   data () {
     return {
@@ -123,7 +125,7 @@ export default {
         store.commit('modules/otherUser/setFollowing', res.user.following)
         store.commit('modules/otherUser/setFollowers', res.user.followers)
         // アクセス先ユーザーの投稿情報をコミット
-        store.dispatch('modules/otherUser/setPosts', res.posts)
+        store.dispatch('modules/post/setPosts', res.posts)
         store.commit('modules/info/setError', false)
       })
       .catch(error => {
@@ -153,7 +155,7 @@ export default {
       otherUser: 'modules/otherUser/data',
       following: 'modules/otherUser/following',
       followers: 'modules/otherUser/followers',
-      posts: 'modules/otherUser/posts',
+      posts: 'modules/post/posts',
       error: 'modules/info/error'
     })
   },
