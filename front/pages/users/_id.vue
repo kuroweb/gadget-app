@@ -115,15 +115,15 @@ export default {
       .then(res => {
         // アクセス先ユーザーの基本情報をコミット
         const data = {
-          id: res.user.id,
-          name: res.user.name,
-          profile: res.user.profile,
-          avatar_url: res.user.avatar_url,
+          id: res.id,
+          name: res.name,
+          profile: res.profile,
+          avatar_url: res.avatar_url,
         }
         store.commit('modules/otherUser/setData', data)
         // アクセス先ユーザーのフォロー・フォロワー情報をコミット
-        store.commit('modules/otherUser/setFollowing', res.user.following)
-        store.commit('modules/otherUser/setFollowers', res.user.followers)
+        store.commit('modules/otherUser/setFollowing', res.following)
+        store.commit('modules/otherUser/setFollowers', res.followers)
         // アクセス先ユーザーの投稿情報をコミット
         store.dispatch('modules/post/setPosts', res.posts)
         store.commit('modules/info/setError', false)

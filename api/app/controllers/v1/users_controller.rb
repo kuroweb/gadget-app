@@ -13,13 +13,32 @@ class V1::UsersController < ApplicationController
 
   # ユーザー詳細ページに必要な情報をインクルードして返す。
   def show
-    # 要リファクタリング　コメント画像をアタッチできていない
-    @user = User.with_attached_avatar.includes(:following, :followers).find(params[:id])
-    posts = @user.posts.with_attached_images.order(created_at: 'DESC').includes(:user, :tags, :liked_users, :comments)
-    render json: {
-      user: @user.as_json(methods: :avatar_url, include: [:following, :followers]),
-      posts: posts.as_json(methods: :images_url, include: [{user: {methods: :avatar_url}}, :tags, :liked_users, {comments: {include: {user: {methods: :avatar_url}}}}])
-    }
+    # 要リファクタリング　コメント画像をアタッチできていない¥
+    @user = User.includes({avatar_attachment: :blob},
+                          :following,
+                          :followers,
+                          {posts: [{images_attachments: :blob},
+                                    :tags,
+                                    :liked_users,
+                                    {user: {avatar_attachment: :blob}},
+                                    {comments: [{user: {avatar_attachment: :blob}},
+                                                {images_attachments: :blob}]}]}).find(params[:id])
+    render json: @user.as_json(include: [:following,
+                                          :followers,
+                                          {posts: {include: [:tags,
+                                                              :liked_users,
+                                                              {user: {method: :avatar_url}},
+                                                              {comments: {include: {user: {methods: :avatar_url}},
+                                                                          methods: :images_url}}],
+                                                    methods: :images_url}}],
+                                methods: :avatar_url)
+
+    #@user = User.with_attached_avatar.includes(:following, :followers).find(params[:id])
+    #posts = @user.posts.with_attached_images.order(created_at: 'DESC').includes(:user, :tags, :liked_users, :comments)
+    #render json: {
+    #  user: @user.as_json(methods: :avatar_url, include: [:following, :followers]),
+    #  posts: posts.as_json(methods: :images_url, include: [{user: {methods: :avatar_url}}, :tags, :liked_users, {comments: {include: {user: {methods: :avatar_url}}}}])
+    #}
   end
 
   def test
