@@ -40,7 +40,8 @@
                   <v-row justify="center">
                     <v-btn
                       v-if="$data['image' + n].length != 0"
-                      color="success"
+                      color="red"
+                      class="white--text"
                       @click="removeImage(n)"
                     >
                       削除
@@ -87,7 +88,7 @@
   </v-dialog>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import TextAreaWithValidation from '~/components/molecules/inputs/TextAreaWithValidation.vue'
 import TagsForm from '~/components/molecules/inputs/TagsForm.vue'
 export default {
@@ -264,6 +265,9 @@ export default {
     }),
   },
   methods: {
+    ...mapActions({
+      setFlash: 'modules/info/setFlash'
+    }),
     async updatePost () {
       const data = new FormData()
       const config = {
@@ -291,16 +295,25 @@ export default {
         })
       }
       this.$axios.$patch(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`, data, config)
-      .then(() => {
-        console.log('投稿に成功しました')
-      })
-      .catch((error) => {
-        console.log('投稿に失敗しました')
-        console.log(error)
-      })
-    },
-    async deletePost () {
-      this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`)
+        .then(res => {
+          console.log('編集に成功しました')
+          this.$emit('editPost', res)
+          this.$emit('closeDialog')
+          this.setFlash({
+            status: true,
+            message: '投稿を更新しました'
+          })
+          setTimeout(() => {
+            this.setFlash({
+              status: false,
+              message: ''
+            })
+          }, 2000)
+        })
+        .catch((error) => {
+          console.log('編集に失敗しました')
+          console.log(error)
+        })
     },
     closeDialog () {
       this.$emit('closeDialog')

@@ -98,18 +98,33 @@ export const actions = {
     })
     commit('setPosts', commentData)
   },
+  // 一覧ページ用
   reloadPostsByCreate ({ commit }, comment) {
     commit('reloadPostsByCreate', comment)
   },
-  reloadPostsByDelete ({ commit }, comment) {
-    commit('reloadPostsByDelete', comment)
+  reloadPostsByDeleteComment ({ commit }, comment) {
+    commit('reloadPostsByDeleteComment', comment)
   },
+  reloadPostsByEdit ({ commit }, postId) {
+    commit('reloadPostsByEdit', postId)
+  },
+  reloadPostsByDeletePost ({ commit }, postId) {
+    commit('reloadPostsByDeletePost', postId)
+  },
+  // 詳細ページ用
   reloadPostByCreate ({ commit }, comment) {
     commit('reloadPostByCreate', comment)
   },
-  reloadPostByDelete ({ commit }, comment) {
-    commit('reloadPostByDelete', comment)
+  reloadPostByDeleteComment ({ commit }, comment) {
+    commit('reloadPostByDeleteComment', comment)
   },
+  reloadPostByEdit ({ commit }, post) {
+    commit('reloadPostByEdit', post)
+  },
+  reloadPostByDeletePost ({ commit }, postId) {
+    commit('reloadPostByDeletePost', postId)
+  },
+  // いいねボタン（動作不明）
   setLikedUsersCountUp ({ commit }, post) {
     commit('setLikedUsersCountUp', post)
   },
@@ -131,6 +146,7 @@ export const mutations = {
   setPosts (state, payload) {
     state.posts = payload
   },
+  // 一覧ページ用
   reloadPostsByCreate (state, comment) {
     state.posts.forEach(post => {
       if (post.id === comment.post_id) {
@@ -152,7 +168,7 @@ export const mutations = {
       }
     })
   },
-  reloadPostsByDelete (state, comment) {
+  reloadPostsByDeleteComment (state, comment) {
     state.posts.forEach(post => {
       if (post.id === comment.post_id) {
         if (comment.reply_comment_id === null) {
@@ -177,6 +193,23 @@ export const mutations = {
       }
     })
   },
+  reloadPostsByEdit (state, post) {
+    state.posts.forEach(p => {
+      if (p.id === post.id) {
+        p.images_url = post.images_url
+        p.description = post.description
+        p.tags = post.tags
+      }
+    })
+  },
+  reloadPostsByDeletePost (state, postId) {
+    state.posts.forEach((p, index) => {
+      if (p.id === postId) {
+        state.posts.splice(index, 1)
+      }
+    })
+  },
+  // 詳細ページ用
   reloadPostByCreate (state, comment) {
     if (state.data.id === comment.post_id) {
       state.data.commentCounts += 1
@@ -196,7 +229,7 @@ export const mutations = {
       }
     }
   },
-  reloadPostByDelete (state, comment) {
+  reloadPostByDeleteComment (state, comment) {
     if (state.data.id === comment.post_id) {
       if (comment.reply_comment_id === null) {
         state.data.comments.forEach((c, index) => {
@@ -219,6 +252,18 @@ export const mutations = {
       }
     }
   },
+  reloadPostByEdit (state, post) {
+    if (state.data.id === post.id) {
+      state.data.images_url = post.images_url
+      state.data.description = post.description
+      state.data.tags = post.tags
+    }
+  },
+  reloadPostByDeleteComment (state, postId) {
+
+  },
+
+
   setLikedUsersCountUp (state, post) {
     state.posts.forEach(p => {
       if (p.id === post.id) {

@@ -28,6 +28,7 @@
   </v-dialog>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   components: {
   },
@@ -53,8 +54,25 @@ export default {
   computed: {
   },
   methods: {
+    ...mapActions({
+      setFlash: 'modules/info/setFlash'
+    }),
     async deletePost () {
       this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`)
+        .then(() => {
+          this.$emit('deletePost', this.postId)
+          this.$emit('closeDialog')
+          this.setFlash({
+            status: true,
+            message: "投稿削除に成功しました"
+          })
+          setTimeout(() => {
+            this.setFlash({
+              status: false,
+              message: ""
+            })
+          }, 2000)
+        })
     },
     closeDialog () {
       this.$emit('closeDialog')

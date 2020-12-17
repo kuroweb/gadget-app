@@ -25,7 +25,14 @@
     <EditPostDialog
       :dialog="editPostDialog"
       :postId="postId"
+      @editPost="editPost"
       @closeDialog="editPostDialog = false"
+    />
+    <DeletePostDialog
+      :dialog="deletePostDialog"
+      :postId="postId"
+      @deletePost="deletePost"
+      @closeDialog="deletePostDialog = false"
     />
     <v-row justify="center">
       <v-col>
@@ -84,7 +91,10 @@
           >
             mdi-pencil-box-multiple
           </v-icon>
-          <v-icon class="ml-3 pr-6">
+          <v-icon
+            class="ml-3 pr-6"
+            @click="openDeletePostDialog"
+          >
             mdi-delete
           </v-icon>
         </v-row>
@@ -231,6 +241,7 @@ import CreatePostCommentDialog from '~/components/organisms/posts/CreatePostComm
 import CreatePostReplyDialog from '~/components/organisms/posts/CreatePostReplyDialog.vue'
 import DeletePostCommentDialog from '~/components/organisms/posts/DeletePostCommentDialog.vue'
 import EditPostDialog from '~/components/organisms/posts/EditPostDialog.vue'
+import DeletePostDialog from '~/components/organisms/posts/DeletePostDialog.vue'
 export default {
   components: {
     Tags,
@@ -238,7 +249,8 @@ export default {
     CreatePostCommentDialog,
     CreatePostReplyDialog,
     DeletePostCommentDialog,
-    EditPostDialog
+    EditPostDialog,
+    DeletePostDialog
   },
   props: {
     post: {
@@ -253,6 +265,7 @@ export default {
       replyDialog: false,
       deleteCommentDialog: false,
       editPostDialog: false,
+      deletePostDialog: false,
       parentComment: '',
       comment: '',
     }
@@ -260,7 +273,9 @@ export default {
   methods: {
     ...mapActions({
       reloadPostsByCreate: 'modules/post/reloadPostsByCreate',
-      reloadPostsByDelete: 'modules/post/reloadPostsByDelete'
+      reloadPostsByDeleteComment: 'modules/post/reloadPostsByDeleteComment',
+      reloadPostsByEdit: 'modules/post/reloadPostsByEdit',
+      reloadPostsByDeletePost: 'modules/post/reloadPostsByDeletePost'
     }),
     toggleCommentFeed () {
       this.commentFeed = !this.commentFeed
@@ -283,6 +298,10 @@ export default {
       this.postId = this.post.id
       this.editPostDialog = true
     },
+    openDeletePostDialog () {
+      this.postId = this.post.id
+      this.deletePostDialog = true
+    },
     createPostComment (payload) {
       this.reloadPostsByCreate(payload)
     },
@@ -290,8 +309,14 @@ export default {
       this.reloadPostsByCreate(payload)
     },
     deletePostComment (payload) {
-      this.reloadPostsByDelete(payload)
+      this.reloadPostsByDeleteComment(payload)
     },
+    editPost (payload) {
+      this.reloadPostsByEdit(payload)
+    },
+    deletePost (payload) {
+      this.reloadPostsByDeletePost(payload)
+    }
   }
 }
 </script>

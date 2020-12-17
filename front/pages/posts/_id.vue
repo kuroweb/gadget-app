@@ -25,6 +25,18 @@
       @deletePostComment="deletePostComment"
       @closeDialog="deleteCommentDialog = false"
     />
+    <EditPostDialog
+      :dialog="editPostDialog"
+      :postId="postId"
+      @editPost="editPost"
+      @closeDialog="editPostDialog = false"
+    />
+    <DeletePostDialog
+      :dialog="deletePostDialog"
+      :postId="postId"
+      @deletePost="deletePost"
+      @closeDialog="deletePostDialog = false"
+    />
     <v-row
       justify="center"
       v-if="error === false"
@@ -47,10 +59,10 @@
             <v-card
               class="mx-auto pa-5"
             >
-              <v-row>
+              <v-row justify="center">
                 <v-col>
-                  <v-avatar
-                    size="84"
+                  <v-avatar 
+                  size="62"
                   >
                     <img 
                       v-if="post.user.avatar_url"
@@ -64,17 +76,44 @@
                     >
                   </v-avatar>
                 </v-col>
-                <v-col align-self="center">
+                <v-col
+                  align-self="center"
+                >
                   <h3>{{ post.user.name }}</h3>
-                  <Tags
-                    :tags="post.tags"
-                  />
                 </v-col>
               </v-row>
-              <p>{{ post.description }}</p>
+              <v-card
+                flat
+                :to="`/posts/${post.id}`"
+              >
+                <p>{{ post.description }}</p>
+              </v-card>
               <Images
                 :images="post.images_url"
               />
+              <Tags
+                :tags="post.tags"
+              />
+              <v-row>
+                <v-col cols="8">
+                  <p>{{ post.created_at }}</p>
+                </v-col>
+                <v-col cols="4" >
+                  <v-row justify="end">
+                    <v-icon
+                      @click="openEditPostDialog"
+                    >
+                      mdi-pencil-box-multiple
+                    </v-icon>
+                    <v-icon
+                      class="ml-3 pr-6"
+                      @click="openDeletePostDialog"
+                    >
+                      mdi-delete
+                    </v-icon>
+                  </v-row>
+                </v-col>
+              </v-row>
             </v-card>
             <v-row
               class="pa-3"
@@ -220,6 +259,7 @@ import Images from '~/components/atoms/Images.vue'
 import CreatePostCommentDialog from '~/components/organisms/posts/CreatePostCommentDialog.vue'
 import CreatePostReplyDialog from '~/components/organisms/posts/CreatePostReplyDialog.vue'
 import DeletePostCommentDialog from '~/components/organisms/posts/DeletePostCommentDialog.vue'
+import EditPostDialog from '~/components/organisms/posts/EditPostDialog.vue'
 export default {
   components: {
     ErrorCard,
@@ -227,7 +267,8 @@ export default {
     Images,
     CreatePostCommentDialog,
     CreatePostReplyDialog,
-    DeletePostCommentDialog
+    DeletePostCommentDialog,
+    EditPostDialog
   },
   data () {
     return {
@@ -235,6 +276,8 @@ export default {
       commentDialog: false,
       replyDialog: false,
       deleteCommentDialog: false,
+      editPostDialog: false,
+      deletePostDialog: false,
       parentComment: '',
       comment: '',
     }
@@ -264,7 +307,8 @@ export default {
   methods: {
     ...mapActions({
       reloadPostByCreate: 'modules/post/reloadPostByCreate',
-      reloadPostByDelete: 'modules/post/reloadPostByDelete'
+      reloadPostByDeleteComment: 'modules/post/reloadPostByDeleteComment',
+      reloadPostByEdit: 'modules/post/reloadPostByEdit'
     }),
     openCommentDialog () {
       this.postId = this.post.id
@@ -280,6 +324,14 @@ export default {
       this.comment = comment
       this.deleteCommentDialog = true
     },
+    openEditPostDialog () {
+      this.postId = this.post.id
+      this.editPostDialog = true
+    },
+    openDeletePostDialog () {
+      this.postId = this.post.id
+      this.deletePostDialog = true
+    },
     createPostComment (payload) {
       this.reloadPostByCreate(payload)
     },
@@ -287,8 +339,14 @@ export default {
       this.reloadPostByCreate(payload)
     },
     deletePostComment (payload) {
-      this.reloadPostByDelete(payload)
+      this.reloadPostByDeleteComment(payload)
     },
+    editPost (payload) {
+      this.reloadPostByEdit(payload)
+    },
+    deletePost (payload) {
+      this.$router.push("/")
+    }
   }
 }
 </script>

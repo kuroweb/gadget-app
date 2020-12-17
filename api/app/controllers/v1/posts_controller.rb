@@ -54,7 +54,12 @@ class V1::PostsController < ApplicationController
       if post_content_params[:images] === nil
         @post.update(images: nil)
       end
-      render json: @post
+      render json: @post.as_json(include: [{user: {methods: :avatar_url}},
+                                            :tags,
+                                            :liked_users,
+                                            {comments: {include: {user: {methods: :avatar_url}},
+                                                        methods: :images_url}}],
+                                    methods: :images_url)
     else
       render json: @post.errors, status: :unprocessable_entity
     end
