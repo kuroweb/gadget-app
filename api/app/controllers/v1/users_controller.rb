@@ -25,7 +25,7 @@ class V1::UsersController < ApplicationController
                                           :followers,
                                           {posts: {include: [:tags,
                                                               :liked_users,
-                                                              {user: {method: :avatar_url}},
+                                                              {user: {methods: :avatar_url}},
                                                               {comments: {include: {user: {methods: :avatar_url}},
                                                                           methods: :images_url}}],
                                                     methods: :images_url}}],

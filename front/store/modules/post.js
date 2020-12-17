@@ -15,7 +15,7 @@ export const getters = {
 export const actions = {
   setData ({ commit, rootState }, payload) {
     // ログイン中の場合は、いいね総数・いいね未・済のプロパティを追加
-    payload.liked_users_count = payload.liked_users.length
+    payload.likedUsersCounts = payload.liked_users.length
     let isLikedPost = false
     if ('id' in rootState.modules.user.data) {
       payload.liked_users.forEach(user => {
@@ -53,7 +53,7 @@ export const actions = {
     // いいね総数、いいね未・済のプロパティを追加
     const likeData = []
     posts.forEach(post => {
-      post.liked_users_count = post.liked_users.length
+      post.likedUsersCounts = post.liked_users.length
       let isLikedPost = false
       if (rootState.modules.user.data) {
         post.liked_users.forEach(user => {
@@ -222,16 +222,16 @@ export const mutations = {
   setLikedUsersCountUp (state, post) {
     state.posts.forEach(p => {
       if (p.id === post.id) {
-        const count = post.liked_users_count += 1
-        p.liked_users_count = count
+        const count = post.likedUsersCounts += 1
+        p.likedUsersCounts = count
       }
     })
   },
   setLikedUsersCountDown (state, post) {
     state.posts.forEach(p => {
       if (p.id === post.id) {
-        const count = post.liked_users_count -= 1
-        p.liked_users_count = count
+        const count = post.likedUsersCounts -= 1
+        p.likedUsersCounts = count
       }
     })
   },

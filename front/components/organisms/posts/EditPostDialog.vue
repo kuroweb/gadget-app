@@ -60,19 +60,17 @@
                 </v-col>
                 <p v-if="imageError">{{ imageError }}</p>
               </v-row>
-              <TextFieldWithValidation
+              <TextAreaWithValidation
                 v-model="description"
                 label="説明文"
                 rules="max:80|required"
               />
-              <client-only>
-                <VueTagsInput
-                  v-model="tag"
-                  :tags="tags"
-                  @tags-changed="newTags => tags = newTags"
-                />
-              </client-only>
-              <v-row justify="center">
+              <TagsForm
+                v-model="tag"
+                :initTags="tags"
+                @tags-changed="newTags => tags = newTags"
+              />
+              <v-row justify="center" class="mt-5">
                 <v-btn
                   color="success"
                   class="white--text"
@@ -90,10 +88,12 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import TextFieldWithValidation from '~/components/molecules/inputs/TextFieldWithValidation.vue'
+import TextAreaWithValidation from '~/components/molecules/inputs/TextAreaWithValidation.vue'
+import TagsForm from '~/components/molecules/inputs/TagsForm.vue'
 export default {
   components: {
-    TextFieldWithValidation,
+    TextAreaWithValidation,
+    TagsForm
   },
   props: {
     dialog: {
@@ -338,5 +338,8 @@ export default {
 <style>
 .input-box {
   padding: 0 30%;
+}
+.ti-tag {
+  background-color: #FFA000 !important;
 }
 </style>

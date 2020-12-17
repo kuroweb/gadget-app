@@ -22,6 +22,11 @@
       @deletePostComment="deletePostComment"
       @closeDialog="deleteCommentDialog = false"
     />
+    <EditPostDialog
+      :dialog="editPostDialog"
+      :postId="postId"
+      @closeDialog="editPostDialog = false"
+    />
     <v-row justify="center">
       <v-col>
         <v-avatar 
@@ -58,18 +63,34 @@
       :tags="post.tags"
     />
     <v-row>
-      <v-col cols="10">
+      <v-col cols="8">
         <p>{{ post.created_at }}</p>
       </v-col>
-      <v-col cols="2" >
-        <v-row>
+      <v-col cols="4" >
+        <v-row justify="end">
           <v-icon @click="toggleCommentFeed">
             mdi-comment
           </v-icon>
           <span class="ml-1">{{ post.commentCounts }}</span>
+          <v-icon class="ml-3">
+            mdi-cards-heart
+          </v-icon>
+          <span class="ml-1 pr-3">{{ post.likedUsersCounts }}</span>
+        </v-row>
+        <v-row justify="end" class="mt-3">
+          <v-icon
+            class="ml-3 pr-3"
+            @click="openEditPostDialog"
+          >
+            mdi-pencil-box-multiple
+          </v-icon>
+          <v-icon class="ml-3 pr-6">
+            mdi-delete
+          </v-icon>
         </v-row>
       </v-col>
     </v-row>
+
     <v-container
       v-if="commentFeed"
     >
@@ -209,13 +230,15 @@ import Images from "~/components/atoms/Images.vue"
 import CreatePostCommentDialog from '~/components/organisms/posts/CreatePostCommentDialog.vue'
 import CreatePostReplyDialog from '~/components/organisms/posts/CreatePostReplyDialog.vue'
 import DeletePostCommentDialog from '~/components/organisms/posts/DeletePostCommentDialog.vue'
+import EditPostDialog from '~/components/organisms/posts/EditPostDialog.vue'
 export default {
   components: {
     Tags,
     Images,
     CreatePostCommentDialog,
     CreatePostReplyDialog,
-    DeletePostCommentDialog
+    DeletePostCommentDialog,
+    EditPostDialog
   },
   props: {
     post: {
@@ -229,6 +252,7 @@ export default {
       commentDialog: false,
       replyDialog: false,
       deleteCommentDialog: false,
+      editPostDialog: false,
       parentComment: '',
       comment: '',
     }
@@ -254,6 +278,10 @@ export default {
       this.postId = this.post.id
       this.comment = comment
       this.deleteCommentDialog = true
+    },
+    openEditPostDialog () {
+      this.postId = this.post.id
+      this.editPostDialog = true
     },
     createPostComment (payload) {
       this.reloadPostsByCreate(payload)

@@ -23,7 +23,7 @@ export default {
   text-align: center;
   line-height: 60px;
   width: 100%;
-  background-color: #69F0AE;
+  background-color: orange;
   color: #fff;
 }
 .fade-enter-active,
