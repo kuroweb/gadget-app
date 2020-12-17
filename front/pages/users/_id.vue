@@ -89,7 +89,7 @@
 <script>
 import _ from 'lodash'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
-import MicroPostCard from '~/components/organisms/feeds/microposts/MicroPostCard.vue'
+import MicroPostCard from '~/components/organisms/MicroPostCard.vue'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   components: {
@@ -101,12 +101,6 @@ export default {
       isFollowed: false,
       editDialog: false,
       deleteDialog: false,
-      commentDeleteDialog: false,
-      commentDialog: false,
-      replyDialog: false,
-      postId: '',
-      parentComment: '',
-      comment: ''
     }
   },
   async fetch({ $axios, params, store }) {
@@ -207,6 +201,8 @@ export default {
     },
 
     // ダイアログ関連
+    // MicroPostCardに移植予定
+    // 現在使用していないが動作するはず。
     openEditDialog (post) {
       this.postId = post.id
       this.editDialog = true
@@ -215,22 +211,10 @@ export default {
       this.postId = post.id
       this.deleteDialog = true
     },
-    openCommentDialog (post) {
-      this.postId = post.id
-      this.commentDialog = true
-    },
-    openReplyDialog (post, comment) {
-      this.postId = post.id
-      this.parentComment = comment
-      this.replyDialog = true
-    },
-    openCommentDeleteDialog (post, comment) {
-      this.postId = post.id
-      this.comment = comment
-      this.commentDeleteDialog = true
-    },
 
     // ライクボタン関連
+    // MicroPostCardに移植予定
+    // 現在使用していないが動作するはず。
     createLikePost (post) {
       const likeParams = {
         user_id: this.currentUser.id,

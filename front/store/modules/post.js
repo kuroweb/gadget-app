@@ -55,7 +55,7 @@ export const actions = {
     posts.forEach(post => {
       post.liked_users_count = post.liked_users.length
       let isLikedPost = false
-      if (rootState.modules.user.data !== null) {
+      if (rootState.modules.user.data) {
         post.liked_users.forEach(user => {
           if (user.id = rootState.modules.user.data.id) {
             isLikedPost = true
@@ -98,11 +98,17 @@ export const actions = {
     })
     commit('setPosts', commentData)
   },
-  updatePost ({ commit }, comment) {
-    commit('updataPost', comment)
+  reloadPostsByCreate ({ commit }, comment) {
+    commit('reloadPostsByCreate', comment)
   },
-  deleteComment ({ commit }, comment) {
-    commit('deleteComment', comment)
+  reloadPostsByDelete ({ commit }, comment) {
+    commit('reloadPostByDelete', comment)
+  },
+  reloadPostByCreate ({ commit }, comment) {
+    commit('reloadPostByCreate', comment)
+  },
+  reloadPostByDelete ({ commit }, comment) {
+    commit('reloadPostByDelete', comment)
   },
   setLikedUsersCountUp ({ commit }, post) {
     commit('setLikedUsersCountUp', post)
@@ -125,7 +131,7 @@ export const mutations = {
   setPosts (state, payload) {
     state.posts = payload
   },
-  updataPost (state, comment) {
+  reloadPostsByCreate (state, comment) {
     state.posts.forEach(post => {
       if (post.id === comment.post_id) {
         post.commentCounts += 1
@@ -146,7 +152,7 @@ export const mutations = {
       }
     })
   },
-  deleteComment (state, comment) {
+  reloadPostsByDelete (state, comment) {
     state.posts.forEach(post => {
       if (post.id === comment.post_id) {
         if (comment.reply_comment_id === null) {
@@ -170,6 +176,48 @@ export const mutations = {
         }
       }
     })
+  },
+  reloadPostByCreate (state, comment) {
+    if (state.data.id === comment.post_id) {
+      state.data.commentCounts += 1
+      if (comment.reply_comment_id === null) {
+        state.data.comments.push(comment)
+      } else {
+        state.data.comments.forEach(c => {
+          if (c.id === comment.reply_comment_id) {
+            if ('childComments' in c) {
+              c.childComments.push(comment)
+            } else {
+              c.childComments = []
+              c.childComments.push(comment)
+            }
+          }
+        })
+      }
+    }
+  },
+  reloadPostByDelete (state, comment) {
+    if (state.data.id === comment.post_id) {
+      if (comment.reply_comment_id === null) {
+        state.data.comments.forEach((c, index) => {
+          if (c.id === comment.id) {
+            state.data.comments.splice(index, 1)
+            state.data.commentCounts -= 1
+          }
+        })
+      } else {
+        state.data.comments.forEach(c => {
+          if ('childComments' in c) {
+            c.childComments.forEach((child, index) => {
+              if (child.id === comment.id) {
+                c.childComments.splice(index, 1)
+                state.data.commentCounte -= 1
+              }
+            })
+          }
+        })
+      }
+    }
   },
   setLikedUsersCountUp (state, post) {
     state.posts.forEach(p => {

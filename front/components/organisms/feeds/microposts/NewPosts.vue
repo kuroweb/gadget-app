@@ -22,7 +22,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import MicroPostCard from '~/components/organisms/feeds/microposts/MicroPostCard.vue'
+import MicroPostCard from '~/components/organisms/MicroPostCard.vue'
 export default {
   components: {
     MicroPostCard,

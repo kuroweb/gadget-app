@@ -98,6 +98,7 @@ export default {
           console.log('投稿に成功しました')
           this.$emit('createPostComment', res)
           this.$emit('closeDialog')
+          this.description = ''
         })
         .catch((error) => {
           console.log('投稿に失敗しました')
@@ -106,6 +107,7 @@ export default {
     },
     closeDialog () {
       this.$emit('closeDialog')
+      this.description = ''
     },
     setImages (payload) {
       this.images = payload

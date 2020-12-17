@@ -8,17 +8,21 @@
     <CreatePostCommentDialog
       :dialog="commentDialog"
       :postId="postId"
+      @createPostComment="createPostComment"
       @closeDialog="commentDialog = false"
     />
     <CreatePostReplyDialog
       :dialog="replyDialog"
       :postId="postId"
       :parentComment="parentComment"
+      @createPostReply="createPostReply"
       @closeDialog="replyDialog = false"
     />
     <DeletePostCommentDialog
       :dialog="deleteCommentDialog"
       :postId="postId"
+      :comment="comment"
+      @deletePostComment="deletePostComment"
       @closeDialog="deleteCommentDialog = false"
     />
     <v-row
@@ -139,14 +143,13 @@
                 </v-row>
               </v-card>
               <v-timeline
-                v-if="comment.childComments.length !== 0"
+                v-if="'childComments' in comment"
                 align-top
               >
                 <v-timeline-item
                   v-for="child in comment.childComments"
                   :key="child.id"
                   small
-                  fill-dot
                   color="grey"
                   right
                   hide-dot
@@ -185,6 +188,14 @@
                       <Images
                         :images="child.images_url"
                       />
+                      <v-row justify="end">
+                        <v-icon
+                          color="grey darken-1"
+                          @click="openDeleteCommentDialog(child)"
+                        >
+                          mdi-delete
+                        </v-icon>
+                      </v-row>
                     </v-card-text>
                   </v-card>
                 </v-timeline-item>
@@ -202,7 +213,7 @@
   </v-container>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
 import Tags from '~/components/atoms/Tags.vue'
 import Images from '~/components/atoms/Images.vue'
@@ -232,17 +243,11 @@ export default {
     const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
     await $axios.$get(baseUrl + `/v1/posts/${params.id}`)
       .then(res => {
-        // 掲示板の情報をコミット
-        console.log('true')
         store.dispatch('modules/post/setData', res)
-        console.log('true')
         store.commit('modules/info/setError', false)
-        console.log('true')
       })
       .catch(error => {
-        console.log('false')
         store.commit('modules/info/setError', true)
-        console.log('false')
       })
   },
 
@@ -257,7 +262,10 @@ export default {
   },
 
   methods: {
-    // ダイアログ関連
+    ...mapActions({
+      reloadPostByCreate: 'modules/post/reloadPostByCreate',
+      reloadPostByDelete: 'modules/post/reloadPostByDelete'
+    }),
     openCommentDialog () {
       this.postId = this.post.id
       this.commentDialog = true
@@ -271,7 +279,16 @@ export default {
       this.postId = this.post.id
       this.comment = comment
       this.deleteCommentDialog = true
-    }
+    },
+    createPostComment (payload) {
+      this.reloadPostByCreate(payload)
+    },
+    createPostReply (payload) {
+      this.reloadPostByCreate(payload)
+    },
+    deletePostComment (payload) {
+      this.reloadPostByDelete(payload)
+    },
   }
 }
 </script>

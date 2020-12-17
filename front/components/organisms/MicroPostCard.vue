@@ -235,8 +235,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      updatePost: 'modules/post/updatePost',
-      deleteComment: 'modules/post/deleteComment'
+      reloadPostsByCreate: 'modules/post/reloadPostsByCreate',
+      reloadPostsByDelete: 'modules/post/reloadPostsByDelete'
     }),
     toggleCommentFeed () {
       this.commentFeed = !this.commentFeed
@@ -256,13 +256,13 @@ export default {
       this.deleteCommentDialog = true
     },
     createPostComment (payload) {
-      this.updatePost(payload)
+      this.reloadPostsByCreate(payload)
     },
     createPostReply (payload) {
-      this.updatePost(payload)
+      this.reloadPostsByCreate(payload)
     },
     deletePostComment (payload) {
-      this.deleteComment(payload)
+      this.reloadPostsByDelete(payload)
     },
   }
 }
