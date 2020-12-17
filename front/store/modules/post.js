@@ -102,7 +102,7 @@ export const actions = {
     commit('reloadPostsByCreate', comment)
   },
   reloadPostsByDelete ({ commit }, comment) {
-    commit('reloadPostByDelete', comment)
+    commit('reloadPostsByDelete', comment)
   },
   reloadPostByCreate ({ commit }, comment) {
     commit('reloadPostByCreate', comment)

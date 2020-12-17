@@ -49,6 +49,7 @@
   </v-dialog>
 </template>
 <script>
+import { mapActions } from 'vuex'
 import TextAreaWithValidation from '~/components/molecules/inputs/TextAreaWithValidation.vue'
 import ImagesForm from '~/components/molecules/inputs/ImagesForm.vue'
 export default {
@@ -78,6 +79,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      setFlash: 'modules/info/setFlash'
+    }),
     async createComment () {
       const data = new FormData()
       const config = {
@@ -99,6 +103,16 @@ export default {
           this.$emit('createPostComment', res)
           this.$emit('closeDialog')
           this.description = ''
+          this.setFlash({
+            status: true,
+            message: "コメント作成に成功しました"
+          })
+          setTimeout(() => {
+            this.setFlash({
+              status: false,
+              message: ""
+            })
+          }, 2000)
         })
         .catch((error) => {
           console.log('投稿に失敗しました')
