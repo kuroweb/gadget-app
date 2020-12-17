@@ -699,3 +699,8 @@ comments.each do |comment|
 end
 Comment.all
 exit
+post = Post.find_by(id: 13)
+post.comments
+c = post.comments.first
+c.destroy
+exit

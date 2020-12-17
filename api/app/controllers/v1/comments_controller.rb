@@ -1,4 +1,6 @@
 class V1::CommentsController < ApplicationController
+  # reply_comment_id有のデータを登録する場合に、Comment.find_by(id: reply_comment_id)が存在するのか確認するバリデーションが必要。
+  # -> 親コメントを削除した状態で別の人が返信コメントを作成した場合に、画面上で描画されないバグが発生するから。
 
   def create
     @comment = Comment.new(comment_params)

@@ -2,7 +2,7 @@
   <v-container>
     <ErrorCard
       :display="error"
-      title="404NotFount"
+      title="404NotFound"
       message="投稿が存在しません。"
     />
     <CreatePostCommentDialog
@@ -233,11 +233,16 @@ export default {
     await $axios.$get(baseUrl + `/v1/posts/${params.id}`)
       .then(res => {
         // 掲示板の情報をコミット
+        console.log('true')
         store.dispatch('modules/post/setData', res)
+        console.log('true')
         store.commit('modules/info/setError', false)
+        console.log('true')
       })
       .catch(error => {
+        console.log('false')
         store.commit('modules/info/setError', true)
+        console.log('false')
       })
   },
 

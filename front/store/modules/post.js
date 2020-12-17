@@ -15,22 +15,16 @@ export const getters = {
 export const actions = {
   setData ({ commit, rootState }, payload) {
     // ログイン中の場合は、いいね総数・いいね未・済のプロパティを追加
-    if (rootState.modules.user.data !== null) {
-      const likeData = []
-      posts.forEach(post => {
-        post.liked_users_count = post.liked_users.length
-        let isLikedPost = false
-        if (rootState.modules.user.data !== null) {
-          post.liked_users.forEach(user => {
-            if (user.id = rootState.modules.user.data.id) {
-              isLikedPost = true
-            }
-          })
+    payload.liked_users_count = payload.liked_users.length
+    let isLikedPost = false
+    if ('id' in rootState.modules.user.data) {
+      payload.liked_users.forEach(user => {
+        if (user.id = rootState.modules.user.data.id) {
+          isLikedPost = true
         }
-        post.isLikedPost = isLikedPost
-        likeData.push(post)
       })
     }
+    payload.isLikedPost = isLikedPost
     // 親コメント、子コメントで区別
     let parentComments = []
     let childComments = []

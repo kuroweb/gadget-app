@@ -22,10 +22,12 @@ class V1::PostsController < ApplicationController
     @post = Post.includes({images_attachments: :blob},
                           {user: {avatar_attachment: :blob}},
                           :tags,
+                          :liked_users,
                           {comments: [{user: {avatar_attachment: :blob}},
                                       {images_attachments: :blob}]}).find(params[:id])
     render json: @post.as_json(include: [{user: {methods: :avatar_url}},
                                           :tags,
+                                          :liked_users,
                                           {comments: {include: {user: {methods: :avatar_url}},
                                                       methods: :images_url}}],
                                 methods: :images_url)

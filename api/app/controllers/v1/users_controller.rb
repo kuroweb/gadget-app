@@ -11,9 +11,7 @@ class V1::UsersController < ApplicationController
     end
   end
 
-  # ユーザー詳細ページに必要な情報をインクルードして返す。
   def show
-    # 要リファクタリング　コメント画像をアタッチできていない¥
     @user = User.includes({avatar_attachment: :blob},
                           :following,
                           :followers,
@@ -32,13 +30,6 @@ class V1::UsersController < ApplicationController
                                                                           methods: :images_url}}],
                                                     methods: :images_url}}],
                                 methods: :avatar_url)
-
-    #@user = User.with_attached_avatar.includes(:following, :followers).find(params[:id])
-    #posts = @user.posts.with_attached_images.order(created_at: 'DESC').includes(:user, :tags, :liked_users, :comments)
-    #render json: {
-    #  user: @user.as_json(methods: :avatar_url, include: [:following, :followers]),
-    #  posts: posts.as_json(methods: :images_url, include: [{user: {methods: :avatar_url}}, :tags, :liked_users, {comments: {include: {user: {methods: :avatar_url}}}}])
-    #}
   end
 
   def test
