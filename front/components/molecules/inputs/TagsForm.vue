@@ -43,3 +43,8 @@ export default {
   }
 }
 </script>
+<style>
+.ti-tag {
+  background-color: #FFA000 !important;
+}
+</style>

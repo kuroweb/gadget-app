@@ -100,7 +100,6 @@
         </v-row>
       </v-col>
     </v-row>
-
     <v-container
       v-if="commentFeed"
     >
@@ -112,7 +111,7 @@
           color="orange"
           dark
           rounded
-          @click="openCommentDialog"
+          @click="openCreateCommentDialog"
         >
           コメントする
         </v-btn>
@@ -157,7 +156,7 @@
               rounded
               color="success"
               class="cyan darken-1"
-              @click="openReplyDialog(comment)"
+              @click="openCreateReplyDialog(comment)"
             >
               返信
             </v-btn>
@@ -272,19 +271,19 @@ export default {
   },
   methods: {
     ...mapActions({
-      reloadPostsByCreate: 'modules/post/reloadPostsByCreate',
+      reloadPostsByCreateComment: 'modules/post/reloadPostsByCreateComment',
       reloadPostsByDeleteComment: 'modules/post/reloadPostsByDeleteComment',
-      reloadPostsByEdit: 'modules/post/reloadPostsByEdit',
+      reloadPostsByEditPost: 'modules/post/reloadPostsByEditPost',
       reloadPostsByDeletePost: 'modules/post/reloadPostsByDeletePost'
     }),
     toggleCommentFeed () {
       this.commentFeed = !this.commentFeed
     },
-    openCommentDialog () {
+    openCreateCommentDialog () {
       this.postId = this.post.id
       this.commentDialog = true
     },
-    openReplyDialog (comment) {
+    openCreateReplyDialog (comment) {
       this.postId = this.post.id
       this.parentComment = comment
       this.replyDialog = true
@@ -303,16 +302,16 @@ export default {
       this.deletePostDialog = true
     },
     createPostComment (payload) {
-      this.reloadPostsByCreate(payload)
+      this.reloadPostsByCreateComment(payload)
     },
     createPostReply (payload) {
-      this.reloadPostsByCreate(payload)
+      this.reloadPostsByCreateComment(payload)
     },
     deletePostComment (payload) {
       this.reloadPostsByDeleteComment(payload)
     },
     editPost (payload) {
-      this.reloadPostsByEdit(payload)
+      this.reloadPostsByEditPost(payload)
     },
     deletePost (payload) {
       this.reloadPostsByDeletePost(payload)

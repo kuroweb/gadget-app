@@ -352,7 +352,4 @@ export default {
 .input-box {
   padding: 0 30%;
 }
-.ti-tag {
-  background-color: #FFA000 !important;
-}
 </style>

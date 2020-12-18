@@ -39,7 +39,13 @@ class V1::PostsController < ApplicationController
     sent_tags = post_tags_params[:tags] === nil ? [] : post_tags_params[:tags]
     if @post.save
       @post.save_tag(sent_tags)
-      render json: @post, status: :created
+      render json: @post.as_json(include: [{user: {methods: :avatar_url}},
+                                            :tags,
+                                            :liked_users,
+                                            {comments: {include: {user: {methods: :avatar_url}},
+                                                        methods: :images_url}}],
+                                    methods: :images_url),
+              status: :created
     else
       render json: @post.errors, status: :unprocessable_entity
     end

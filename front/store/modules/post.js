@@ -98,32 +98,41 @@ export const actions = {
     })
     commit('setPosts', commentData)
   },
+
   // 一覧ページ用
-  reloadPostsByCreate ({ commit }, comment) {
-    commit('reloadPostsByCreate', comment)
+  reloadPostsByCreateComment ({ commit }, comment) {
+    commit('reloadPostsByCreateComment', comment)
   },
   reloadPostsByDeleteComment ({ commit }, comment) {
     commit('reloadPostsByDeleteComment', comment)
   },
-  reloadPostsByEdit ({ commit }, postId) {
-    commit('reloadPostsByEdit', postId)
+  reloadPostsByEditPost ({ commit }, postId) {
+    commit('reloadPostsByEditPost', postId)
   },
   reloadPostsByDeletePost ({ commit }, postId) {
     commit('reloadPostsByDeletePost', postId)
   },
+  reloadPostsByCreatePost ({ commit }, post) {
+    commit('reloadPostsByCreatePost', post)
+  },
+
   // 詳細ページ用
-  reloadPostByCreate ({ commit }, comment) {
-    commit('reloadPostByCreate', comment)
+  reloadPostByCreateComment ({ commit }, comment) {
+    commit('reloadPostByCreateComment', comment)
   },
   reloadPostByDeleteComment ({ commit }, comment) {
     commit('reloadPostByDeleteComment', comment)
   },
-  reloadPostByEdit ({ commit }, post) {
-    commit('reloadPostByEdit', post)
+  reloadPostByEditPost ({ commit }, post) {
+    commit('reloadPostByEditPost', post)
   },
   reloadPostByDeletePost ({ commit }, postId) {
     commit('reloadPostByDeletePost', postId)
   },
+  reloadPostByCreatePost ({ commit }, post) {
+    commit('reloadPostByCreatePOst', post)
+  },
+
   // いいねボタン（動作不明）
   setLikedUsersCountUp ({ commit }, post) {
     commit('setLikedUsersCountUp', post)
@@ -146,8 +155,9 @@ export const mutations = {
   setPosts (state, payload) {
     state.posts = payload
   },
+
   // 一覧ページ用
-  reloadPostsByCreate (state, comment) {
+  reloadPostsByCreateComment (state, comment) {
     state.posts.forEach(post => {
       if (post.id === comment.post_id) {
         post.commentCounts += 1
@@ -193,7 +203,7 @@ export const mutations = {
       }
     })
   },
-  reloadPostsByEdit (state, post) {
+  reloadPostsByEditPost (state, post) {
     state.posts.forEach(p => {
       if (p.id === post.id) {
         p.images_url = post.images_url
@@ -209,8 +219,12 @@ export const mutations = {
       }
     })
   },
+  reloadPostsByCreatePost () {
+
+  },
+
   // 詳細ページ用
-  reloadPostByCreate (state, comment) {
+  reloadPostByCreateComment (state, comment) {
     if (state.data.id === comment.post_id) {
       state.data.commentCounts += 1
       if (comment.reply_comment_id === null) {
@@ -252,17 +266,16 @@ export const mutations = {
       }
     }
   },
-  reloadPostByEdit (state, post) {
+  reloadPostByEditPost (state, post) {
     if (state.data.id === post.id) {
       state.data.images_url = post.images_url
       state.data.description = post.description
       state.data.tags = post.tags
     }
   },
-  reloadPostByDeleteComment (state, postId) {
+  reloadPostsByCreatePost () {
 
   },
-
 
   setLikedUsersCountUp (state, post) {
     state.posts.forEach(p => {

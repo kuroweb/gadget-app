@@ -123,7 +123,7 @@
                 color="orange"
                 dark
                 rounded
-                @click="openCommentDialog"
+                @click="openCreateCommentDialog"
               >
                 コメントする
               </v-btn>
@@ -168,7 +168,7 @@
                     rounded
                     color="success"
                     class="cyan darken-1"
-                    @click="openReplyDialog(comment)"
+                    @click="openCreateReplyDialog(comment)"
                   >
                     返信
                   </v-btn>
@@ -306,15 +306,15 @@ export default {
 
   methods: {
     ...mapActions({
-      reloadPostByCreate: 'modules/post/reloadPostByCreate',
+      reloadPostByCreateComment: 'modules/post/reloadPostByCreateComment',
       reloadPostByDeleteComment: 'modules/post/reloadPostByDeleteComment',
-      reloadPostByEdit: 'modules/post/reloadPostByEdit'
+      reloadPostByEditPost: 'modules/post/reloadPostByEditPost'
     }),
-    openCommentDialog () {
+    openCreateCommentDialog () {
       this.postId = this.post.id
       this.commentDialog = true
     },
-    openReplyDialog (comment) {
+    openCreateReplyDialog (comment) {
       this.postId = this.post.id
       this.parentComment = comment
       this.replyDialog = true
@@ -333,16 +333,16 @@ export default {
       this.deletePostDialog = true
     },
     createPostComment (payload) {
-      this.reloadPostByCreate(payload)
+      this.reloadPostByCreateComment(payload)
     },
     createPostReply (payload) {
-      this.reloadPostByCreate(payload)
+      this.reloadPostByCreateComment(payload)
     },
     deletePostComment (payload) {
       this.reloadPostByDeleteComment(payload)
     },
     editPost (payload) {
-      this.reloadPostByEdit(payload)
+      this.reloadPostByEditPost(payload)
     },
     deletePost (payload) {
       this.$router.push("/")

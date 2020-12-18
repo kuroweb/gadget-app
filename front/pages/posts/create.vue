@@ -132,8 +132,8 @@ export default {
       data.append('post[user_id]', this.currentUser.id)
       // this.tagsの中身を抽出して配列に格納
       if (this.tags.length !== 0) {
-        this.tags.forEach(function(tag){
-        data.append('post[tags][]', tag.text)
+        this.tags.forEach(tag => {
+          data.append('post[tags][]', tag.text)
         })
       }
       this.$axios.$post(process.env.BROWSER_BASE_URL + `/v1/posts`, data, config)
