@@ -100,7 +100,18 @@
                 </v-col>
                 <v-col cols="4" >
                   <v-row justify="end">
+                    <v-icon>
+                      mdi-comment
+                    </v-icon>
+                    <span class="ml-1">{{ post.commentCounts }}</span>
+                    <v-icon class="ml-3">
+                      mdi-cards-heart
+                    </v-icon>
+                    <span class="ml-1 pr-3">{{ post.likedUsersCounts }}</span>
+                  </v-row>
+                  <v-row justify="end" class="mt-3">
                     <v-icon
+                      class="ml-3 pr-3"
                       @click="openEditPostDialog"
                     >
                       mdi-pencil-box-multiple

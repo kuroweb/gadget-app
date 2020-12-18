@@ -2,7 +2,7 @@
   <v-container>
     <CreatePostDialog
       :dialog="createPostDialog"
-      :createPost="createPost"
+      @createPost="createPost"
       @closeDialog="createPostDialog = false"
     />
     <v-row v-if="loading">
@@ -66,7 +66,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setPosts: 'modules/post/setPosts'
+      setPosts: 'modules/post/setPosts',
+      reloadPostsByCreatePost: 'modules/post/reloadPostsByCreatePost'
     }),
     stopLoading () {
       this.loading = false
@@ -74,7 +75,7 @@ export default {
     openCreatePostDialog () {
       this.createPostDialog = true
     },
-    createPost () {
+    createPost (payload) {
       this.reloadPostsByCreatePost(payload)
     }
   }

@@ -25,6 +25,8 @@ export const actions = {
       })
     }
     payload.isLikedPost = isLikedPost
+    // コメント総数プロパティを追加
+    payload.commentCounts = payload.comments.length
     // 親コメント、子コメントで区別
     let parentComments = []
     let childComments = []
@@ -130,7 +132,7 @@ export const actions = {
     commit('reloadPostByDeletePost', postId)
   },
   reloadPostByCreatePost ({ commit }, post) {
-    commit('reloadPostByCreatePOst', post)
+    commit('reloadPostByCreatePost', post)
   },
 
   // いいねボタン（動作不明）
@@ -160,10 +162,13 @@ export const mutations = {
   reloadPostsByCreateComment (state, comment) {
     state.posts.forEach(post => {
       if (post.id === comment.post_id) {
-        post.commentCounts += 1
+        // 親コメントの場合
         if (comment.reply_comment_id === null) {
           post.comments.push(comment)
+          post.commentCounts += 1
+        // 子コメントの場合
         } else {
+          post.commentCounts += 1
           post.comments.forEach(c => {
             if (c.id === comment.reply_comment_id) {
               if ('childComments' in c) {
@@ -181,20 +186,32 @@ export const mutations = {
   reloadPostsByDeleteComment (state, comment) {
     state.posts.forEach(post => {
       if (post.id === comment.post_id) {
+        // 親コメントの場合
         if (comment.reply_comment_id === null) {
           post.comments.forEach((c, index) => {
             if (c.id === comment.id) {
+              // コメント数の集計
+              let newCommentCounts = 0
+              //// 子コメントが存在する場合
+              if ('childComments' in c) {
+                newCommentCounts = 1
+                newCommentCounts += c.childComments.length
+              //// 子コメントが存在しない場合
+              } else {
+                newCommentCounts = 1
+              }
               post.comments.splice(index, 1)
-              post.commentCounts -= 1
+              post.commentCounts -= newCommentCounts
             }
           })
+        // 子コメントの場合
         } else {
           post.comments.forEach(c => {
             if ('childComments' in c) {
               c.childComments.forEach((child, index) => {
                 if (child.id === comment.id) {
                   c.childComments.splice(index, 1)
-                  post.commentCounte -= 1
+                  post.commentCounts -= 1
                 }
               })
             }
@@ -219,8 +236,11 @@ export const mutations = {
       }
     })
   },
-  reloadPostsByCreatePost () {
-
+  reloadPostsByCreatePost (state, post) {
+    post.isLikedPost = false
+    post.likedUsersCounts = 0
+    post.commentCounts = 0
+    state.posts.unshift(post)
   },
 
   // 詳細ページ用
@@ -244,27 +264,39 @@ export const mutations = {
     }
   },
   reloadPostByDeleteComment (state, comment) {
-    if (state.data.id === comment.post_id) {
-      if (comment.reply_comment_id === null) {
-        state.data.comments.forEach((c, index) => {
-          if (c.id === comment.id) {
-            state.data.comments.splice(index, 1)
-            state.data.commentCounts -= 1
-          }
-        })
-      } else {
-        state.data.comments.forEach(c => {
-          if ('childComments' in c) {
-            c.childComments.forEach((child, index) => {
-              if (child.id === comment.id) {
-                c.childComments.splice(index, 1)
-                state.data.commentCounte -= 1
+      if (state.data.id === comment.post_id) {
+        // 親コメントの場合
+        if (comment.reply_comment_id === null) {
+          state.data.comments.forEach((c, index) => {
+            if (c.id === comment.id) {
+              // コメント数の集計
+              let newCommentCounts = 0
+              //// 子コメントが存在する場合
+              if ('childComments' in c) {
+                newCommentCounts = 1
+                newCommentCounts += c.childComments.length
+              //// 子コメントが存在しない場合
+              } else {
+                newCommentCounts = 1
               }
-            })
-          }
-        })
+              state.data.comments.splice(index, 1)
+              state.data.commentCounts -= newCommentCounts
+            }
+          })
+        // 子コメントの場合
+        } else {
+          state.data.comments.forEach(c => {
+            if ('childComments' in c) {
+              c.childComments.forEach((child, index) => {
+                if (child.id === comment.id) {
+                  c.childComments.splice(index, 1)
+                  state.data.commentCounts -= 1
+                }
+              })
+            }
+          })
+        }
       }
-    }
   },
   reloadPostByEditPost (state, post) {
     if (state.data.id === post.id) {
@@ -273,7 +305,7 @@ export const mutations = {
       state.data.tags = post.tags
     }
   },
-  reloadPostsByCreatePost () {
+  reloadPostByCreatePost () {
 
   },
 
