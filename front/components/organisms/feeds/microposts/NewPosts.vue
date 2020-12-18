@@ -52,11 +52,24 @@ export default {
       createPostDialog: false,
     }
   },
+  props: {
+    load: null
+  },
+  watch: {
+    async load () {
+      this.loading = true
+      await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`)
+        .then(res => {
+          this.setPosts(res)
+          setTimeout(this.stopLoading, 500)
+        })
+    }
+  },
   async mounted () {
     await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`)
       .then(res => {
         this.setPosts(res)
-        setTimeout(this.stopLoading, 1000)
+        setTimeout(this.stopLoading, 500)
       })
   },
   computed: {

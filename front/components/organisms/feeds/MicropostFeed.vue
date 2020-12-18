@@ -9,26 +9,38 @@
       slider-color="orange"
       icons-and-text
     >
-      <v-tab>
+      <v-tab
+        @change="changeNewPosts"
+      >
         新着順
         <v-icon>mdi-clock-time-eight</v-icon>
       </v-tab>
-      <v-tab>
+      <v-tab
+        @change="changeFollowingUsers"
+      >
         タイムライン
         <v-icon>mdi-account-heart</v-icon>
       </v-tab>
-      <v-tab>
+      <v-tab
+        @change="changeFollowingTags"
+      >
         タグフィード
         <v-icon>mdi-tag</v-icon>
       </v-tab>
       <v-tab-item>
-        <NewPosts/>
+        <NewPosts
+          :load="loadNewPosts"
+        />
       </v-tab-item>
       <v-tab-item>
-        <FollowingUsers/>
+        <FollowingUsers
+          :load="loadFollowingUsers"
+        />
       </v-tab-item>
       <v-tab-item>
-        <FollowingTags/>
+        <FollowingTags
+          :load="loadFollowingTags"
+        />
       </v-tab-item>
     </v-tabs>
   </v-card>
@@ -52,6 +64,9 @@ export default {
   data () {
     return {
       renderStatus: this.render,
+      loadNewPosts: false,
+      loadFollowingUsers: false,
+      loadFollowingTags: false
     }
   },
   watch: {
@@ -60,6 +75,15 @@ export default {
     }
   },
   methods: {
+    changeNewPosts () {
+      this.loadNewPosts = !this.loadNewPosts
+    },
+    changeFollowingUsers () {
+      this.loadFollowingUsers = !this.loadFollowingUsers
+    },
+    changeFollowingTags () {
+      this.loadFollowingTags = !this.loadFollowingTags
+    },
   }
 }
 </script>

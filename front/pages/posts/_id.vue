@@ -98,7 +98,7 @@
                 <v-col cols="8">
                   <p>{{ post.created_at }}</p>
                 </v-col>
-                <v-col cols="4" >
+                <v-col cols="4">
                   <v-row justify="end">
                     <v-icon>
                       mdi-comment

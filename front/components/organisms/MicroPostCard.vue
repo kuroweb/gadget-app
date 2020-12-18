@@ -84,22 +84,36 @@
           </v-icon>
           <span class="ml-1 pr-3">{{ post.likedUsersCounts }}</span>
         </v-row>
-        <v-row justify="end" class="mt-3">
-          <v-icon
-            class="ml-3 pr-3"
-            @click="openEditPostDialog"
-          >
-            mdi-pencil-box-multiple
-          </v-icon>
-          <v-icon
-            class="ml-3 pr-6"
-            @click="openDeletePostDialog"
-          >
-            mdi-delete
-          </v-icon>
-        </v-row>
       </v-col>
     </v-row>
+    <!-- 管理者メニュー -->
+    <v-sheet
+      color="grey lighten-2"
+      rounded
+      v-if="post.user.id === $store.state.modules.user.data.id"
+    >
+      <v-row>
+        <v-col cols="6" align-self="center">
+          <h5 class="ml-3">管理メニュー</h5>
+        </v-col>
+        <v-col cols="6">
+          <v-row justify="end">
+            <v-icon
+              class="ml-3 pr-3"
+              @click="openEditPostDialog"
+            >
+              mdi-pencil-box-multiple
+            </v-icon>
+            <v-icon
+              class="ml-3 pr-6"
+              @click="openDeletePostDialog"
+            >
+              mdi-delete
+            </v-icon>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-sheet>
     <v-container
       v-if="commentFeed"
     >
