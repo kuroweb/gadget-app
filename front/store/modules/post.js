@@ -17,7 +17,7 @@ export const actions = {
     // ログイン中の場合は、いいね総数・いいね未・済のプロパティを追加
     payload.likedUsersCounts = payload.liked_users.length
     let isLikedPost = false
-    if ('id' in rootState.modules.user.data) {
+    if (rootState.modules.user.data) {
       payload.liked_users.forEach(user => {
         if (user.id = rootState.modules.user.data.id) {
           isLikedPost = true

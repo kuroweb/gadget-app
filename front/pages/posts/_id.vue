@@ -96,9 +96,9 @@
               />
               <v-row>
                 <v-col cols="8">
-                  <p>{{ post.created_at }}</p>
+                  <span>{{ $moment(post.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="4" >
                   <v-row justify="end">
                     <v-icon>
                       mdi-comment
@@ -109,22 +109,36 @@
                     </v-icon>
                     <span class="ml-1 pr-3">{{ post.likedUsersCounts }}</span>
                   </v-row>
-                  <v-row justify="end" class="mt-3">
-                    <v-icon
-                      class="ml-3 pr-3"
-                      @click="openEditPostDialog"
-                    >
-                      mdi-pencil-box-multiple
-                    </v-icon>
-                    <v-icon
-                      class="ml-3 pr-6"
-                      @click="openDeletePostDialog"
-                    >
-                      mdi-delete
-                    </v-icon>
-                  </v-row>
                 </v-col>
               </v-row>
+              <!-- 管理者メニュー -->
+              <v-sheet
+                color="grey lighten-2"
+                rounded
+                v-if="post.user.id === $store.state.modules.user.data.id"
+              >
+                <v-row dense>
+                  <v-col cols="6">
+                    <span class="ml-3">管理メニュー</span>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-row justify="end">
+                      <v-icon
+                        class="ml-3 pr-3"
+                        @click="openEditPostDialog"
+                      >
+                        mdi-pencil-box-multiple
+                      </v-icon>
+                      <v-icon
+                        class="ml-3 pr-6"
+                        @click="openDeletePostDialog"
+                      >
+                        mdi-delete
+                      </v-icon>
+                    </v-row>
+                  </v-col>
+                </v-row>
+              </v-sheet>
             </v-card>
             <v-row
               class="pa-3"
@@ -168,12 +182,12 @@
                     <h3>{{ comment.user.name }}</h3>
                   </v-col>
                 </v-row>
-                <p>{{ comment.description }}</p>
+                <span>{{ comment.description }}</span>
                 <Images
                   :images="comment.images_url"
                 />
                 <v-row
-                  justify="end"
+                  justify="end" class="mb-3"
                 >
                   <v-btn
                     rounded
@@ -184,13 +198,28 @@
                     返信
                   </v-btn>
                 </v-row>
-                <v-row justify="end">
-                  <v-icon
-                    @click="openDeleteCommentDialog(comment)"
-                  >
-                    mdi-delete
-                  </v-icon>
-                </v-row>
+                <!-- 管理者メニュー -->
+                <v-sheet
+                  color="grey lighten-2"
+                  rounded
+                  v-if="comment.user.id === $store.state.modules.user.data.id"
+                >
+                  <v-row dense>
+                    <v-col cols="6">
+                      <span class="ml-3">管理メニュー</span>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-row justify="end">
+                        <v-icon
+                          class="ml-3 pr-6"
+                          @click="openDeleteCommentDialog(comment)"
+                        >
+                          mdi-delete
+                        </v-icon>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-sheet>
               </v-card>
               <v-timeline
                 v-if="'childComments' in comment"
@@ -206,9 +235,8 @@
                 >
                   <v-card
                     color="grey"
-                    dark
                   >
-                    <v-card-title class="title">
+                    <v-card-title class="title white--text">
                       <v-icon dark>mdi-reply</v-icon>
                       返信コメント
                     </v-card-title>
@@ -234,18 +262,35 @@
                           <h3>{{ child.user.name }}</h3>
                         </v-col>
                       </v-row>
-                      <p>{{ child.description }}</p>
+                      <span>{{ child.description }}</span>
                       <Images
                         :images="child.images_url"
                       />
-                      <v-row justify="end">
-                        <v-icon
-                          color="grey darken-1"
-                          @click="openDeleteCommentDialog(child)"
-                        >
-                          mdi-delete
-                        </v-icon>
+                      <v-row dense justify="home">
+                          <span>{{ $moment(child.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
                       </v-row>
+                      <!-- 管理者メニュー -->
+                      <v-sheet
+                        color="grey lighten-2"
+                        rounded
+                        v-if="child.user.id === $store.state.modules.user.data.id"
+                      >
+                        <v-row dense>
+                          <v-col cols="6">
+                            <span class="ml-3">管理メニュー</span>
+                          </v-col>
+                          <v-col cols="6">
+                            <v-row justify="end">
+                              <v-icon
+                                class="ml-3 pr-6"
+                                @click="openDeleteCommentDialog(comment)"
+                              >
+                                mdi-delete
+                              </v-icon>
+                            </v-row>
+                          </v-col>
+                        </v-row>
+                      </v-sheet>
                     </v-card-text>
                   </v-card>
                 </v-timeline-item>

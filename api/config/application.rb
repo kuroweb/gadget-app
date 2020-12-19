@@ -33,5 +33,6 @@ module App
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.time_zone = 'Tokyo'
   end
 end

@@ -34,5 +34,7 @@
     "nuxt": "^2.14.6",
     "vee-validate": "^3.4.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@nuxtjs/moment": "^1.6.1"
+  }
 }

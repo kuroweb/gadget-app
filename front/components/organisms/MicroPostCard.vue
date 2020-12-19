@@ -61,7 +61,7 @@
       flat
       :to="`/posts/${post.id}`"
     >
-      <p>{{ post.description }}</p>
+      <span>{{ post.description }}</span>
     </v-card>
     <Images
       :images="post.images_url"
@@ -71,7 +71,7 @@
     />
     <v-row>
       <v-col cols="8">
-        <p>{{ post.created_at }}</p>
+        <span>{{ $moment(post.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
       </v-col>
       <v-col cols="4" >
         <v-row justify="end">
@@ -90,11 +90,11 @@
     <v-sheet
       color="grey lighten-2"
       rounded
-      v-if="post.user.id === $store.state.modules.user.data.id"
+      v-if="$store.state.modules.user.data && post.user.id === $store.state.modules.user.data.id"
     >
-      <v-row>
-        <v-col cols="6" align-self="center">
-          <h5 class="ml-3">管理メニュー</h5>
+      <v-row dense>
+        <v-col cols="6">
+          <span class="ml-3">管理メニュー</span>
         </v-col>
         <v-col cols="6">
           <v-row justify="end">
@@ -136,7 +136,7 @@
         flat
       >
         <v-card
-          class="mx-auto pa-5 mt-5"
+          class="mx-auto pa-5"
         >
           <v-row>
             <v-col>
@@ -159,29 +159,49 @@
               <h3>{{ comment.user.name }}</h3>
             </v-col>
           </v-row>
-          <p>{{ comment.description }}</p>
+          <span>{{ comment.description }}</span>
           <Images
             :images="comment.images_url"
           />
-          <v-row
-            justify="end"
+          <v-row>
+            <v-col align-self="center">
+              <span>{{ $moment(comment.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
+            </v-col>
+            <v-col>
+              <v-row justify="end">
+                <v-btn
+                  rounded
+                  color="success"
+                  class="cyan darken-1"
+                  @click="openCreateReplyDialog(comment)"
+                >
+                  返信
+                </v-btn>
+              </v-row>
+            </v-col>
+          </v-row>
+          <!-- 管理者メニュー -->
+          <v-sheet
+            color="grey lighten-2"
+            rounded
+            v-if="$store.state.modules.user.data && comment.user.id === $store.state.modules.user.data.id"
           >
-            <v-btn
-              rounded
-              color="success"
-              class="cyan darken-1"
-              @click="openCreateReplyDialog(comment)"
-            >
-              返信
-            </v-btn>
-          </v-row>
-          <v-row justify="end">
-            <v-icon
-              @click="openDeleteCommentDialog(comment)"
-            >
-              mdi-delete
-            </v-icon>
-          </v-row>
+            <v-row dense>
+              <v-col cols="6">
+                <span class="ml-3">管理メニュー</span>
+              </v-col>
+              <v-col cols="6">
+                <v-row justify="end">
+                  <v-icon
+                    class="ml-3 pr-6"
+                    @click="openDeleteCommentDialog(comment)"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-sheet>
         </v-card>
         <v-timeline
           v-if="'childComments' in comment"
@@ -197,9 +217,8 @@
           >
             <v-card
               color="grey"
-              dark
             >
-              <v-card-title class="title">
+              <v-card-title class="title white--text">
                 <v-icon dark>mdi-reply</v-icon>
                 返信コメント
               </v-card-title>
@@ -225,18 +244,35 @@
                     <h3>{{ child.user.name }}</h3>
                   </v-col>
                 </v-row>
-                <p>{{ child.description }}</p>
+                <span>{{ child.description }}</span>
                 <Images
                   :images="child.images_url"
                 />
-                <v-row justify="end">
-                  <v-icon
-                    color="grey darken-1"
-                    @click="openDeleteCommentDialog(child)"
-                  >
-                    mdi-delete
-                  </v-icon>
+                <v-row dense justify="home">
+                    <span>{{ $moment(child.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
                 </v-row>
+                <!-- 管理者メニュー -->
+                <v-sheet
+                  color="grey lighten-2"
+                  rounded
+                  v-if="$store.state.modules.user.data && child.user.id === $store.state.modules.user.data.id"
+                >
+                  <v-row dense>
+                    <v-col cols="6">
+                      <span class="ml-3">管理メニュー</span>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-row justify="end">
+                        <v-icon
+                          class="ml-3 pr-6"
+                          @click="openDeleteCommentDialog(comment)"
+                        >
+                          mdi-delete
+                        </v-icon>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-sheet>
               </v-card-text>
             </v-card>
           </v-timeline-item>

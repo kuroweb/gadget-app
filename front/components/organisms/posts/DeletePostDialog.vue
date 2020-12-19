@@ -5,17 +5,27 @@
     persistent
   >
     <v-card width="500px" class="mx-auto">
-    <v-toolbar flat>
-      <v-toolbar-title>投稿削除</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn 
-        @click="closeDialog"
-        icon
+      <v-toolbar
+        class="cyan darken-1"
+        flat
       >
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-    </v-toolbar>
+        <v-toolbar-title
+          class="white--text font-weight-bold"
+        >
+          投稿を削除する
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-icon
+          dark
+          @click="closeDialog"
+        >
+          mdi-close
+        </v-icon>
+      </v-toolbar>
       <v-card-text>
+        <v-row class="mt-5 mb-5" justify="center">
+          <h3>本当に投稿を削除しますか？</h3>
+        </v-row>
         <v-row justify="center">
           <v-btn
             color="white--text red"

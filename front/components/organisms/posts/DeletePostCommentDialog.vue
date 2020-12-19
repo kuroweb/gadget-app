@@ -21,7 +21,7 @@
       >
         <v-icon>mdi-close</v-icon>
       </v-btn>
-    </v-toolbar>
+      </v-toolbar>
       <v-card-text>
         <v-row class="mt-5 mb-5" justify="center">
           <h3>本当にコメントを削除しますか？</h3>
@@ -29,7 +29,7 @@
         <v-row justify="center">
           <v-btn
             color="white--text red"
-            @click="deletePost"
+            @click="deleteComment"
           >削除
           </v-btn>
         </v-row>
@@ -70,7 +70,7 @@ export default {
     ...mapActions({
       setFlash: 'modules/info/setFlash'
     }),
-    async deletePost () {
+    async deleteComment () {
       this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/comments/delete', {
         params: {
           comment_id: this.comment.id,
