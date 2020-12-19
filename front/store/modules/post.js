@@ -117,6 +117,12 @@ export const actions = {
   reloadPostsByCreatePost ({ commit }, post) {
     commit('reloadPostsByCreatePost', post)
   },
+  reloadPostsByLikedPost ({ commit }, post) {
+    commit('reloadPostsByLikedPost', post)
+  },
+  reloadPostsByDisLikedPost ({ commit }, post) {
+    commit('reloadPostsByDisLikedPost', post)
+  },
 
   // 詳細ページ用
   reloadPostByCreateComment ({ commit }, comment) {
@@ -134,20 +140,12 @@ export const actions = {
   reloadPostByCreatePost ({ commit }, post) {
     commit('reloadPostByCreatePost', post)
   },
-
-  // いいねボタン（動作不明）
-  setLikedUsersCountUp ({ commit }, post) {
-    commit('setLikedUsersCountUp', post)
+  reloadPostByLikedPost ({ commit }, post) {
+    commit('reloadPostByLikedPost', post)
   },
-  setLikedUsersCountDown ({ commit }, post) {
-    commit('setLikedUsersCountDown', post)
+  reloadPostByDisLikedPost ({ commit }, post) {
+    commit('reloadPostByDisLikedPost', post)
   },
-  setIsLikedPostTrue ({ commit }, post) {
-    commit('setIsLikedPostTrue', post)
-  },
-  setIsLikedPostFalse ({ commit }, post) {
-    commit('setIsLikedPostFalse', post)
-  }
 }
 
 export const mutations = {
@@ -242,6 +240,22 @@ export const mutations = {
     post.commentCounts = 0
     state.posts.unshift(post)
   },
+  reloadPostsByLikedPost (state, post) {
+    state.posts.forEach(p => {
+      if (p.id === post.id) {
+        p.isLikedPost = true
+        p.likedUsersCounts += 1
+      }
+    })
+  },
+  reloadPostsByDisLikedPost (state, post) {
+    state.posts.forEach(p => {
+      if (p.id === post.id) {
+        p.isLikedPost = false
+        p.likedUsersCounts -= 1
+      }
+    })
+  },
 
   // 詳細ページ用
   reloadPostByCreateComment (state, comment) {
@@ -305,8 +319,13 @@ export const mutations = {
       state.data.tags = post.tags
     }
   },
-  reloadPostByCreatePost () {
-
+  reloadPostByLikedPost (state, post) {
+    state.data.isLikedPost = true
+    state.data.likedUsersCounts += 1
+  },
+  reloadPostByDisLikedPost (state, post) {
+    state.data.isLikedPost = false
+    state.data.likedUsersCounts -= 1
   },
 
   setLikedUsersCountUp (state, post) {

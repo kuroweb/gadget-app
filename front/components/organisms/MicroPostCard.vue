@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="mx-auto mt-5 pa-5"
+    class="mx-auto mt-5 pa-3"
   >
     <CreatePostCommentDialog
       :dialog="commentDialog"
@@ -37,7 +37,7 @@
     <v-row justify="center">
       <v-col>
         <v-avatar 
-        size="62"
+        size="84"
         >
           <img 
             v-if="post.user.avatar_url"
@@ -70,19 +70,56 @@
       :tags="post.tags"
     />
     <v-row>
-      <v-col cols="8">
+      <v-col cols="8" align-self="center">
         <span>{{ $moment(post.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
       </v-col>
-      <v-col cols="4" >
-        <v-row justify="end">
-          <v-icon @click="toggleCommentFeed">
-            mdi-comment
-          </v-icon>
-          <span class="ml-1">{{ post.commentCounts }}</span>
-          <v-icon class="ml-3">
-            mdi-cards-heart
-          </v-icon>
-          <span class="ml-1 pr-3">{{ post.likedUsersCounts }}</span>
+      <v-col cols="4">
+        <v-row justify="end" class="pr-3">
+          <v-btn
+            v-if="commentFeed === true"
+            icon
+            text
+            color="blue"
+            @click="toggleCommentFeed"
+          >
+            <v-icon>
+              mdi-comment
+            </v-icon>
+          </v-btn>
+          <v-btn
+            v-if="commentFeed === false"
+            icon
+            text
+            @click="toggleCommentFeed"
+          >
+            <v-icon>
+              mdi-comment-outline
+            </v-icon>
+          </v-btn>
+          <span>{{ post.commentCounts }}</span>
+          <v-btn
+            v-if="post.isLikedPost === true"
+            icon
+            text
+            color="red"
+            @click="disLikedPost(post)"
+          >
+            <v-icon>
+              mdi-heart
+            </v-icon>
+          </v-btn>
+          <v-btn
+            v-if="post.isLikedPost === false"
+            icon
+            text
+            color="grey darken-2"
+            @click="likedPost(post)"
+          >
+            <v-icon>
+              mdi-heart-outline
+            </v-icon>
+          </v-btn>
+          <span>{{ post.likedUsersCounts }}</span>
         </v-row>
       </v-col>
     </v-row>
@@ -93,28 +130,37 @@
       v-if="$store.state.modules.user.data && post.user.id === $store.state.modules.user.data.id"
     >
       <v-row dense>
-        <v-col cols="6">
+        <v-col cols="6" align-self="center">
           <span class="ml-3">管理メニュー</span>
         </v-col>
         <v-col cols="6">
           <v-row justify="end">
-            <v-icon
-              class="ml-3 pr-3"
+            <v-btn
+              icon
+              text
+              color="grey darken-2"
               @click="openEditPostDialog"
             >
-              mdi-pencil-box-multiple
-            </v-icon>
-            <v-icon
-              class="ml-3 pr-6"
+              <v-icon>
+                mdi-pencil-box-multiple
+              </v-icon>
+            </v-btn>
+            <v-btn
+              icon
+              text
+              color="grey darken-2"
               @click="openDeletePostDialog"
+              class="mr-3"
             >
-              mdi-delete
-            </v-icon>
+              <v-icon>
+                mdi-delete
+              </v-icon>
+            </v-btn>
           </v-row>
         </v-col>
       </v-row>
     </v-sheet>
-    <v-container
+    <div
       v-if="commentFeed"
     >
       <v-row
@@ -130,18 +176,17 @@
           コメントする
         </v-btn>
       </v-row>
-      <v-card
+      <div
         v-for="comment in post.comments"
         :key="comment.id"
-        flat
       >
         <v-card
-          class="mx-auto pa-5"
+          class="mx-auto pa-3"
         >
           <v-row>
             <v-col>
               <v-avatar 
-                size="84"
+                size="64"
               >
                 <img 
                   v-if="comment.user.avatar_url"
@@ -163,11 +208,11 @@
           <Images
             :images="comment.images_url"
           />
-          <v-row>
-            <v-col align-self="center">
+          <v-row class="pr-3">
+            <v-col cols="9" align-self="center">
               <span>{{ $moment(comment.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
             </v-col>
-            <v-col>
+            <v-col cols="3">
               <v-row justify="end">
                 <v-btn
                   rounded
@@ -187,17 +232,22 @@
             v-if="$store.state.modules.user.data && comment.user.id === $store.state.modules.user.data.id"
           >
             <v-row dense>
-              <v-col cols="6">
+              <v-col cols="6" align-self="center">
                 <span class="ml-3">管理メニュー</span>
               </v-col>
               <v-col cols="6">
                 <v-row justify="end">
-                  <v-icon
-                    class="ml-3 pr-6"
+                  <v-btn
+                    icon
+                    text
+                    color="grey darken-2"
                     @click="openDeleteCommentDialog(comment)"
+                    class="mr-3"
                   >
-                    mdi-delete
-                  </v-icon>
+                    <v-icon>
+                      mdi-delete
+                    </v-icon>
+                  </v-btn>
                 </v-row>
               </v-col>
             </v-row>
@@ -248,8 +298,8 @@
                 <Images
                   :images="child.images_url"
                 />
-                <v-row dense justify="home">
-                    <span>{{ $moment(child.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
+                <v-row dense justify="start">
+                  <span>{{ $moment(child.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
                 </v-row>
                 <!-- 管理者メニュー -->
                 <v-sheet
@@ -258,17 +308,22 @@
                   v-if="$store.state.modules.user.data && child.user.id === $store.state.modules.user.data.id"
                 >
                   <v-row dense>
-                    <v-col cols="6">
+                    <v-col cols="6" align-self="center">
                       <span class="ml-3">管理メニュー</span>
                     </v-col>
                     <v-col cols="6">
                       <v-row justify="end">
-                        <v-icon
-                          class="ml-3 pr-6"
-                          @click="openDeleteCommentDialog(comment)"
+                        <v-btn
+                          icon
+                          text
+                          color="grey darken-2"
+                          @click="openDeleteCommentDialog(child)"
+                          class="mr-3"
                         >
-                          mdi-delete
-                        </v-icon>
+                          <v-icon>
+                            mdi-delete
+                          </v-icon>
+                        </v-btn>
                       </v-row>
                     </v-col>
                   </v-row>
@@ -277,8 +332,8 @@
             </v-card>
           </v-timeline-item>
         </v-timeline>
-      </v-card>
-    </v-container>
+      </div>
+    </div>
   </v-card>
 </template>
 
@@ -324,7 +379,9 @@ export default {
       reloadPostsByCreateComment: 'modules/post/reloadPostsByCreateComment',
       reloadPostsByDeleteComment: 'modules/post/reloadPostsByDeleteComment',
       reloadPostsByEditPost: 'modules/post/reloadPostsByEditPost',
-      reloadPostsByDeletePost: 'modules/post/reloadPostsByDeletePost'
+      reloadPostsByDeletePost: 'modules/post/reloadPostsByDeletePost',
+      reloadPostsByLikedPost: 'modules/post/reloadPostsByLikedPost',
+      reloadPostsByDisLikedPost: 'modules/post/reloadPostsByDisLikedPost'
     }),
     toggleCommentFeed () {
       this.commentFeed = !this.commentFeed
@@ -365,6 +422,28 @@ export default {
     },
     deletePost (payload) {
       this.reloadPostsByDeletePost(payload)
+    },
+    likedPost (payload) {
+      this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/likes', {
+        user_id: this.$store.state.modules.user.data.id,
+        post_id: payload.id
+      })
+        .then(() => {
+          this.reloadPostsByLikedPost(payload)
+        })
+    },
+    disLikedPost (payload) {
+      this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/likes/delete', {
+        params: {
+          like: {
+            user_id: this.$store.state.modules.user.data.id,
+            post_id: payload.id
+          }
+        }
+      })
+        .then(() => {
+          this.reloadPostsByDisLikedPost(payload)
+        })
     }
   }
 }

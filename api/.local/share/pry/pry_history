@@ -704,3 +704,7 @@ post.comments
 c = post.comments.first
 c.destroy
 exit
+Like.all
+like = Like.first
+like.destroy
+exit
