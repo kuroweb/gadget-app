@@ -3,6 +3,7 @@
     v-if="renderStatus"
   >
     <v-tabs
+      fixed-tabs
       centered
       background-color="cyan darken-1"
       color="white"
@@ -11,18 +12,21 @@
     >
       <v-tab
         @change="changeNewPosts"
+        class="ma-0 pa-0"
       >
         新着順
         <v-icon>mdi-clock-time-eight</v-icon>
       </v-tab>
       <v-tab
         @change="changeFollowingUsers"
+        class="ma-0 pa-0"
       >
         タイムライン
         <v-icon>mdi-account-heart</v-icon>
       </v-tab>
       <v-tab
         @change="changeFollowingTags"
+        class="ma-0 pa-0"
       >
         タグフィード
         <v-icon>mdi-tag</v-icon>

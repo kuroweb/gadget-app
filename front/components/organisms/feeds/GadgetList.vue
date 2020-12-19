@@ -3,15 +3,33 @@
     v-if="renderStatus"
   >
     <v-tabs
+      fixed-tabs
       centered
+      background-color="cyan darken-1"
+      color="white"
+      slider-color="orange"
+      icons-and-text
     >
-      <v-tab>新着順</v-tab>
-      <v-tab>人気順</v-tab>
+      <v-tab class="ma-0 pa-0">
+        新着順
+        <v-icon>mdi-clock-time-eight</v-icon>
+      </v-tab>
+      <v-tab class="ma-0 pa-0">
+        雑談板
+        <v-icon>mdi-forum</v-icon>
+      </v-tab>
+      <v-tab class="ma-0 pa-0">
+        質問板
+        <v-icon>mdi-comment-question</v-icon>
+      </v-tab>
       <v-tab-item>
-        <p>新着順</p>
+        <NewBoards/>
       </v-tab-item>
       <v-tab-item>
-        <p>人気順</p>
+        <ForumBoards/>
+      </v-tab-item>
+      <v-tab-item>
+        <QuestionBoards/>
       </v-tab-item>
     </v-tabs>
   </v-card>
