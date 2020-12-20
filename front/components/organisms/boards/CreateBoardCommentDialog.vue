@@ -22,7 +22,7 @@
           mdi-close
         </v-icon>
       </v-toolbar>
-      <v-card-text>
+      <v-card-text v-if="dialogStatus">
         <v-form>
           <ValidationObserver v-slot="ObserverProps">
             <ImagesForm
@@ -49,6 +49,7 @@
   </v-dialog>
 </template>
 <script>
+import { mapActions } from 'vuex'
 import TextAreaWithValidation from '~/components/molecules/inputs/TextAreaWithValidation.vue'
 import ImagesForm from '~/components/molecules/inputs/ImagesForm.vue'
 export default {
@@ -78,6 +79,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      setFlash: 'modules/info/setFlash'
+    }),
     async createComment () {
       const data = new FormData()
       const config = {
@@ -94,8 +98,21 @@ export default {
       data.append('board_comment[user_id]', this.$store.state.modules.user.data.id)
 
       this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/board_comments', data, config)
-        .then(() => {
+        .then(res => {
           console.log('投稿に成功しました')
+          this.$emit('createBoardComment', res)
+          this.$emit('closeDialog')
+          this.resetData()
+          this.setFlash({
+            status: true,
+            message: "作成に成功しました"
+          })
+          setTimeout(() => {
+            this.setFlash({
+              status: false,
+              message: ""
+            })
+          }, 2000)
         })
         .catch((error) => {
           console.log('投稿に失敗しました')
@@ -104,9 +121,13 @@ export default {
     },
     closeDialog () {
       this.$emit('closeDialog')
+      this.resetData()
     },
     setImages (payload) {
       this.images = payload
+    },
+    resetData () {
+      this.description = ''
     }
   }
 }

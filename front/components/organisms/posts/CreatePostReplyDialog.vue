@@ -108,7 +108,7 @@ export default {
           this.description = ''
           this.setFlash({
             status: true,
-            message: "コメント返信に成功しました"
+            message: "返信に成功しました"
           })
           setTimeout(() => {
             this.setFlash({

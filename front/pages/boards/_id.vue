@@ -8,18 +8,21 @@
     <CreateBoardCommentDialog
       :dialog="createCommentDialog"
       :boardId="boardId"
+      @createBoardComment="createBoardComment"
       @closeDialog="createCommentDialog = false"
     />
     <CreateBoardReplyDialog
       :dialog="createReplyDialog"
       :boardId="boardId"
       :parentComment="parentComment"
+      @createBoardReply="createBoardReply"
       @closeDialog="createReplyDialog = false"
     />
     <DeleteBoardCommentDialog
       :dialog="deleteCommentDialog"
       :boardId="boardId"
       :comment="comment"
+      @deleteBoardComment="deleteBoardComment"
       @closeDialog="deleteCommentDialog = false"
     />
     <EditBoardDialog
@@ -386,7 +389,9 @@ export default {
 
   methods: {
     ...mapActions({
-      reloadBoardByEditBoard: 'modules/board/reloadBoardByEditBoard'
+      reloadBoardByEditBoard: 'modules/board/reloadBoardByEditBoard',
+      reloadBoardByCreateComment: 'modules/board/reloadBoardByCreateComment',
+      reloadBoardByDeleteComment: 'modules/board/reloadBoardByDeleteComment'
     }),
     // ダイアログ関連
     openCreateCommentDialog () {
@@ -416,6 +421,15 @@ export default {
     },
     deleteBoard () {
       this.$router.push("/")
+    },
+    createBoardComment (payload) {
+      this.reloadBoardByCreateComment(payload)
+    },
+    createBoardReply (payload) {
+      this.reloadBoardByCreateComment(payload)
+    },
+    deleteBoardComment (payload) {
+      this.reloadBoardByDeleteComment(payload)
     }
   }
 }

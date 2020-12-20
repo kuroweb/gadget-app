@@ -102,7 +102,7 @@ export default {
           console.log('投稿に成功しました')
           this.$emit('createPostComment', res)
           this.$emit('closeDialog')
-          this.description = ''
+          this.resetData()
           this.setFlash({
             status: true,
             message: "コメント作成に成功しました"
@@ -121,10 +121,13 @@ export default {
     },
     closeDialog () {
       this.$emit('closeDialog')
-      this.description = ''
+      this.resetData()
     },
     setImages (payload) {
       this.images = payload
+    },
+    resetData () {
+      this.description = ''
     }
   }
 }

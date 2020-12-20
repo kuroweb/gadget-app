@@ -15,7 +15,7 @@
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-toolbar>
-      <v-card-text>
+      <v-card-text v-if="dialogStatus">
         <v-form>
           <ValidationObserver v-slot="ObserverProps">
             <div class="create-post-box">

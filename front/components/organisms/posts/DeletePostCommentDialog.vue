@@ -64,8 +64,6 @@ export default {
       this.dialogStatus = newValue
     },
   },
-  computed: {
-  },
   methods: {
     ...mapActions({
       setFlash: 'modules/info/setFlash'
@@ -82,7 +80,7 @@ export default {
           this.$emit('closeDialog')
           this.setFlash({
             status: true,
-            message: "コメント削除に成功しました"
+            message: "削除に成功しました"
           })
           setTimeout(() => {
             this.setFlash({

@@ -56,6 +56,18 @@ export const actions = {
   // 詳細ページ用
   reloadBoardByEditBoard ({ commit }, board) {
     commit('reloadBoardByEditBoard', board)
+  },
+  reloadBoardByCreateComment ({ commit }, comment) {
+    commit('reloadBoardByCreateComment', comment)
+  },
+  reloadBoardByDeleteComment ({ commit }, comment) {
+    commit('reloadBoardByDeleteComment', comment)
+  },
+  reloadBoardByDeleteBoard ({ commit }, boardId) {
+    commit('reloadBoardByDeleteBoard', boardId)
+  },
+  reloadBoardByCreateBoard ({ commit }, board) {
+    commit('reloadBoardByCreateBoard', board)
   }
 }
 
@@ -80,5 +92,56 @@ export const mutations = {
     state.data.title = board.title
     state.data.board_type = board.board_type
     state.data.tags = board.tags
-  }
+  },
+  reloadBoardByCreateComment (state, comment) {
+    console.log('test')
+    state.data.commentCounts += 1
+    if (comment.reply_comment_id === null) {
+      state.data.board_comments.push(comment)
+    } else {
+      state.data.board_comments.forEach(c => {
+        if (c.id === comment.reply_comment_id) {
+          if ('childComments' in c) {
+            c.childComments.push(comment)
+          } else {
+            c.childComments = []
+            c.childComments.push(comment)
+          }
+        }
+      })
+    }
+  },
+  reloadBoardByDeleteComment (state, comment) {
+    // 親コメントの場合
+    if (comment.reply_comment_id === null) {
+      state.data.board_comments.forEach((c, index) => {
+        if (c.id === comment.id) {
+          // コメント数の集計
+          let newCommentCounts = 0
+          //// 子コメントが存在する場合
+          if ('childComments' in c) {
+            newCommentCounts = 1
+            newCommentCounts += c.childComments.length
+          //// 子コメントが存在しない場合
+          } else {
+            newCommentCounts = 1
+          }
+          state.data.board_comments.splice(index, 1)
+          state.data.commentCounts -= newCommentCounts
+        }
+      })
+    // 子コメントの場合
+    } else {
+      state.data.board_comments.forEach(c => {
+        if ('childComments' in c) {
+          c.childComments.forEach((child, index) => {
+            if (child.id === comment.id) {
+              c.childComments.splice(index, 1)
+              state.data.commentCounts -= 1
+            }
+          })
+        }
+      })
+    }
+  },
 }

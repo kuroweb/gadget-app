@@ -7,7 +7,8 @@ class V1::CommentsController < ApplicationController
     if @comment.save
       render json: @comment.as_json(include: [{user: {methods: :avatar_url}},
                                               :post],
-                                    methods: :images_url), status: :created
+                                    methods: :images_url),
+              status: :created
     else
       render json: @comment.errors, status: :unprocessable_entity
     end
