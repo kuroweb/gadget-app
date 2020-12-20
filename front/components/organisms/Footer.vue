@@ -1,5 +1,5 @@
 <template>
-  <v-footer color="cyan darken-4" dark>
+  <v-footer color="cyan darken-4" dark app>
     <v-col class="text-center">
       ポートフォリオ
     </v-col>

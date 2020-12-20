@@ -34,23 +34,16 @@
       </v-btn>
       <v-btn
         v-if="isAuthenticated"
-        to="/posts/create"
-        text
-        color="white"
-        :outlined="true"
-        small
-      >
-      投稿
-      </v-btn>
-      <v-btn
-        v-if="isAuthenticated"
         to="/search"
+        icon
         text
         color="white"
-        :outlined="true"
         small
+        class="mr-3"
       >
-        検索
+        <v-icon>
+          mdi-magnify
+        </v-icon>
       </v-btn>
     </div>
     <v-menu

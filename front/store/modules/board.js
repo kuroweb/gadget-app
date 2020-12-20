@@ -1,10 +1,14 @@
 export const state = () => ({
-  data: {}
+  data: {},
+  boards: {}
 })
 
 export const getters = {
   data(state) {
     return state.data
+  },
+  boards(state) {
+    return state.boards
   }
 }
 
@@ -33,11 +37,32 @@ export const actions = {
     })
     payload.board_comments = commentData
     commit('setData', payload)
+  },
+  setBoards ({ commit }, boards) {
+    // コメント総数プロパティを追加
+    boards.forEach(board => {
+      board.commentCounts = board.board_comments.length
+    })
+    commit('setBoards', boards)
+  },
+
+  // 一覧ページ用
+  reloadBoardsByCreateBoard ({ commit }, board) {
+    commit('reloadBoardsByCreateBoard', board)
   }
 }
 
 export const mutations = {
   setData (state, payload) {
     state.data = payload
+  },
+  setBoards (state, payload) {
+    state.boards = payload
+  },
+
+  // 一覧ページ用
+  reloadBoardsByCreateBoard (state, board) {
+    board.commentCounts = 0
+    state.boards.unshift(board)
   }
 }

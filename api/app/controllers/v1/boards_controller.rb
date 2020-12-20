@@ -3,11 +3,23 @@ class V1::BoardsController < ApplicationController
   # 掲示板一覧
   def index
     if params[:board_type]
-      @boards = Board.includes(:tags).where(board_type: params[:board_type])
+      @boards = Board.includes({images_attachments: :blob},
+                                {user: {avatar_attachment: :blob}},
+                                :tags,
+                                {board_comments: [{user: {avatar_attachment: :blob}},
+                                                  {images_attachments: :blob}]}).where(board_type: params[:board_type]).order(created_at: "DESC")
     else
-      @boards = Board.all
+      @boards = Board.includes({images_attachments: :blob},
+                                {user: {avatar_attachment: :blob}},
+                                :tags,
+                                {board_comments: [{user: {avatar_attachment: :blob}},
+                                                  {images_attachments: :blob}]}).all.order(created_at: "DESC")
     end
-    render json: @boards.as_json(include: :tags)
+    render json: @boards.as_json(include: [{user: {methods: :avatar_url}},
+                                            :tags,
+                                            {board_comments: {include: {user: {methods: :avatar_url}},
+                                                              methods: :images_url}}],
+                                      methods: :images_url)
   end
 
   # 掲示板詳細
@@ -30,7 +42,12 @@ class V1::BoardsController < ApplicationController
     sent_tags = board_tags_params[:tags] === nil ? [] : board_tags_params[:tags]
     if @board.save
       @board.save_tag(sent_tags)
-      render json: @board, status: :created
+      render json: @board.as_json(include: [{user: {methods: :avatar_url}},
+                                            :tags,
+                                            {board_comments: {include: {user: {methods: :avatar_url}},
+                                                              methods: :images_url}}],
+                                    methods: :images_url),
+              status: :created
     else
       render json: @board.errors, status: :unprocessable_entity
     end

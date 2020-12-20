@@ -13,10 +13,10 @@
         <MicropostFeed
           :render="micropostFeed"
         />
-        <BoardList
+        <BoardFeed
           :render="boardList"
         />
-        <GadgetList
+        <GadgetFeed
           :render="gadgetList"
         />
       </v-col>
@@ -33,8 +33,8 @@
 
 <script>
 import MicropostFeed from '~/components/organisms/feeds/MicropostFeed.vue'
-import BoardList from '~/components/organisms/feeds/BoardList.vue'
-import GadgetList from '~/components/organisms/feeds/GadgetList.vue'
+import BoardList from '~/components/organisms/feeds/BoardFeed.vue'
+import GadgetList from '~/components/organisms/feeds/GadgetFeed.vue'
 import SideMenu from '~/components/organisms/feeds/SideMenu.vue'
 export default {
   components: {
