@@ -6,17 +6,17 @@
       message="投稿が存在しません。"
     />
     <CreatePostCommentDialog
-      :dialog="commentDialog"
+      :dialog="createCommentDialog"
       :postId="postId"
       @createPostComment="createPostComment"
-      @closeDialog="commentDialog = false"
+      @closeDialog="createCommentDialog = false"
     />
     <CreatePostReplyDialog
-      :dialog="replyDialog"
+      :dialog="createReplyDialog"
       :postId="postId"
       :parentComment="parentComment"
       @createPostReply="createPostReply"
-      @closeDialog="replyDialog = false"
+      @closeDialog="createReplyDialog = false"
     />
     <DeletePostCommentDialog
       :dialog="deleteCommentDialog"
@@ -86,7 +86,7 @@
                 flat
                 :to="`/posts/${post.id}`"
               >
-                <p>{{ post.description }}</p>
+                <span>{{ post.description }}</span>
               </v-card>
               <Images
                 :images="post.images_url"
@@ -376,8 +376,8 @@ export default {
   data () {
     return {
       postId: '',
-      commentDialog: false,
-      replyDialog: false,
+      createCommentDialog: false,
+      createReplyDialog: false,
       deleteCommentDialog: false,
       editPostDialog: false,
       deletePostDialog: false,
@@ -417,12 +417,12 @@ export default {
     }),
     openCreateCommentDialog () {
       this.postId = this.post.id
-      this.commentDialog = true
+      this.createCommentDialog = true
     },
     openCreateReplyDialog (comment) {
       this.postId = this.post.id
       this.parentComment = comment
-      this.replyDialog = true
+      this.createReplyDialog = true
     },
     openDeleteCommentDialog (comment) {
       this.postId = this.post.id

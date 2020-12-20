@@ -25,7 +25,7 @@ export const actions = {
       }
     })
     // 親コメント内に子コメントを格納
-    const commentData = []
+    const result = []
     parentComments.forEach(p => {
       p.childComments = []
       childComments.forEach(c => {
@@ -33,9 +33,11 @@ export const actions = {
           p.childComments.push(c)
         }
       })
-      commentData.push(p)
+      result.push(p)
     })
-    payload.board_comments = commentData
+    payload.board_comments = result
+    // コメント総数プロパティを追加
+    payload.commentCounts = payload.board_comments.length
     commit('setData', payload)
   },
   setBoards ({ commit }, boards) {

@@ -50,9 +50,9 @@
   </v-card>
 </template>
 <script>
-import NewPosts from '~/components/organisms/feeds/microposts/NewPosts.vue'
-import FollowingUsers from '~/components/organisms/feeds/microposts/FollowingUsers.vue'
-import FollowingTags from '~/components/organisms/feeds/microposts/FollowingTags.vue'
+import NewPosts from '~/components/organisms/feeds/micropostFeed/NewPosts.vue'
+import FollowingUsers from '~/components/organisms/feeds/micropostFeed/FollowingUsers.vue'
+import FollowingTags from '~/components/organisms/feeds/micropostFeed/FollowingTags.vue'
 export default {
   components: {
     NewPosts,

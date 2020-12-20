@@ -32,24 +32,22 @@
         </v-card>
       </v-col>
       <v-col lg="6" sm="8" cols="12">
-        <v-card
-          v-if="board"
-        >
+        <v-card>
           <v-toolbar
             color="cyan darken-1"
             dark
             flat
           >
-            <v-toolbar-title>{{ board.board_type }}掲示板</v-toolbar-title>
+            <v-toolbar-title>【{{ board.board_type }}】 {{ board.title }}</v-toolbar-title>
           </v-toolbar>
           <v-container>
             <v-card
-              class="mx-auto pa-5"
+              class="mx-auto pa-3"
             >
-              <v-row>
+              <v-row justify="center">
                 <v-col>
-                  <v-avatar
-                    size="84"
+                  <v-avatar 
+                  size="84"
                   >
                     <img 
                       v-if="board.user.avatar_url"
@@ -63,17 +61,81 @@
                     >
                   </v-avatar>
                 </v-col>
-                <v-col align-self="center">
+                <v-col
+                  align-self="center"
+                >
                   <h3>{{ board.user.name }}</h3>
-                  <Tags
-                    :tags="board.tags"
-                  />
                 </v-col>
               </v-row>
-              <p>{{ board.description }}</p>
+              <v-card
+                flat
+                :to="`/boards/${board.id}`"
+              >
+                <span>{{ board.description }}</span>
+              </v-card>
               <Images
                 :images="board.images_url"
               />
+              <Tags
+                :tags="board.tags"
+              />
+              <v-row>
+                <v-col cols="8" align-self="center">
+                  <span>{{ $moment(board.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
+                </v-col>
+                <v-col cols="4">
+                  <v-row justify="end" class="pr-3">
+                    <v-btn
+                      icon
+                      text
+                    >
+                      <v-icon>
+                        mdi-comment-outline
+                      </v-icon>
+                    </v-btn>
+                    <span>{{ board.commentCounts }}</span>
+                  </v-row>
+                </v-col>
+              </v-row>
+              <!-- 管理者メニュー -->
+              <v-sheet
+                color="grey lighten-2"
+                rounded
+                v-if="$store.state.modules.user.data && board.user.id === $store.state.modules.user.data.id"
+              >
+                <v-row dense>
+                  <v-col cols="6" align-self="center">
+                    <span class="ml-3">管理メニュー</span>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-row justify="end">
+                      <!-- @click="openEditPostDialog" -->
+                      <v-btn
+                        icon
+                        text
+                        color="grey darken-2"
+                        
+                      >
+                        <v-icon>
+                          mdi-pencil-box-multiple
+                        </v-icon>
+                      </v-btn>
+                      <!-- @click="openDeletePostDialog" -->
+                      <v-btn
+                        icon
+                        text
+                        color="grey darken-2"
+                        class="mr-3"
+
+                      >
+                        <v-icon>
+                          mdi-delete
+                        </v-icon>
+                      </v-btn>
+                    </v-row>
+                  </v-col>
+                </v-row>
+              </v-sheet>
             </v-card>
             <v-row
               class="pa-3"
@@ -83,23 +145,22 @@
                 color="orange"
                 dark
                 rounded
-                @click="openCommentDialog"
+                @click="openCreateCommentDialog"
               >
                 コメントする
               </v-btn>
             </v-row>
-            <v-card
+            <div
               v-for="comment in board.board_comments"
               :key="comment.id"
-              flat
             >
               <v-card
-                class="mx-auto pa-5 mt-5"
+                class="mx-auto pa-3"
               >
                 <v-row>
                   <v-col>
                     <v-avatar 
-                      size="84"
+                      size="64"
                     >
                       <img 
                         v-if="comment.user.avatar_url"
@@ -117,48 +178,71 @@
                     <h3>{{ comment.user.name }}</h3>
                   </v-col>
                 </v-row>
-                <p>{{ comment.description }}</p>
+                <span>{{ comment.description }}</span>
                 <Images
                   :images="comment.images_url"
                 />
-                <v-row
-                  justify="end"
+                <v-row class="pr-3">
+                  <v-col cols="9" align-self="center">
+                    <span>{{ $moment(comment.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-row justify="end">
+                      <v-btn
+                        rounded
+                        color="success"
+                        class="cyan darken-1"
+                        @click="openCreateReplyDialog(comment)"
+                      >
+                        返信
+                      </v-btn>
+                    </v-row>
+                  </v-col>
+                </v-row>
+                <!-- 管理者メニュー -->
+                <v-sheet
+                  color="grey lighten-2"
+                  rounded
+                  v-if="$store.state.modules.user.data && comment.user.id === $store.state.modules.user.data.id"
                 >
-                  <v-btn
-                    rounded
-                    color="success"
-                    class="cyan darken-1"
-                    @click="openReplyDialog(comment)"
-                  >
-                    返信
-                  </v-btn>
-                </v-row>
-                <v-row justify="end">
-                  <v-icon
-                    @click="openDeleteCommentDialog(comment)"
-                  >
-                    mdi-delete
-                  </v-icon>
-                </v-row>
+                  <v-row dense>
+                    <v-col cols="6" align-self="center">
+                      <span class="ml-3">管理メニュー</span>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-row justify="end">
+                        <v-btn
+                          icon
+                          text
+                          color="grey darken-2"
+                          @click="openDeleteCommentDialog(comment)"
+                          class="mr-3"
+                        >
+                          <v-icon>
+                            mdi-delete
+                          </v-icon>
+                        </v-btn>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-sheet>
               </v-card>
               <v-timeline
-                v-if="comment.childComments.length !== 0"
+                v-if="'childComments' in comment"
                 align-top
               >
                 <v-timeline-item
                   v-for="child in comment.childComments"
                   :key="child.id"
                   small
-                  fill-dot
                   color="grey"
                   right
                   hide-dot
                 >
                   <v-card
                     color="grey"
-                    dark
                   >
-                    <v-card-title class="title">
+                    <v-card-title class="title white--text">
                       <v-icon dark>mdi-reply</v-icon>
                       返信コメント
                     </v-card-title>
@@ -184,15 +268,45 @@
                           <h3>{{ child.user.name }}</h3>
                         </v-col>
                       </v-row>
-                      <p>{{ child.description }}</p>
+                      <span>{{ child.description }}</span>
                       <Images
                         :images="child.images_url"
                       />
+                      <v-row dense justify="start">
+                        <span>{{ $moment(child.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
+                      </v-row>
+                      <!-- 管理者メニュー -->
+                      <v-sheet
+                        color="grey lighten-2"
+                        rounded
+                        v-if="$store.state.modules.user.data && child.user.id === $store.state.modules.user.data.id"
+                      >
+                        <v-row dense>
+                          <v-col cols="6" align-self="center">
+                            <span class="ml-3">管理メニュー</span>
+                          </v-col>
+                          <v-col cols="6">
+                            <v-row justify="end">
+                              <v-btn
+                                icon
+                                text
+                                color="grey darken-2"
+                                @click="openDeleteCommentDialog(child)"
+                                class="mr-3"
+                              >
+                                <v-icon>
+                                  mdi-delete
+                                </v-icon>
+                              </v-btn>
+                            </v-row>
+                          </v-col>
+                        </v-row>
+                      </v-sheet>
                     </v-card-text>
                   </v-card>
                 </v-timeline-item>
               </v-timeline>
-            </v-card>
+            </div>
           </v-container>
         </v-card>
       </v-col>
@@ -256,11 +370,11 @@ export default {
 
   methods: {
     // ダイアログ関連
-    openCommentDialog () {
+    openCreateCommentDialog () {
       this.boardId = this.board.id
       this.commentDialog = true
     },
-    openReplyDialog (comment) {
+    openCreateReplyDialog (comment) {
       this.boardId = this.board.id
       this.parentComment = comment
       this.replyDialog = true
