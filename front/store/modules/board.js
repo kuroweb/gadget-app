@@ -14,6 +14,8 @@ export const getters = {
 
 export const actions = {
   setData ({ commit }, payload) {
+    // コメント総数プロパティを追加
+    payload.commentCounts = payload.board_comments.length
     // 親コメント、子コメントで区別
     let parentComments = []
     let childComments = []
@@ -36,8 +38,6 @@ export const actions = {
       result.push(p)
     })
     payload.board_comments = result
-    // コメント総数プロパティを追加
-    payload.commentCounts = payload.board_comments.length
     commit('setData', payload)
   },
   setBoards ({ commit }, boards) {
@@ -51,6 +51,11 @@ export const actions = {
   // 一覧ページ用
   reloadBoardsByCreateBoard ({ commit }, board) {
     commit('reloadBoardsByCreateBoard', board)
+  },
+
+  // 詳細ページ用
+  reloadBoardByEditBoard ({ commit }, board) {
+    commit('reloadBoardByEditBoard', board)
   }
 }
 
@@ -66,5 +71,14 @@ export const mutations = {
   reloadBoardsByCreateBoard (state, board) {
     board.commentCounts = 0
     state.boards.unshift(board)
+  },
+
+  // 詳細ページ用
+  reloadBoardByEditBoard (state, board) {
+    state.data.images_url = board.images_url
+    state.data.description = board.description
+    state.data.title = board.title
+    state.data.board_type = board.board_type
+    state.data.tags = board.tags
   }
 }

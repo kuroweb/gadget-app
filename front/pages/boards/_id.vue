@@ -6,21 +6,27 @@
       message="掲示板が存在しません。"
     />
     <CreateBoardCommentDialog
-      :dialog="commentDialog"
+      :dialog="createCommentDialog"
       :boardId="boardId"
-      @closeDialog="commentDialog = false"
+      @closeDialog="createCommentDialog = false"
     />
     <CreateBoardReplyDialog
-      :dialog="replyDialog"
+      :dialog="createReplyDialog"
       :boardId="boardId"
       :parentComment="parentComment"
-      @closeDialog="replyDialog = false"
+      @closeDialog="createReplyDialog = false"
     />
     <DeleteBoardCommentDialog
       :dialog="deleteCommentDialog"
       :boardId="boardId"
       :comment="comment"
       @closeDialog="deleteCommentDialog = false"
+    />
+    <EditBoardDialog
+      :dialog="editBoardDialog"
+      :boardId="boardId"
+      @editBoard="editBoard"
+      @closeDialog="editBoardDialog = false"
     />
     <v-row
       justify="center"
@@ -109,12 +115,11 @@
                   </v-col>
                   <v-col cols="6">
                     <v-row justify="end">
-                      <!-- @click="openEditPostDialog" -->
                       <v-btn
                         icon
                         text
                         color="grey darken-2"
-                        
+                        @click="openEditBoardDialog"
                       >
                         <v-icon>
                           mdi-pencil-box-multiple
@@ -319,28 +324,31 @@
   </v-container>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
+import Tags from "~/components/atoms/Tags.vue"
+import Images from "~/components/atoms/Images.vue"
 import CreateBoardCommentDialog from '~/components/organisms/boards/CreateBoardCommentDialog.vue'
 import CreateBoardReplyDialog from '~/components/organisms/boards/CreateBoardReplyDialog.vue'
 import DeleteBoardCommentDialog from '~/components/organisms/boards/DeleteBoardCommentDialog.vue'
-import Tags from "~/components/atoms/Tags.vue"
-import Images from "~/components/atoms/Images.vue"
+import EditBoardDialog from '~/components/organisms/boards/EditBoardDialog.vue'
 export default {
   components: {
     ErrorCard,
+    Tags,
+    Images,
     CreateBoardCommentDialog,
     CreateBoardReplyDialog,
     DeleteBoardCommentDialog,
-    Tags,
-    Images
+    EditBoardDialog
   },
   data () {
     return {
       boardId: '',
-      commentDialog: false,
-      replyDialog: false,
+      createCommentDialog: false,
+      createReplyDialog: false,
       deleteCommentDialog: false,
+      editBoardDialog: false,
       parentComment: '',
       comment: '',
     }
@@ -369,20 +377,30 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      reloadBoardByEditBoard: 'modules/board/reloadBoardByEditBoard'
+    }),
     // ダイアログ関連
     openCreateCommentDialog () {
       this.boardId = this.board.id
-      this.commentDialog = true
+      this.createCommentDialog = true
     },
     openCreateReplyDialog (comment) {
       this.boardId = this.board.id
       this.parentComment = comment
-      this.replyDialog = true
+      this.createReplyDialog = true
     },
     openDeleteCommentDialog (comment) {
       this.boardId = this.board.id
       this.comment = comment
       this.deleteCommentDialog = true
+    },
+    openEditBoardDialog () {
+      this.boardId = this.board.id
+      this.editBoardDialog = true
+    },
+    editBoard (payload) {
+      this.reloadBoardByEditBoard(payload)
     }
   }
 }

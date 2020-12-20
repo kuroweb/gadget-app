@@ -244,18 +244,6 @@ export default {
               })
           }
         }
-      // モーダルウィンドウを閉じたらモーダル内のデータを初期化
-      } else {
-        this.image1Url = []
-        this.image2Url = []
-        this.image3Url = []
-        this.image4Url = []
-        this.image1 = []
-        this.image2 = []
-        this.image3 = []
-        this.image4 = []
-        this.description = ''
-        this.tags = []
       }
     },
   },
@@ -299,6 +287,7 @@ export default {
           console.log('編集に成功しました')
           this.$emit('editPost', res)
           this.$emit('closeDialog')
+          this.resetData ()
           this.setFlash({
             status: true,
             message: '投稿を更新しました'
@@ -317,6 +306,7 @@ export default {
     },
     closeDialog () {
       this.$emit('closeDialog')
+      this.resetData ()
     },
     addImage (n) {
       const file = this.$data['image' + n]
@@ -344,6 +334,18 @@ export default {
       this.$data['image' + n + 'Url'] = []
       this.$data['image' + n] = []
       this.imageError = null
+    },
+    resetData () {
+      this.image1Url = []
+      this.image2Url = []
+      this.image3Url = []
+      this.image4Url = []
+      this.image1 = []
+      this.image2 = []
+      this.image3 = []
+      this.image4 = []
+      this.description = ''
+      this.tags = []
     }
   }
 }

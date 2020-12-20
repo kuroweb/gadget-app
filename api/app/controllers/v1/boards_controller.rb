@@ -53,6 +53,26 @@ class V1::BoardsController < ApplicationController
     end
   end
 
+  # 投稿更新
+  def update
+    @board = Board.find(params[:id])
+    sent_tags = board_tags_params[:tags] === nil ? [] : board_tags_params[:tags]
+    if @board.update(board_content_params)
+      @board.save_tag(sent_tags)
+      # imagesが空の場合に、updateメソッドで初期化
+      if board_content_params[:images] === nil
+        @board.update(images: nil)
+      end
+      render json: @board.as_json(include: [{user: {methods: :avatar_url}},
+                                  :tags,
+                                  {board_comments: {include: {user: {methods: :avatar_url}},
+                                                    methods: :images_url}}],
+                          methods: :images_url)
+    else
+      render json: @board.errors, status: :unprocessable_entity
+    end
+  end
+
   # 掲示板削除
   def destroy
     @board = Board.find(params[:id])

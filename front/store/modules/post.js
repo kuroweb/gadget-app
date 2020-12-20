@@ -259,65 +259,59 @@ export const mutations = {
 
   // 詳細ページ用
   reloadPostByCreateComment (state, comment) {
-    if (state.data.id === comment.post_id) {
-      state.data.commentCounts += 1
-      if (comment.reply_comment_id === null) {
-        state.data.comments.push(comment)
-      } else {
-        state.data.comments.forEach(c => {
-          if (c.id === comment.reply_comment_id) {
-            if ('childComments' in c) {
-              c.childComments.push(comment)
-            } else {
-              c.childComments = []
-              c.childComments.push(comment)
-            }
+    state.data.commentCounts += 1
+    if (comment.reply_comment_id === null) {
+      state.data.comments.push(comment)
+    } else {
+      state.data.comments.forEach(c => {
+        if (c.id === comment.reply_comment_id) {
+          if ('childComments' in c) {
+            c.childComments.push(comment)
+          } else {
+            c.childComments = []
+            c.childComments.push(comment)
           }
-        })
-      }
+        }
+      })
     }
   },
   reloadPostByDeleteComment (state, comment) {
-      if (state.data.id === comment.post_id) {
-        // 親コメントの場合
-        if (comment.reply_comment_id === null) {
-          state.data.comments.forEach((c, index) => {
-            if (c.id === comment.id) {
-              // コメント数の集計
-              let newCommentCounts = 0
-              //// 子コメントが存在する場合
-              if ('childComments' in c) {
-                newCommentCounts = 1
-                newCommentCounts += c.childComments.length
-              //// 子コメントが存在しない場合
-              } else {
-                newCommentCounts = 1
-              }
-              state.data.comments.splice(index, 1)
-              state.data.commentCounts -= newCommentCounts
-            }
-          })
-        // 子コメントの場合
-        } else {
-          state.data.comments.forEach(c => {
-            if ('childComments' in c) {
-              c.childComments.forEach((child, index) => {
-                if (child.id === comment.id) {
-                  c.childComments.splice(index, 1)
-                  state.data.commentCounts -= 1
-                }
-              })
+    // 親コメントの場合
+    if (comment.reply_comment_id === null) {
+      state.data.comments.forEach((c, index) => {
+        if (c.id === comment.id) {
+          // コメント数の集計
+          let newCommentCounts = 0
+          //// 子コメントが存在する場合
+          if ('childComments' in c) {
+            newCommentCounts = 1
+            newCommentCounts += c.childComments.length
+          //// 子コメントが存在しない場合
+          } else {
+            newCommentCounts = 1
+          }
+          state.data.comments.splice(index, 1)
+          state.data.commentCounts -= newCommentCounts
+        }
+      })
+    // 子コメントの場合
+    } else {
+      state.data.comments.forEach(c => {
+        if ('childComments' in c) {
+          c.childComments.forEach((child, index) => {
+            if (child.id === comment.id) {
+              c.childComments.splice(index, 1)
+              state.data.commentCounts -= 1
             }
           })
         }
-      }
+      })
+    }
   },
   reloadPostByEditPost (state, post) {
-    if (state.data.id === post.id) {
-      state.data.images_url = post.images_url
-      state.data.description = post.description
-      state.data.tags = post.tags
-    }
+    state.data.images_url = post.images_url
+    state.data.description = post.description
+    state.data.tags = post.tags
   },
   reloadPostByLikedPost (state, post) {
     state.data.isLikedPost = true
