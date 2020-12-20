@@ -70,11 +70,11 @@ export default {
     async deletePost () {
       this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`)
         .then(() => {
-          this.$emit('deletePost', this.postId)
+          this.$emit('deletePost')
           this.$emit('closeDialog')
           this.setFlash({
             status: true,
-            message: "投稿削除に成功しました"
+            message: "削除に成功しました"
           })
           setTimeout(() => {
             this.setFlash({

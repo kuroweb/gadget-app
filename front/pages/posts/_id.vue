@@ -449,7 +449,7 @@ export default {
     editPost (payload) {
       this.reloadPostByEditPost(payload)
     },
-    deletePost (payload) {
+    deletePost () {
       this.$router.push("/")
     },
     likedPost (payload) {

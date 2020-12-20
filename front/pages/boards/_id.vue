@@ -28,6 +28,12 @@
       @editBoard="editBoard"
       @closeDialog="editBoardDialog = false"
     />
+    <DeleteBoardDialog
+      :dialog="deleteBoardDialog"
+      :boardId="boardId"
+      @deleteBoard="deleteBoard"
+      @closeDialog="deleteBoardDialog = false"
+    />
     <v-row
       justify="center"
       v-if="error === false"
@@ -125,13 +131,12 @@
                           mdi-pencil-box-multiple
                         </v-icon>
                       </v-btn>
-                      <!-- @click="openDeletePostDialog" -->
                       <v-btn
                         icon
                         text
                         color="grey darken-2"
                         class="mr-3"
-
+                        @click="openDeleteBoardDialog"
                       >
                         <v-icon>
                           mdi-delete
@@ -332,6 +337,7 @@ import CreateBoardCommentDialog from '~/components/organisms/boards/CreateBoardC
 import CreateBoardReplyDialog from '~/components/organisms/boards/CreateBoardReplyDialog.vue'
 import DeleteBoardCommentDialog from '~/components/organisms/boards/DeleteBoardCommentDialog.vue'
 import EditBoardDialog from '~/components/organisms/boards/EditBoardDialog.vue'
+import DeleteBoardDialog from '~/components/organisms/boards/DeleteBoardDialog.vue'
 export default {
   components: {
     ErrorCard,
@@ -340,7 +346,8 @@ export default {
     CreateBoardCommentDialog,
     CreateBoardReplyDialog,
     DeleteBoardCommentDialog,
-    EditBoardDialog
+    EditBoardDialog,
+    DeleteBoardDialog
   },
   data () {
     return {
@@ -349,6 +356,7 @@ export default {
       createReplyDialog: false,
       deleteCommentDialog: false,
       editBoardDialog: false,
+      deleteBoardDialog: false,
       parentComment: '',
       comment: '',
     }
@@ -399,8 +407,15 @@ export default {
       this.boardId = this.board.id
       this.editBoardDialog = true
     },
+    openDeleteBoardDialog () {
+      this.boardId = this.board.id
+      this.deleteBoardDialog = true
+    },
     editBoard (payload) {
       this.reloadBoardByEditBoard(payload)
+    },
+    deleteBoard () {
+      this.$router.push("/")
     }
   }
 }
