@@ -165,6 +165,7 @@ export const mutations = {
       if (post.id === comment.post_id) {
         // 親コメントの場合
         if (comment.reply_comment_id === null) {
+          comment.childComments = []
           post.comments.push(comment)
           post.commentCounts += 1
         // 子コメントの場合
@@ -269,6 +270,7 @@ export const mutations = {
   reloadPostByCreateComment (state, comment) {
     state.data.commentCounts += 1
     if (comment.reply_comment_id === null) {
+      comment.childComments = []
       state.data.comments.push(comment)
     } else {
       state.data.comments.forEach(c => {
