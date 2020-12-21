@@ -3,13 +3,18 @@ class V1::PostsController < ApplicationController
 
   # 投稿一覧
   def index
-    # 要リファクタリング
+    #@posts = Post.includes({images_attachments: :blob},
+    #                        {user: {avatar_attachment: :blob}},
+    #                        :tags,
+    #                        :liked_users,
+    #                        {comments: [{user: {avatar_attachment: :blob}},
+    #                                    {images_attachments: :blob}]}).all.order(created_at: "DESC")
     @posts = Post.includes({images_attachments: :blob},
                             {user: {avatar_attachment: :blob}},
                             :tags,
                             :liked_users,
                             {comments: [{user: {avatar_attachment: :blob}},
-                                        {images_attachments: :blob}]}).all.order(created_at: "DESC")
+                                        {images_attachments: :blob}]}).page(params[:page]).per(5).order(created_at: "DESC")
     render json: @posts.as_json(include: [{user: {methods: :avatar_url}},
                                           :tags,
                                           :liked_users,

@@ -123,6 +123,9 @@ export const actions = {
   reloadPostsByDisLikedPost ({ commit }, post) {
     commit('reloadPostsByDisLikedPost', post)
   },
+  reloadPostsByPageScrolling ({ commit }, posts) {
+    commit('reloadPostsByPageScrolling', posts)
+  },
 
   // 詳細ページ用
   reloadPostByCreateComment ({ commit }, comment) {
@@ -254,6 +257,11 @@ export const mutations = {
         p.isLikedPost = false
         p.likedUsersCounts -= 1
       }
+    })
+  },
+  reloadPostsByPageScrolling (state, posts) {
+    posts.forEach(post => {
+      state.posts.push(post)
     })
   },
 

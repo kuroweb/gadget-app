@@ -19,7 +19,7 @@
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cookieparser": "^0.1.0",
-    "core-js": "^3.6.5",
+    "core-js": "^2.6.12",
     "cross-env": "^7.0.2",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
@@ -32,7 +32,8 @@
     "loaders.css": "^0.1.2",
     "lodash": "^4.17.20",
     "nuxt": "^2.14.6",
-    "vee-validate": "^3.4.2"
+    "vee-validate": "^3.4.2",
+    "vue-infinite-loading": "^2.4.5"
   },
   "devDependencies": {
     "@nuxtjs/moment": "^1.6.1"

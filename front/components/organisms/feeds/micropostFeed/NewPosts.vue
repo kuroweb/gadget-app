@@ -33,6 +33,14 @@
           :key="post.id"
           :post="post"
         />
+        <VueInfiniteLoading
+          ref="infiniteLoading"
+          spinner="spiral"
+          @infinite="infiniteHandler"
+        >
+          <span slot="no-more">-----投稿は以上です-----</span>
+          <span slot="no-results">-----投稿はありません-----</span>
+        </VueInfiniteLoading>
       </v-col>
     </v-row>
   </v-container>
@@ -50,6 +58,7 @@ export default {
     return {
       loading: true,
       createPostDialog: false,
+      count: 1
     }
   },
   props: {
@@ -58,7 +67,8 @@ export default {
   watch: {
     async load () {
       this.loading = true
-      await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`)
+      this.count = 1
+      await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts?page=${this.count}`)
         .then(res => {
           this.setPosts(res)
           setTimeout(this.stopLoading, 500)
@@ -66,7 +76,8 @@ export default {
     }
   },
   async mounted () {
-    await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`)
+    this.count = 1
+    await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts?page=${this.count}`)
       .then(res => {
         this.setPosts(res)
         setTimeout(this.stopLoading, 500)
@@ -80,7 +91,8 @@ export default {
   methods: {
     ...mapActions({
       setPosts: 'modules/post/setPosts',
-      reloadPostsByCreatePost: 'modules/post/reloadPostsByCreatePost'
+      reloadPostsByCreatePost: 'modules/post/reloadPostsByCreatePost',
+      reloadPostsByPageScrolling: 'modules/post/reloadPostsByPageScrolling'
     }),
     stopLoading () {
       this.loading = false
@@ -90,6 +102,20 @@ export default {
     },
     createPost (payload) {
       this.reloadPostsByCreatePost(payload)
+    },
+    async infiniteHandler () {
+      this.count += 1
+      await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts?page=${this.count}`)
+        .then(res => {
+          if (res.length !== 0) {
+            setTimeout(() => {
+              this.reloadPostsByPageScrolling(res)
+              this.$refs.infiniteLoading.stateChanger.loaded()
+            }, 1000)
+          } else {
+            this.$refs.infiniteLoading.stateChanger.complete()
+          }
+        })
     }
   }
 }

@@ -44,13 +44,11 @@
               label="説明文"
               rules="max:255|required"
             />
-            <client-only>
-              <VueTagsInput
-                v-model="tag"
-                :tags="tags"
-                @tags-changed="newTags => tags = newTags"
-              />
-            </client-only>
+            <TagsForm
+              v-model="tag"
+              :initTags="tags"
+              @tags-changed="newTags => tags = newTags"
+            />
             <v-row justify="center" class="mt-3">
               <v-btn
                 color="success"
@@ -72,12 +70,14 @@ import TextFieldWithValidation from '~/components/molecules/inputs/TextFieldWith
 import TextAreaWithValidation from '~/components/molecules/inputs/TextAreaWithValidation.vue'
 import SelectFormWithValidation from '~/components/molecules/inputs/SelectFormWithValidation.vue'
 import ImagesForm from '~/components/molecules/inputs/ImagesForm.vue'
+import TagsForm from '~/components/molecules/inputs/TagsForm.vue'
 export default {
   components: {
     TextFieldWithValidation,
     TextAreaWithValidation,
     SelectFormWithValidation,
-    ImagesForm
+    ImagesForm,
+    TagsForm
   },
   props: {
     dialog: {
