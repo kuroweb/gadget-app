@@ -39,7 +39,7 @@
           @infinite="infiniteHandler"
         >
           <span slot="no-more">-----投稿は以上です-----</span>
-          <span slot="no-results">-----投稿はありません-----</span>
+          <span slot="no-results"></span>
         </VueInfiniteLoading>
       </v-col>
     </v-row>

@@ -7,13 +7,13 @@ class V1::BoardsController < ApplicationController
                                 {user: {avatar_attachment: :blob}},
                                 :tags,
                                 {board_comments: [{user: {avatar_attachment: :blob}},
-                                                  {images_attachments: :blob}]}).where(board_type: params[:board_type]).order(created_at: "DESC")
+                                                  {images_attachments: :blob}]}).where(board_type: params[:board_type]).order(created_at: "DESC").page(params[:page]).per(5)
     else
       @boards = Board.includes({images_attachments: :blob},
                                 {user: {avatar_attachment: :blob}},
                                 :tags,
                                 {board_comments: [{user: {avatar_attachment: :blob}},
-                                                  {images_attachments: :blob}]}).all.order(created_at: "DESC")
+                                                  {images_attachments: :blob}]}).page(params[:page]).per(5).order(created_at: "DESC")
     end
     render json: @boards.as_json(include: [{user: {methods: :avatar_url}},
                                             :tags,

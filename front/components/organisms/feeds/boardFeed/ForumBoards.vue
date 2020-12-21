@@ -33,6 +33,14 @@
           :key="board.id"
           :board="board"
         />
+        <VueInfiniteLoading
+          ref="infiniteLoading"
+          spinner="spiral"
+          @infinite="infiniteHandler"
+        >
+          <span slot="no-more">-----掲示板は以上です-----</span>
+          <span slot="no-results"></span>
+        </VueInfiniteLoading>
       </v-col>
     </v-row>
   </v-container>
@@ -49,7 +57,8 @@ export default {
   data () {
     return {
       loading: true,
-      createBoardDialog: false
+      createBoardDialog: false,
+      count: 1
     }
   },
   props: {
@@ -57,8 +66,14 @@ export default {
   },
   watch: {
     async load () {
+      this.count = 1
       this.loading = true
-      await this.$axios.$get(process.env.BROWSER_BASE_URL + '/v1/boards?board_type=雑談')
+      await this.$axios.$get(process.env.BROWSER_BASE_URL + '/v1/boards', {
+        params: {
+          board_type: "雑談",
+          page: this.count
+        }
+      })
         .then(res => {
           this.setBoards(res)
           setTimeout(this.stopLoading, 500)
@@ -66,7 +81,13 @@ export default {
     }
   },
   async mounted () {
-    await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/boards?board_type=雑談`)
+    this.count = 1
+    await this.$axios.$get(process.env.BROWSER_BASE_URL + '/v1/boards', {
+        params: {
+          board_type: "雑談",
+          page: this.count
+        }
+      })
       .then(res => {
         this.setBoards(res)
         setTimeout(this.stopLoading, 500)
@@ -80,7 +101,8 @@ export default {
   methods: {
     ...mapActions({
       setBoards: 'modules/board/setBoards',
-      reloadBoardsByCreateBoard: 'modules/board/reloadBoardsByCreateBoard'
+      reloadBoardsByCreateBoard: 'modules/board/reloadBoardsByCreateBoard',
+      reloadBoardsByPageScrolling: 'modules/board/reloadBoardsByPageScrolling'
     }),
     stopLoading () {
       this.loading = false
@@ -90,6 +112,25 @@ export default {
     },
     createBoard (payload) {
       this.reloadBoardsByCreateBoard(payload)
+    },
+    async infiniteHandler () {
+      this.count += 1
+      await this.$axios.$get(process.env.BROWSER_BASE_URL + '/v1/boards', {
+        params: {
+          board_type: "雑談",
+          page: this.count
+        }
+      })
+        .then(res => {
+          if (res.length !== 0) {
+            setTimeout(() => {
+              this.reloadBoardsByPageScrolling(res)
+              this.$refs.infiniteLoading.stateChanger.loaded()
+            }, 1000)
+          } else {
+            this.$refs.infiniteLoading.stateChanger.complete()
+          }
+        })
     }
   }
 }

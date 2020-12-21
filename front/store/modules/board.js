@@ -52,6 +52,9 @@ export const actions = {
   reloadBoardsByCreateBoard ({ commit }, board) {
     commit('reloadBoardsByCreateBoard', board)
   },
+  reloadBoardsByPageScrolling ({ commit }, boards) {
+    commit('reloadBoardsByPageScrolling', boards)
+  },
 
   // 詳細ページ用
   reloadBoardByEditBoard ({ commit }, board) {
@@ -83,6 +86,11 @@ export const mutations = {
   reloadBoardsByCreateBoard (state, board) {
     board.commentCounts = 0
     state.boards.unshift(board)
+  },
+  reloadBoardsByPageScrolling (state, boards) {
+    boards.forEach(board => {
+      state.boards.push(board)
+    })
   },
 
   // 詳細ページ用
