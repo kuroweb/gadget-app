@@ -708,3 +708,31 @@ Like.all
 like = Like.first
 like.destroy
 exit
+user = User.find_by(name: "テスト1号")
+user
+User.all
+user = User.find(1)
+user
+user.following
+user.following.posts
+user.following
+user.following.first
+user.following.first.posts
+exit
+user.following.first.posts
+exit
+@user = User.find(1)
+@user.following
+@user.following each do |f|
+  puts(f)
+end
+@user
+exit
+@user = User.find(1)
+@user.following
+@user.following.posts
+@user.following.includes(:posts)
+exit
+tag = Tag.find_by(tag_name: 'test')
+tag.posts
+exit

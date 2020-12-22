@@ -70,7 +70,7 @@ export default {
     async deletePost () {
       this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`)
         .then(() => {
-          this.$emit('deletePost')
+          this.$emit('deletePost', this.postId)
           this.$emit('closeDialog')
           this.setFlash({
             status: true,

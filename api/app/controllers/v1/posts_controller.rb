@@ -3,24 +3,44 @@ class V1::PostsController < ApplicationController
 
   # 投稿一覧
   def index
-    #@posts = Post.includes({images_attachments: :blob},
-    #                        {user: {avatar_attachment: :blob}},
-    #                        :tags,
-    #                        :liked_users,
-    #                        {comments: [{user: {avatar_attachment: :blob}},
-    #                                    {images_attachments: :blob}]}).all.order(created_at: "DESC")
-    @posts = Post.includes({images_attachments: :blob},
-                            {user: {avatar_attachment: :blob}},
+    if params[:user_id]
+      user = User.find(params[:user_id])
+      following = user.following.includes({posts: [{images_attachments: :blob},
+                                                    {user: {avatar_attachment: :blob}},
+                                                    :tags,
+                                                    :liked_users,
+                                                    {comments: [{user: {avatar_attachment: :blob}},
+                                                                {images_attachments: :blob}]}]})
+      posts = []
+      following.each do |f|
+        f.posts.each do |p|
+          posts.push(p)
+        end
+      end
+      posts.sort! do |a, b|
+        b[:created_at] <=> a[:created_at]
+      end
+      @timeline = Kaminari.paginate_array(posts).page(params[:page]).per(5)
+      render json: @timeline.as_json(include: [{user: {methods: :avatar_url}},
+                                              :tags,
+                                              :liked_users,
+                                              {comments: {include: {user: {methods: :avatar_url}},
+                                                            methods: :images_url}}],
+                                      methods: :images_url)
+    else
+      @posts = Post.includes({images_attachments: :blob},
+        {user: {avatar_attachment: :blob}},
+        :tags,
+        :liked_users,
+        {comments: [{user: {avatar_attachment: :blob}},
+                    {images_attachments: :blob}]}).page(params[:page]).per(5).order(created_at: "DESC")
+      render json: @posts.as_json(include: [{user: {methods: :avatar_url}},
                             :tags,
                             :liked_users,
-                            {comments: [{user: {avatar_attachment: :blob}},
-                                        {images_attachments: :blob}]}).page(params[:page]).per(5).order(created_at: "DESC")
-    render json: @posts.as_json(include: [{user: {methods: :avatar_url}},
-                                          :tags,
-                                          :liked_users,
-                                          {comments: {include: {user: {methods: :avatar_url}},
-                                                        methods: :images_url}}],
-                                methods: :images_url)
+                            {comments: {include: {user: {methods: :avatar_url}},
+                                          methods: :images_url}}],
+                  methods: :images_url)
+    end
   end
 
   # 投稿詳細
