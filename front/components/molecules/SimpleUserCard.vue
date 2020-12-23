@@ -5,10 +5,9 @@
   >
     <v-row>
       <v-col cols="12">
-        <h3>{{ user.title }}</h3>
+        <h3>{{ user.name }}</h3>
       </v-col>
       <v-col cols="12">
-        <p>{{ user.description }}</p>
         <p>{{ $moment(user.created_at).format('YYYY年MM月DD日 HH時mm分') }}</p>
       </v-col>
       <v-col cols="12" v-if="user.avatar_url">

@@ -7,6 +7,7 @@
       color="orange"
       label
       text-color="white"
+      :to="`/tags/${tag.id}`"
     >
       <v-icon left>
         mdi-label

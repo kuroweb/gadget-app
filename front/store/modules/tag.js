@@ -22,11 +22,17 @@ export const actions = {
       payload.isFollowed = null
     }
     commit('setData', payload)
-  }
+  },
+  setIsFollowed ({ commit }, payload) {
+    commit('setIsFollowed', payload)
+  } 
 }
 
 export const mutations = {
   setData (state, payload) {
     state.data = payload
+  },
+  setIsFollowed (state, payload) {
+    state.data.isFollowed = payload
   }
 }

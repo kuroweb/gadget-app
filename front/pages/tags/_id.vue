@@ -139,10 +139,13 @@ export default {
       currentUser: 'modules/user/data',
       isAuthenticated: 'modules/user/isAuthenticated',
       error: 'modules/info/error',
-      tag: 'modules/tag/data'
+      tag: 'modules/tag/data',
     })
   },
   methods: {
+    ...mapActions({
+      setIsFollowed: 'modules/tag/setIsFollowed'
+    }),
     followTag () {
       this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/user_tag_maps', {
         follow_tag: {
@@ -150,6 +153,9 @@ export default {
           tag_id: this.tag.id
         }
       })
+        .then(res => {
+          this.setIsFollowed(res)
+        })
     },
     unfollowTag () {
       this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/user_tag_maps/delete', {
@@ -160,6 +166,9 @@ export default {
           }
         }
       })
+        .then(res => {
+          this.setIsFollowed(res)
+        })
     }
   }
 }
