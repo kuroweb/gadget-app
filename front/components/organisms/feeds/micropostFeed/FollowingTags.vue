@@ -29,8 +29,8 @@
       </v-col>
       <v-col cols="12">
         <MicroPostCard
-          v-for="post in posts"
-          :key="post.id"
+          v-for="(post, index) in posts"
+          :key="index"
           :post="post"
         />
       </v-col>

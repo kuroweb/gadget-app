@@ -15,6 +15,8 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :boards, dependent: :destroy
   has_many :board_comments, dependent: :destroy
+  has_many :user_tag_maps, dependent: :destroy
+  has_many :tags, through: :user_tag_maps
 
   def avatar_url
     avatar.attached? ? url_for(avatar) : nil

@@ -29,8 +29,8 @@
       </v-col>
       <v-col cols="12">
         <BoardCard
-          v-for="board in boards"
-          :key="board.id"
+          v-for="(board, index) in boards"
+          :key="index"
           :board="board"
         />
         <VueInfiniteLoading

@@ -20,5 +20,7 @@ Rails.application.routes.draw do
     resources :comments, only: [:create, :destroy]
     resources :boards
     resources :board_comments
+    resources :tags
+    resources :user_tag_maps, only: [:create, :destroy]
   end
 end

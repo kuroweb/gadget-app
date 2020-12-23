@@ -58,6 +58,7 @@
           <v-container>
             <v-card
               class="mx-auto pa-3"
+              flat
             >
               <v-row justify="center">
                 <v-col>
@@ -390,10 +391,10 @@ export default {
     await $axios.$get(baseUrl + `/v1/posts/${params.id}`)
       .then(res => {
         store.dispatch('modules/post/setData', res)
-        store.commit('modules/info/setError', false)
+        store.dispatch('modules/info/setError', false)
       })
       .catch(error => {
-        store.commit('modules/info/setError', true)
+        store.dispatch('modules/info/setError', true)
       })
   },
 

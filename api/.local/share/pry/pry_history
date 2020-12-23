@@ -736,3 +736,34 @@ exit
 tag = Tag.find_by(tag_name: 'test')
 tag.posts
 exit
+tag = Tag.find_by(tag_name: 'test')
+tag.users
+tag.user
+tag.posts
+tag.users
+tag.boards
+tag.posts
+exit
+tag = Tag.first
+tag.boards
+tag.users
+exit
+user = User.first
+user.tags
+uset.tags << "test"
+tag = Tag.find_by(tag_name: "test"
+)
+user.tags << tag
+user.tags
+exit
+user = User.first
+user.tags
+follow_tag = {
+  user_id: 1,
+  tag_id: 7
+}
+UserTagMap.find_by(follow_tag)
+@followed_tag = UserTagMap.find_by(follow_tag)
+@followed_tag
+@followed_tag.destroy!
+exit

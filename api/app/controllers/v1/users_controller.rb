@@ -61,6 +61,7 @@ class V1::UsersController < ApplicationController
     @user.destroy
   end
 
+  # フォロー機能
   def following
     render json: @user.following
   end
@@ -76,10 +77,7 @@ class V1::UsersController < ApplicationController
     render json: isFollowed
   end
 
-  def posts
-    render json: @user, include: [:posts]
-  end
-
+  # ユーザー検索
   def search
     if params[:user_name]
       @users = User.search(params[:user_name])
