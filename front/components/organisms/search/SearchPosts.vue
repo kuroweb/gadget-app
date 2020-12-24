@@ -6,17 +6,20 @@
     >
       <v-icon slot="prepend">mdi-magnify</v-icon>
     </v-text-field>
-    <v-row
-      v-for="post in post_result"
-      :key="post.id"
-    >
-      <p>{{ post.description }}</p>
-    </v-row>
+    <SimplePostCard
+      v-for="(post, index) in post_result"
+      :key="index"
+      :post="post"
+    />
   </v-card-text>
 </template>
 <script>
 import _ from 'lodash'
+import SimplePostCard from '~/components/molecules/SimplePostCard.vue'
 export default {
+  components: {
+    SimplePostCard
+  },
   data () {
     return {
       post: '',

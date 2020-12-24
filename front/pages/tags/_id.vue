@@ -39,14 +39,18 @@
         background-color="cyan darken-1"
         color="white"
         slider-color="orange"
+        icons-and-text
       >
         <v-tab class="ma-0 pa-0">
+          投稿
           <v-icon>mdi-post</v-icon>
         </v-tab>
         <v-tab class="ma-0 pa-0">
+          掲示板
           <v-icon>mdi-forum</v-icon>
         </v-tab>
         <v-tab class="ma-0 pa-0">
+          ユーザー
           <v-icon>mdi-account</v-icon>
         </v-tab>
         <v-tab-item>

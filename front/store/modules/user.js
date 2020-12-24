@@ -6,6 +6,7 @@ export const state = () => ({
   user: null,
   // APIにあるユーザー情報
   data: null,
+  users: {}
 })
 
 export const getters = {
@@ -31,6 +32,10 @@ export const getters = {
   data(state) {
     return state.data
   },
+
+  users(state) {
+    return state.users
+  }
 }
 
 export const actions = {
@@ -73,6 +78,21 @@ export const actions = {
     } catch (e) {
       console.log(e)
     }
+  },
+
+  // 一覧ページ用
+  setUsers ({ commit, rootState }, users) {
+    // isFollowedプロパティの追加
+    users.forEach(user => {
+      user.isFollowed = false
+      if (rootState.modules.user.data) {
+        user.following.forEach(f => {
+          if (f.id === rootState.modules.user.data.id) {
+            user.isFollowed = true
+          }
+        })
+      }
+    })
   }
 }
 

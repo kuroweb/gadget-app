@@ -19,8 +19,12 @@ class V1::TagsController < ApplicationController
   # タグ検索
   def search
     if params[:tag_name]
-      @tags = Tag.search(params[:tag_name])
-      render json: @tags
+      @tags = Tag.includes({users: {avatar_attachment: :blob}},
+                            {posts: {images_attachments: :blob}},
+                            {boards: {images_attachments: :blob}}).search(params[:tag_name])
+      render json: @tags.as_json(include: [{users: {methods: :avatar_url}},
+                                            {posts: {methods: :images_url}},
+                                            {boards: {methods: :images_url}}])
     end
   end
 end

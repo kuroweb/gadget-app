@@ -80,8 +80,10 @@ class V1::UsersController < ApplicationController
   # ユーザー検索
   def search
     if params[:user_name]
-      @users = User.search(params[:user_name])
-      render json: @users
+      @users = User.includes({avatar_attachment: :blob},
+                              :followers).search(params[:user_name])
+      render json: @users.as_json(include: :followers,
+                                  methods: :avatar_url)
     end
   end
 
