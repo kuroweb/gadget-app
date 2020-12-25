@@ -58,7 +58,12 @@ export default {
   watch: {
     async load () {
       this.loading = true
-      await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`)
+      await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`, {
+        params: {
+          tag_feed_id: this.$store.state.modules.user.data.id,
+          page: this.count
+        }
+      })
         .then(res => {
           this.setPosts(res)
           setTimeout(this.stopLoading, 500)
@@ -66,10 +71,15 @@ export default {
     }
   },
   async mounted () {
-    await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`)
-      .then(res => {
-        this.setPosts(res)
-        setTimeout(this.stopLoading, 500)
+      await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`, {
+        params: {
+          tag_feed_id: this.$store.state.modules.user.data.id,
+          page: this.count
+        }
+      })
+        .then(res => {
+          this.setPosts(res)
+          setTimeout(this.stopLoading, 500)
       })
   },
   computed: {

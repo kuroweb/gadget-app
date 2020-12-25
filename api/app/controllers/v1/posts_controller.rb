@@ -3,6 +3,7 @@ class V1::PostsController < ApplicationController
 
   # 投稿一覧
   def index
+    # タイムライン用の投稿一覧を返す
     if params[:user_id]
       user = User.find(params[:user_id])
       following = user.following.includes({posts: [{images_attachments: :blob},
@@ -25,8 +26,37 @@ class V1::PostsController < ApplicationController
                                               :tags,
                                               :liked_users,
                                               {comments: {include: {user: {methods: :avatar_url}},
+                                                          methods: :images_url}}],
+                                      methods: :images_url)
+    elsif params[:tag_feed_id]
+      user = User.find(params[:tag_feed_id])
+      tags = user.tags.includes({posts: [{images_attachments: :blob},
+                                          {user: {avatar_attachment: :blob}},
+                                          :tags,
+                                          :liked_users,
+                                          {comments: [{user: {avatar_attachment: :blob}},
+                                                      {images_attachments: :blob}]}]})
+      # 投稿を抽出
+      posts = []
+      tags.each do |tag|
+        tag.posts.each do |p|
+          posts.push(p)
+        end
+      end
+      # タブった投稿をリジェクト
+      posts.uniq!
+      # 新着順でソート
+      posts.sort! do |a, b|
+        b[:created_at] <=> a[:created_at]
+      end
+      @tag_feed = Kaminari.paginate_array(posts).page(params[:page]).per(5)
+      render json: @tag_feed.as_json(include: [{user: {methods: :avatar_url}},
+                                                :tags,
+                                                :liked_users,
+                                                {comments: {include: {user: {methods: :avatar_url}},
                                                             methods: :images_url}}],
                                       methods: :images_url)
+    ## 新着投稿一覧を返す
     else
       @posts = Post.includes({images_attachments: :blob},
         {user: {avatar_attachment: :blob}},
