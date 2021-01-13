@@ -18,14 +18,14 @@ phases:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
-      - docker build -t $API_IMAGE:$API_IMAGE_TAG ./api
-      - docker push $API_IMAGE:$API_IMAGE_TAG
-      - docker build -t $FRONT_IMAGE:$FRONT_IMAGE_TAG ./front
-      - docker push $FRONT_IMAGE:$FRONT_IMAGE_TAG
+      - docker build -t $API_IMAGE ./api
+      - docker push $API_IMAGE
+      - docker build -t $FRONT_IMAGE ./front
+      - docker push $FRONT_IMAGE
   post_build:
     commands:
-      - printf '[{"name":"api","imageUri":"%s"}]' $API_IMAGE:$API_IMAGE_TAG > api_imagedefinitions.json
-      - printf '[{"name":"front","imageUri":"%s"}]' $FRONT_IMAGE:$FRONT_IMAGE_TAG > front_imagedefinitions.json
+      - printf '[{"name":"api","imageUri":"%s"}]' $API_IMAGE > api_imagedefinitions.json
+      - printf '[{"name":"front","imageUri":"%s"}]' $FRONT_IMAGE > front_imagedefinitions.json
 artifacts:
   files:
     - api_imagedefinitions.json
