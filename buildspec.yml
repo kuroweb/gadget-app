@@ -7,23 +7,22 @@ phases:
   pre_build:
     commands:
     - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-    - REPO_API=$(aws ecr describe-repositories --repository-names api --output text --query "repositories[0].repositoryUri")
-    - IMAGE_API=$REPO_API:latest
-    - REPO_FRONT=$(aws ecr describe-repositories --repository-names front --output text --query "repositories[0].repositoryUri")
-    - IMAGE_FRONT=$REPO_FRONT:latest
+    - API_REPO=$(aws ecr describe-repositories --repository-names api --output text --query "repositories[0].repositoryUri")
+    - API_IMAGE=$API_REPO:latest
+    - FRONT_REPO=$(aws ecr describe-repositories --repository-names front --output text --query "repositories[0].repositoryUri")
+    - FRONT_IMAGE=$FRONT_REPO:latest
   build:
     commands:
-    - cd api
-    - docker build -t $IMAGE_API .
-    - docker push $IMAGE_API
+    - docker build -t $API_IMAGE ./api
+    - docker push $API_IMAGE
     - cd ..
     - cd front
-    - docker build -t $IMAGE_FRONT .
-    - docker push $IMAGE_FRONT
+    - docker build -t $FRONT_IMAGE ./front
+    - docker push $FRONT_IMAGE
   post_build:
     commands:
-    - printf '[{"name":"api","imageUri":"%s"}]' $IMAGE_API > api_imagedefinitions.json
-    - printf '[{"name":"front","imageUri":"%s"}]' $IMAGE_FRONT > front_imagedefinitions.json
+    - printf '[{"name":"api","imageUri":"%s"}]' $API_IMAGE > api_imagedefinitions.json
+    - printf '[{"name":"front","imageUri":"%s"}]' $FRONT_IMAGE > front_imagedefinitions.json
 artifacts:
   files:
     - api_imagedefinitions.json
