@@ -28,9 +28,9 @@ phases:
       - docker push $FRONT_IMAGE
   post_build:
     commands:
-      - printf '[{"name":"api","imageUri":"%s"}]' $API_IMAGE > gadget-api-ecs-service_imagedefinitions.json
-      - printf '[{"name":"front","imageUri":"%s"}]' $FRONT_IMAGE > gadget-front-ecs-service_imagedefinitions.json
+      - printf '[{"name":"gadget-api","imageUri":"%s"}]' $API_IMAGE > api_imagedefinitions.json
+      - printf '[{"name":"gadget-front","imageUri":"%s"}]' $FRONT_IMAGE > front_imagedefinitions.json
 artifacts:
   files:
-    - gadget-api-ecs-service_imagedefinitions.json
-    - gadget-front-ecs-service_imagedefinitions.json
+    - api_imagedefinitions.json
+    - front_imagedefinitions.json
