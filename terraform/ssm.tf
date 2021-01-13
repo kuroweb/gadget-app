@@ -24,6 +24,10 @@ variable "GITHUB_BRANCH" {}
 variable "WEBHOOK_TOKEN" {}
 variable "AWS_DEFAULT_REGION" {}
 variable "AWS_ACCOUNT_ID" {}
+variable "API_IMAGE" {}
+variable "API_IMAGE_TAG" {}
+variable "FRONT_IMAGE" {}
+variable "FRONT_IMAGE_TAG" {}
 
 #__________ 共通 __________#
 resource "aws_ssm_parameter" "access-key-id" {
@@ -169,4 +173,28 @@ resource "aws_ssm_parameter" "webhook-token" {
   value = var.WEBHOOK_TOKEN
   type = "SecureString"
   description = "WEBHOOK_TOKEN"
+}
+resource "aws_ssm_parameter" "api-image" {
+  name = "api-image"
+  value = var.API_IMAGE
+  type = "SecureString"
+  description = "API_IMAGE"
+}
+resource "aws_ssm_parameter" "api-image-tag" {
+  name = "api-image-tag"
+  value = var.API_IMAGE_TAG
+  type = "SecureString"
+  description = "API_IMAGE_TAG"
+}
+resource "aws_ssm_parameter" "front-image" {
+  name = "front-image"
+  value = var.FRONT_IMAGE
+  type = "SecureString"
+  description = "FRONT_IMAGE"
+}
+resource "aws_ssm_parameter" "front-image-tag" {
+  name = "front-image-tag"
+  value = var.FRONT_IMAGE_TAG
+  type = "SecureString"
+  description = "FRONT_IMAGE_TAG"
 }

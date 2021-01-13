@@ -4,29 +4,30 @@ env:
   parameter-store:
     AWS_DEFAULT_REGION: default-region
     AWS_ACCOUNT_ID: account-id
+    API_IMAGE: api-image
+    API_IMAGE_TAG: api-image-tag
+    FRONT_IMAGE: front-image
+    FRONT_IMAGETAG: front-image-tag
 phases:
   install:
     runtime-versions:
       docker: 18
   pre_build:
     commands:
-      - $(aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com)
-      - API_REPO=$(aws ecr $AWS_ACCOUNT_ID --repository-names gadget-api --output text --query "repositories[0].repositoryUri")
-      - API_IMAGE=$API_REPO:latest
-      - FRONT_REPO=$(aws ecr $AWS_ACCOUNT_ID --repository-names gadget-front --output text --query "repositories[0].repositoryUri")
-      - FRONT_IMAGE=$FRONT_REPO:latest
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
-      - docker build -t $API_IMAGE ./api
-      - docker push $API_IMAGE
+      - docker build -t $API_IMAGE:$API_IMAGE_TAG ./api
+      - docker push $API_IMAGE:$API_IMAGE_TAG
       - cd ..
       - cd front
-      - docker build -t $FRONT_IMAGE ./front
-      - docker push $FRONT_IMAGE
+      - docker build -t $FRONT_IMAGE:$FRONT_IMAGE_TAG ./front
+      - docker push $FRONT_IMAGE:$FRONT_IMAGE_TAG
   post_build:
     commands:
-      - printf '[{"name":"api","imageUri":"%s"}]' $API_IMAGE > api_imagedefinitions.json
-      - printf '[{"name":"front","imageUri":"%s"}]' $FRONT_IMAGE > front_imagedefinitions.json
+      - printf '[{"name":"api","imageUri":"%s"}]' $API_IMAGE:$API_IMAGE_TAG > api_imagedefinitions.json
+      - printf '[{"name":"front","imageUri":"%s"}]' $FRONT_IMAGE:$FRONT_IMAGE_TAG > front_imagedefinitions.json
 artifacts:
   files:
     - api_imagedefinitions.json
