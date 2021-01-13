@@ -52,7 +52,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   a {
     padding: 5px;
   }

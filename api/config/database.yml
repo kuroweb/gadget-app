@@ -17,13 +17,13 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  host: db
-  username: postgres
-  password: <%= ENV["POSTGRES_PASSWORD"] %> 
+  host: <%= ENV['DB_HOST'] %> 
+  username: <%= ENV['DB_USERNAME'] %> 
+  password: <%= ENV['DB_PASSWORD'] %> 
 
 development:
   <<: *default
-  database: app_development
+  database: <%= ENV['DB_NAME'] %> 
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -78,8 +78,19 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
+
 production:
   <<: *default
-  database: app_production
-  username: app
-  password: <%= ENV['APP_DATABASE_PASSWORD'] %>
+  database: <%= ENV['DB_NAME'] %> 
+  adapter: postgresql
+  encoding: utf8
+  host: <%= ENV['DB_HOST'] %> 
+  username: <%= ENV['DB_USERNAME'] %> 
+  password: <%= ENV['DB_PASSWORD'] %> 
+
+## ローカルでproduction駆動する場合
+# production:
+#   <<: *default
+#   database: <%= ENV['DB_NAME'] %> 
+#   username: <%= ENV['DB_USERNAME'] %> 
+#   password: <%= ENV['DB_PASSWORD'] %> 

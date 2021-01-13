@@ -7,7 +7,7 @@
     "build": "nuxt build",
     "build:stg": "cross-env NODE_ENV=\"staging\" nuxt build",
     "build:prod": "cross-env NODE_ENV=\"production\" nuxt build",
-    "start": "nuxt start",
+    "start": "nuxt build && nuxt start",
     "start:stg": "cross-env NODE_ENV=\"staging\" nuxt start",
     "start:prod": "cross-env NODE_ENV=\"production\" nuxt start",
     "generate": "nuxt generate"
@@ -33,7 +33,8 @@
     "lodash": "^4.17.20",
     "nuxt": "^2.14.6",
     "vee-validate": "^3.4.2",
-    "vue-infinite-loading": "^2.4.5"
+    "vue-infinite-loading": "^2.4.5",
+    "@nuxtjs/moment": "^1.6.1"
   },
   "devDependencies": {
     "@nuxtjs/moment": "^1.6.1"

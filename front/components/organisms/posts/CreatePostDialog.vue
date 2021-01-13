@@ -22,34 +22,36 @@
           mdi-close
         </v-icon>
       </v-toolbar>
-      <v-card-text v-if="dialogStatus">
-        <v-form>
-          <ValidationObserver v-slot="ObserverProps">
-            <ImagesForm
-              @setImages="setImages"
-            />
-            <TextAreaWithValidation
-              v-model="description"
-              label="説明文"
-              rules="max:255|required"
-            />
-            <TagsForm
-              v-model="tag"
-              :initTags="tags"
-              @tags-changed="newTags => tags = newTags"
-            />
-            <v-row justify="center">
-              <v-btn
-                color="success"
-                class="white--text"
-                @click="createPost"
-                :disabled="ObserverProps.invalid"
-              >送信
-              </v-btn>
-            </v-row>
-          </ValidationObserver>
-        </v-form>
-      </v-card-text>
+      <v-form v-if="dialogStatus">
+        <v-card-text>
+          <v-container>
+            <ValidationObserver v-slot="ObserverProps">
+              <ImagesForm
+                @setImages="setImages"
+              />
+              <TextAreaWithValidation
+                v-model="description"
+                label="説明文"
+                rules="max:255|required"
+              />
+              <TagsForm
+                v-model="tag"
+                :initTags="tags"
+                @tags-changed="newTags => tags = newTags"
+              />
+              <v-row justify="center" class="mt-3">
+                <v-btn
+                  color="success"
+                  class="white--text"
+                  @click="createPost"
+                  :disabled="ObserverProps.invalid"
+                >送信
+                </v-btn>
+              </v-row>
+            </ValidationObserver>
+          </v-container>
+        </v-card-text>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>
@@ -139,5 +141,5 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 </style>

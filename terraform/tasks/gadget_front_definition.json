@@ -1,0 +1,76 @@
+[
+  {
+    "name": "front-container",
+    "image": "778139347749.dkr.ecr.ap-northeast-1.amazonaws.com/gadget-front:latest",
+    "essential": true,
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "front",
+        "awslogs-group": "/ecs/front"
+      }
+    },
+    "portMappings": [
+      {
+        "protocol": "tcp",
+        "containerPort": 80
+      }
+    ],
+    "command": [
+      "yarn", "start"
+    ],
+    "environment": [
+      {
+        "name": "NODE_ENV",
+        "value": "production"
+      },
+      {
+        "name": "WORKDIR",
+        "value": "app"
+      },
+      {
+        "name": "HOST",
+        "value": "0.0.0.0"
+      },
+      {
+        "name": "PORT",
+        "value": "80"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "API_BASE_URL",
+        "valueFrom": "api-base-url"
+      },
+      {
+        "name": "BROWSER_BASE_URL",
+        "valueFrom": "browser-base-url"
+      },
+      {
+        "name": "API_KEY",
+        "valueFrom": "api-key"
+      },
+      {
+        "name": "AUTH_DOMAIN",
+        "valueFrom": "auth-domain"
+      },
+      {
+        "name": "DATABASE_URL",
+        "valueFrom": "database-url"
+      },
+      {
+        "name": "PROJECT_ID",
+        "valueFrom": "project-id"
+      },
+      {
+        "name": "STORAGE_BUCKET",
+        "valueFrom": "storage-bucket"
+      },
+      {
+        "name": "MESSAGE_SENDER_ID",
+        "valueFrom": "message-sender-id"
+      }
+    ]
+  }
+]

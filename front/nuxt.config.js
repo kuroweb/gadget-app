@@ -1,8 +1,10 @@
+// 起動パターンに合わせてAPI通信用のBASE_URLを切り替え（cross-envモジュール）
 const environment = process.env.NODE_ENV || 'development';
 const envSet = require(`./env.${environment}.js`)
 
 export default {
 
+  // 起動パターンに合わせてAPI通信用のBASE_URLを切り替え（cross-envモジュール）
   env: envSet,
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
@@ -40,7 +42,7 @@ export default {
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
-    '@nuxtjs/axios',
+    '@nuxtjs/axios'
   ],
   axios: {
 

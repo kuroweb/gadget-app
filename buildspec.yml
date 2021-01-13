@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+  pre_build:
+    commands:
+    - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+    - REPO=$(aws ecr describe-repositories --repository-names example --output text --query "repositories[0].repositoryUri")
+    - IMAGE=$REPO:latest
+  build:
+    commands:
+    - cd api
+    - docker build -t $IMAGE .
+    - docker push $IMAGE
+    - cd ..
+    - cd front
+    - docker build -t $IMAGE .
+    - docker push $IMAGE
+  post_build:
+    commands:
+    - printf '[{"name":"api","imageUri":"%s"}]' $IMAGE > api_imagedefinitions.json
+    - printf '[{"name":"front","imageUri":"%s"}]' $IMAGE > front_imagedefinitions.json
+artifacts:
+  files:
+    - api_imagedefinitions.json
+    - front_imagedefinitions.json

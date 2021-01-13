@@ -1,45 +1,47 @@
 <template>
-  <v-row>
-    <v-col cols=3
-      align-self="center"
-      v-for="n in maxImageNum"
-      :key="n.id"
-    >
-      <v-row justify="center">
-        <v-avatar
-          justify="center"
-          v-if="$data['image' + n].length != 0"
-          size="62"
-        >
-          <img
-            v-if="$data['image' + n + 'Url']"
-            :src="$data['image' + n + 'Url']"
+  <div>
+    <v-row>
+      <v-col cols=3
+        align-self="center"
+        v-for="n in maxImageNum"
+        :key="n.id"
+      >
+        <v-row justify="center">
+          <v-avatar
+            justify="center"
+            v-if="$data['image' + n].length != 0"
+            size="62"
+          >
+            <img
+              v-if="$data['image' + n + 'Url']"
+              :src="$data['image' + n + 'Url']"
+            />
+          </v-avatar>
+        </v-row>
+        <v-row justify="center">
+          <v-btn
+            v-if="$data['image' + n].length != 0"
+            color="red"
+            class="white--text"
+            @click="removeImage(n)"
+          >
+            削除
+          </v-btn>
+        </v-row>
+        <div class="input-box">
+          <v-file-input
+            v-if="$data['image' + n].length == 0"
+            accept="image/*"
+            v-model="$data['image' + n]"
+            @change="addImage(n)"
+            prepend-icon="mdi-camera"
+            hide-input
           />
-        </v-avatar>
-      </v-row>
-      <v-row justify="center">
-        <v-btn
-          v-if="$data['image' + n].length != 0"
-          color="red"
-          class="white--text"
-          @click="removeImage(n)"
-        >
-          削除
-        </v-btn>
-      </v-row>
-      <div class="input-box">
-        <v-file-input
-          v-if="$data['image' + n].length == 0"
-          accept="image/*"
-          v-model="$data['image' + n]"
-          @change="addImage(n)"
-          prepend-icon="mdi-camera"
-          hide-input
-        />
-      </div>
-    </v-col>
-    <p v-if="imageError">{{ imageError }}</p>
-  </v-row>
+        </div>
+      </v-col>
+      <p v-if="imageError">{{ imageError }}</p>
+    </v-row>
+  </div>
 </template>
 <script>
 export default {
@@ -96,7 +98,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .input-box {
   padding: 0 30%;
 }

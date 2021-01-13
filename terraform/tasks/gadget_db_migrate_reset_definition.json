@@ -1,0 +1,68 @@
+[
+  {
+    "name": "api-container",
+    "image": "778139347749.dkr.ecr.ap-northeast-1.amazonaws.com/gadget-api:latest",
+    "essential": true,
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "db-migrate-reset",
+        "awslogs-group": "/ecs/db-migrate-reset"
+      }
+    },
+    "command": ["bundle", "exec", "rails", "db:migrate:reset"],
+    "environment": [
+      {
+        "name": "RAILS_ENV",
+        "value": "production"
+      },
+      {
+        "name": "WORKDIR",
+        "value": "app"
+      },
+      {
+        "name": "HOST",
+        "value": "0.0.0.0"
+      },
+      {
+        "name": "PORT",
+        "value": "3000"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "AWS_ACCESS_KEY_ID",
+        "valueFrom": "access-key-id"
+      },
+      {
+        "name": "AWS_SECRET_ACCESS_KEY",
+        "valueFrom": "secret-access-key"
+      },
+      {
+        "name": "DB_HOST",
+        "valueFrom": "db-host"
+      },
+      {
+        "name": "DB_NAME",
+        "valueFrom": "db-name"
+      },
+      {
+        "name": "DB_USERNAME",
+        "valueFrom": "db-username"
+      },
+      {
+        "name": "DB_PASSWORD",
+        "valueFrom": "db-password"
+      },
+      {
+        "name": "S3_REGION",
+        "valueFrom": "s3-region"
+      },
+      {
+        "name": "S3_BUCKET",
+        "valueFrom": "s3-bucket"
+      }
+    ]
+  }
+]

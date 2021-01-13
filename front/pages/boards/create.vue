@@ -141,7 +141,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .input-box {
   padding: 0 30%;
 }

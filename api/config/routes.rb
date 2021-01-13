@@ -22,5 +22,6 @@ Rails.application.routes.draw do
     resources :board_comments
     resources :tags
     resources :user_tag_maps, only: [:create, :destroy]
+    resources :tasks, only: :index
   end
 end

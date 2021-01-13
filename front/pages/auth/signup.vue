@@ -130,7 +130,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .signup-title {
     font-size: 24px;
   }

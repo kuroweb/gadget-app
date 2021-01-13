@@ -1,5 +1,2 @@
-/.env
-/.DS_Store
-/front/env.development.js
-/front/env.production.js
-/front/sample-app-ga-firebase-adminsdk-t7y9x-9ac115f24b.json
+.env
+.DS_Store

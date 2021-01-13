@@ -11,14 +11,14 @@
 </template>
 
 <script>
-import "loaders.css";
+import "loaders.css"
 export default {
   data() {
     return {
       
     }
   },
-};
+}
 </script>
 
 <style  lang="scss" scoped>

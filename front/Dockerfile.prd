@@ -1,0 +1,29 @@
+FROM node:14.4.0-alpine
+
+ARG API_KEY
+ARG AUTH_DOMAIN
+ARG PROJECT_ID
+ARG DATABASE_URL
+ARG STORAGE_BUCKET
+ARG MESSAGE_SENDER_ID
+
+ENV HOME=/app \
+    TZ=Asia/Tokyo \
+    HOST=0.0.0.0 \
+    PORT=80 \
+    NPM_CONFIG_PRODUCTION=false
+
+WORKDIR ${HOME}
+
+COPY package*.json ./
+
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache make gcc g++ python && \
+    yarn install
+
+COPY . ${HOME}
+
+RUN yarn run build
+
+EXPOSE ${PORT}
