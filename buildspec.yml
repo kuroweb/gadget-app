@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   parameter-store:
-    AWS_DEFAULT_REGION: defaout-region
+    AWS_DEFAULT_REGION: default-region
     AWS_ACCOUNT_ID: account-id
 phases:
   install:
