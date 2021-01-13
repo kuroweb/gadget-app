@@ -41,6 +41,10 @@
     ],
     "secrets": [
       {
+        "name": "RAILS_MASTER_KEY",
+        "valueFrom": "rails-master-key"
+      },
+      {
         "name": "AWS_ACCESS_KEY_ID",
         "valueFrom": "access-key-id"
       },

@@ -56,6 +56,7 @@ resource "aws_ecs_service" "gadget-api-ecs-service" {
   desired_count    = 1
   launch_type      = "FARGATE"
   platform_version = "1.3.0"
+  health_check_grace_period_seconds = 600
 
   network_configuration {
     assign_public_ip = true

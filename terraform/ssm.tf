@@ -30,6 +30,7 @@ variable "FRONT_IMAGE" {}
 variable "FRONT_IMAGE_TAG" {}
 variable "DOCKERHUB_USER" {}
 variable "DOCKERHUB_PASS" {}
+variable "RAILS_MASTER_KEY" {}
 
 #__________ 共通 __________#
 resource "aws_ssm_parameter" "access-key-id" {
@@ -81,6 +82,12 @@ resource "aws_ssm_parameter" "s3-bucket" {
   value = var.S3_BUCKET
   type = "SecureString"
   description = "S3_BUCKET"
+}
+resource "aws_ssm_parameter" "rails-master-key" {
+  name = "rails-master-key"
+  value = var.RAILS_MASTER_KEY
+  type = "SecureString"
+  description = "RAILS_MASTER_KEY"
 }
 
 #__________ FRONT __________#
