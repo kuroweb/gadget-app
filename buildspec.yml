@@ -20,8 +20,6 @@ phases:
     commands:
       - docker build -t $API_IMAGE:$API_IMAGE_TAG ./api
       - docker push $API_IMAGE:$API_IMAGE_TAG
-      - cd ..
-      - cd front
       - docker build -t $FRONT_IMAGE:$FRONT_IMAGE_TAG ./front
       - docker push $FRONT_IMAGE:$FRONT_IMAGE_TAG
   post_build:
