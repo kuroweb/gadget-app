@@ -28,8 +28,8 @@ phases:
       - docker push $FRONT_IMAGE
   post_build:
     commands:
-      - printf '[{"name":"gadget-api-ecs-service","imageUri":"%s"}]' $API_IMAGE > api_imagedefinitions.json
-      - printf '[{"name":"gadget-front-ecs-service","imageUri":"%s"}]' $FRONT_IMAGE > front_imagedefinitions.json
+      - printf '[{"name":"api-container","imageUri":"%s"}]' $API_IMAGE > api_imagedefinitions.json
+      - printf '[{"name":"front-container","imageUri":"%s"}]' $FRONT_IMAGE > front_imagedefinitions.json
 artifacts:
   files:
     - api_imagedefinitions.json
