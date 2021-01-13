@@ -22,6 +22,8 @@ variable "GITHUB_USER" {}
 variable "GITHUB_REPO" {}
 variable "GITHUB_BRANCH" {}
 variable "WEBHOOK_TOKEN" {}
+variable "AWS_DEFAULT_REGION" {}
+variable "AWS_ACCOUNT_ID" {}
 
 #__________ 共通 __________#
 resource "aws_ssm_parameter" "access-key-id" {
@@ -126,6 +128,18 @@ resource "aws_ssm_parameter" "message-sender-id" {
 }
 
 #__________ CodePipeline _________#
+resource "aws_ssm_parameter" "default-region" {
+  name = "default-region"
+  value = var.AWS_DEFAULT_REGION
+  type = "SecureString"
+  description = "AWS_DEFAULT_REGION"
+}
+resource "aws_ssm_parameter" "account-id" {
+  name = "account-id"
+  value = var.AWS_ACCOUNT_ID
+  type = "SecureString"
+  description = "AWS_ACCOUNT_ID"
+}
 resource "aws_ssm_parameter" "github-token" {
   name = "github-token"
   value = var.GITHUB_TOKEN

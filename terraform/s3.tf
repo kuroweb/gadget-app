@@ -15,3 +15,14 @@ resource "aws_s3_bucket" "gadget-s3-bucket" {
     Name = "gadget-s3-bucket-for-images"
   }
 }
+resource "aws_s3_bucket" "artifact" {
+  bucket = "artifact-pragmatic-terraform-for-gadget"
+
+  lifecycle_rule {
+    enabled = true
+
+    expiration {
+      days = "180"
+    }
+  }
+}
