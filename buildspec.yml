@@ -10,10 +10,10 @@ phases:
       docker: 18
   pre_build:
     commands:
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - API_REPO=$(aws ecr AWS_ACCOUNT_ID --repository-names gadget-api --output text --query "repositories[0].repositoryUri")
+      - $(aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com)
+      - API_REPO=$(aws ecr $AWS_ACCOUNT_ID --repository-names gadget-api --output text --query "repositories[0].repositoryUri")
       - API_IMAGE=$API_REPO:latest
-      - FRONT_REPO=$(aws ecr AWS_ACCOUNT_ID --repository-names gadget-front --output text --query "repositories[0].repositoryUri")
+      - FRONT_REPO=$(aws ecr $AWS_ACCOUNT_ID --repository-names gadget-front --output text --query "repositories[0].repositoryUri")
       - FRONT_IMAGE=$FRONT_REPO:latest
   build:
     commands:
