@@ -9,23 +9,7 @@ phases:
     commands:
       - echo pre_build start
       - echo $default-region
-  #   - $(aws ecr get-login --region $default-region --no-include-email)
-  #   - API_REPO=$(aws ecr $account-id --repository-names gadget-api --output text --query "repositories[0].repositoryUri")
-  #   - API_IMAGE=$API_REPO:latest
-  #   - FRONT_REPO=$(aws ecr $account-id --repository-names gadget-front --output text --query "repositories[0].repositoryUri")
-  #   - FRONT_IMAGE=$FRONT_REPO:latest
-  # build:
-  #   commands:
-  #   - docker build -t $API_IMAGE ./api
-  #   - docker push $API_IMAGE
-  #   - cd ..
-  #   - cd front
-  #   - docker build -t $FRONT_IMAGE ./front
-  #   - docker push $FRONT_IMAGE
-  # post_build:
-  #   commands:
-  #   - printf '[{"name":"api","imageUri":"%s"}]' $API_IMAGE > api_imagedefinitions.json
-  #   - printf '[{"name":"front","imageUri":"%s"}]' $FRONT_IMAGE > front_imagedefinitions.json
+
 artifacts:
   files:
     - api_imagedefinitions.json
