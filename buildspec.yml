@@ -7,17 +7,19 @@ phases:
   pre_build:
     commands:
     - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-    - REPO=$(aws ecr describe-repositories --repository-names example --output text --query "repositories[0].repositoryUri")
-    - IMAGE=$REPO:latest
+    - REPO_API=$(aws ecr describe-repositories --repository-names api --output text --query "repositories[0].repositoryUri")
+    - IMAGE_API=$REPO_API:latest
+    - REPO_FRONT=$(aws ecr describe-repositories --repository-names front --output text --query "repositories[0].repositoryUri")
+    - IMAGE_FRONT=$REPO_FRONT:latest
   build:
     commands:
     - cd api
-    - docker build -t $IMAGE .
-    - docker push $IMAGE
+    - docker build -t $IMAGE_API .
+    - docker push $IMAGE_API
     - cd ..
     - cd front
-    - docker build -t $IMAGE .
-    - docker push $IMAGE
+    - docker build -t $IMAGE_FRONT .
+    - docker push $IMAGE_FRONT
   post_build:
     commands:
     - printf '[{"name":"api","imageUri":"%s"}]' $IMAGE > api_imagedefinitions.json
