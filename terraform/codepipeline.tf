@@ -144,7 +144,7 @@ resource "aws_codepipeline" "codepipeline" {
       configuration = {
         ClusterName = aws_ecs_cluster.gadget-ecs-cluster.name
         ServiceName = aws_ecs_service.gadget-api-ecs-service.name
-        FileName    = "api_imagedefinitions.json"
+        FileName    = "gadget-api-ecs-service_imagedefinitions.json"
       }
     }
     action {
@@ -158,7 +158,7 @@ resource "aws_codepipeline" "codepipeline" {
       configuration = {
         ClusterName = aws_ecs_cluster.gadget-ecs-cluster.name
         ServiceName = aws_ecs_service.gadget-front-ecs-service.name
-        FileName    = "front_imagedefinitions.json"
+        FileName    = "gadget-front-ecs-service_imagedefinitions.json"
       }
     }
   }
