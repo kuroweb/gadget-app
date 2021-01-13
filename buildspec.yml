@@ -1,13 +1,14 @@
 version: 0.2
 
 env:
+  variables:
+    WORKDIR: "app"
   parameter-store:
     AWS_DEFAULT_REGION: default-region
     AWS_ACCOUNT_ID: account-id
     API_IMAGE: api-image
-    API_IMAGE_TAG: api-image-tag
     FRONT_IMAGE: front-image
-    FRONT_IMAGETAG: front-image-tag
+
 phases:
   install:
     runtime-versions:
