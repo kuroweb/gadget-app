@@ -7,8 +7,7 @@ phases:
       docker: 18
   pre_build:
     commands:
-      - echo pre_build start
-      - echo $default-region
+      - echo ${default-region}
 
 artifacts:
   files:
