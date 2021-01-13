@@ -22,8 +22,8 @@ phases:
     - docker push $IMAGE_FRONT
   post_build:
     commands:
-    - printf '[{"name":"api","imageUri":"%s"}]' $IMAGE > api_imagedefinitions.json
-    - printf '[{"name":"front","imageUri":"%s"}]' $IMAGE > front_imagedefinitions.json
+    - printf '[{"name":"api","imageUri":"%s"}]' $IMAGE_API > api_imagedefinitions.json
+    - printf '[{"name":"front","imageUri":"%s"}]' $IMAGE_FRONT > front_imagedefinitions.json
 artifacts:
   files:
     - api_imagedefinitions.json
