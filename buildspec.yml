@@ -8,7 +8,8 @@ env:
     AWS_ACCOUNT_ID: account-id
     API_IMAGE: api-image
     FRONT_IMAGE: front-image
-
+    DOCKERHUB_USER: dockerhub-user
+    DOCKERHUB_PASS: dockerhub-pass
 phases:
   install:
     runtime-versions:
@@ -17,6 +18,8 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - echo Logging in to Docker Hub...
+      - echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
   build:
     commands:
       - docker build -t $API_IMAGE ./api

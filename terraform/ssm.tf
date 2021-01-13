@@ -28,6 +28,8 @@ variable "API_IMAGE" {}
 variable "API_IMAGE_TAG" {}
 variable "FRONT_IMAGE" {}
 variable "FRONT_IMAGE_TAG" {}
+variable "DOCKERHUB_USER" {}
+variable "DOCKERHUB_PASS" {}
 
 #__________ 共通 __________#
 resource "aws_ssm_parameter" "access-key-id" {
@@ -197,4 +199,16 @@ resource "aws_ssm_parameter" "front-image-tag" {
   value = var.FRONT_IMAGE_TAG
   type = "SecureString"
   description = "FRONT_IMAGE_TAG"
+}
+resource "aws_ssm_parameter" "dockerhub-user" {
+  name = "dockerhub-user"
+  value = var.DOCKERHUB_USER
+  type = "SecureString"
+  description = "DOCKERHUB_USER"
+}
+resource "aws_ssm_parameter" "dockerhub-pass" {
+  name = "dockerhub-pass"
+  value = var.DOCKERHUB_PASS
+  type = "SecureString"
+  description = "DOCKERHUB_PASS"
 }
