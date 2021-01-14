@@ -74,7 +74,7 @@ resource "aws_codebuild_project" "codetest" {
   environment {
     type            = "LINUX_CONTAINER"
     compute_type    = "BUILD_GENERAL1_SMALL"
-    image           = "aws/codebuild/standard:2.0"
+    image           = "aws/codebuild/standard:3.0"
     privileged_mode = true
   }
 }
@@ -133,23 +133,23 @@ resource "aws_codepipeline" "codepipeline" {
     }
   }
 
-  stage {
-    name = "Build"
+  # stage {
+  #   name = "Build"
 
-    action {
-      name             = "Build"
-      category         = "Build"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      version          = 1
-      input_artifacts  = ["Source"]
-      output_artifacts = ["Build"]
+  #   action {
+  #     name             = "Build"
+  #     category         = "Build"
+  #     owner            = "AWS"
+  #     provider         = "CodeBuild"
+  #     version          = 1
+  #     input_artifacts  = ["Source"]
+  #     output_artifacts = ["Build"]
 
-      configuration = {
-        ProjectName = aws_codebuild_project.codebuild.id
-      }
-    }
-  }
+  #     configuration = {
+  #       ProjectName = aws_codebuild_project.codebuild.id
+  #     }
+  #   }
+  # }
   stage {
     name = "Test"
 
@@ -168,38 +168,38 @@ resource "aws_codepipeline" "codepipeline" {
     }
   }
 
-  stage {
-    name = "Deploy"
+  # stage {
+  #   name = "Deploy"
 
-    action {
-      name            = "Deploy-API"
-      category        = "Deploy"
-      owner           = "AWS"
-      provider        = "ECS"
-      version         = 1
-      input_artifacts = ["Build"]
+  #   action {
+  #     name            = "Deploy-API"
+  #     category        = "Deploy"
+  #     owner           = "AWS"
+  #     provider        = "ECS"
+  #     version         = 1
+  #     input_artifacts = ["Build"]
 
-      configuration = {
-        ClusterName = aws_ecs_cluster.gadget-ecs-cluster.name
-        ServiceName = aws_ecs_service.gadget-api-ecs-service.name
-        FileName    = "api_imagedefinitions.json"
-      }
-    }
-    action {
-      name            = "Deploy-FRONT"
-      category        = "Deploy"
-      owner           = "AWS"
-      provider        = "ECS"
-      version         = 1
-      input_artifacts = ["Build"]
+  #     configuration = {
+  #       ClusterName = aws_ecs_cluster.gadget-ecs-cluster.name
+  #       ServiceName = aws_ecs_service.gadget-api-ecs-service.name
+  #       FileName    = "api_imagedefinitions.json"
+  #     }
+  #   }
+  #   action {
+  #     name            = "Deploy-FRONT"
+  #     category        = "Deploy"
+  #     owner           = "AWS"
+  #     provider        = "ECS"
+  #     version         = 1
+  #     input_artifacts = ["Build"]
 
-      configuration = {
-        ClusterName = aws_ecs_cluster.gadget-ecs-cluster.name
-        ServiceName = aws_ecs_service.gadget-front-ecs-service.name
-        FileName    = "front_imagedefinitions.json"
-      }
-    }
-  }
+  #     configuration = {
+  #       ClusterName = aws_ecs_cluster.gadget-ecs-cluster.name
+  #       ServiceName = aws_ecs_service.gadget-front-ecs-service.name
+  #       FileName    = "front_imagedefinitions.json"
+  #     }
+  #   }
+  # }
 
   artifact_store {
     location = aws_s3_bucket.artifact.id
