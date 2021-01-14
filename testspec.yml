@@ -21,7 +21,3 @@ phases:
     commands:
   post_build:
     commands:
-      - printf '[{"test":"api-container","imageUri":"%s"}]' test > api_imagedefinitions.json
-artifacts:
-  files:
-    - test_imagedefinitions.json
