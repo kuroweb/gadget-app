@@ -103,11 +103,11 @@ resource "aws_codepipeline" "codepipeline" {
       output_artifacts = ["Source"]
 
       configuration = {
-        Owner                = var.GITHUB_USER
-        Repo                 = var.GITHUB_REPO
-        Branch               = var.GITHUB_BRANCH
+        Owner                = "kuromitsu0104"
+        Repo                 = "gadget-app"
+        Branch               = "master"
         PollForSourceChanges = false
-        OAuthToken = var.GITHUB_TOKEN
+        OAuthToken           = var.GITHUB_TOKEN
       }
     }
   }
@@ -187,6 +187,7 @@ resource "aws_codepipeline_webhook" "webhook" {
 }
 provider "github" {
   organization = "kuromitsu0104"
+  token = var.GITHUB_TOKEN
 }
 resource "github_repository_webhook" "codepipeline" {
   repository = "gadget-app"
