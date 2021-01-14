@@ -1,0 +1,26 @@
+version: 0.2
+
+env:
+  variables:
+    WORKDIR: "app"
+  parameter-store:
+    AWS_DEFAULT_REGION: default-region
+    AWS_ACCOUNT_ID: account-id
+    API_IMAGE: api-image
+    FRONT_IMAGE: front-image
+    DOCKERHUB_USER: dockerhub-user
+    DOCKERHUB_PASS: dockerhub-pass
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+  pre_build:
+    commands:
+      - echo Starting Tests...
+  build:
+    commands:
+  post_build:
+    commands:
+artifacts:
+  files:
+    - test_imagedefinitions.json
