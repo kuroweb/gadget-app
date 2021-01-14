@@ -21,8 +21,6 @@
     "cookieparser": "^0.1.0",
     "core-js": "^2.6.12",
     "cross-env": "^7.0.2",
-    "express": "^4.17.1",
-    "express-session": "^1.17.1",
     "firebase": "^7.24.0",
     "firebase-admin": "^9.2.0",
     "firebaseui": "^4.7.0",
@@ -37,6 +35,5 @@
     "@nuxtjs/moment": "^1.6.1"
   },
   "devDependencies": {
-    "@nuxtjs/moment": "^1.6.1"
   }
 }
