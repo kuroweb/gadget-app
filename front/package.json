@@ -4,12 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
+    "test": "jest",
     "build": "nuxt build",
-    "build:stg": "cross-env NODE_ENV=\"staging\" nuxt build",
-    "build:prod": "cross-env NODE_ENV=\"production\" nuxt build",
     "start": "nuxt build && nuxt start",
-    "start:stg": "cross-env NODE_ENV=\"staging\" nuxt start",
-    "start:prod": "cross-env NODE_ENV=\"production\" nuxt start",
     "generate": "nuxt generate"
   },
   "dependencies": {
@@ -35,6 +32,8 @@
     "vue-infinite-loading": "^2.4.5"
   },
   "devDependencies": {
-    "jest": "^26.6.3"
+    "@vue/test-utils": "^1.1.2",
+    "jest": "^26.6.3",
+    "lodash.clonedeep": "^4.5.0"
   }
 }
