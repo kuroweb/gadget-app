@@ -23,11 +23,15 @@ env:
     BROWSER_BASE_URL: browser-base-url
 
 phases:
+  install:
+    runtime-versions:
+      docker: 19
   pre_build:
     commands:
       - echo Starting Tests...
       - docker-compose build
   build:
     commands:
+      - docker-compose run front yarn test
   post_build:
     commands:
