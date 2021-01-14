@@ -17,6 +17,7 @@ phases:
   pre_build:
     commands:
       - echo Starting Tests...
+      - docker-compose build
   build:
     commands:
   post_build:
