@@ -20,7 +20,7 @@ env:
     STORAGE_BUCKET: storage-bucket
     MESSAGE_SENDER_ID: message-sender-id
     API_BASE_URL: api-base-url
-    BROWSER_BASE_URL: browse-base-url
+    BROWSER_BASE_URL: browser-base-url
 
 phases:
   install:
