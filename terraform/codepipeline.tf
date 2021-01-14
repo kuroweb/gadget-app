@@ -103,9 +103,9 @@ resource "aws_codepipeline" "codepipeline" {
       output_artifacts = ["Source"]
 
       configuration = {
-        Owner                = "kuromitsu0104"
-        Repo                 = "gadget-app"
-        Branch               = "master"
+        Owner                = var.GITHUB_USER
+        Repo                 = var.GITHUB_REPO
+        Branch               = var.GITHUB_BRANCH
         PollForSourceChanges = false
         OAuthToken           = var.GITHUB_TOKEN
       }
