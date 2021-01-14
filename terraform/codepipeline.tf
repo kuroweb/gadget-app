@@ -57,6 +57,27 @@ resource "aws_codebuild_project" "codebuild" {
     privileged_mode = true
   }
 }
+#__________ CodeTest ___________#
+resource "aws_codebuild_project" "codetest" {
+  name         = "codetest"
+  service_role = module.codebuild_role.iam_role_arn
+
+  source {
+    type = "CODEPIPELINE"
+    buildspec = "testspec.yml"
+  }
+
+  artifacts {
+    type = "CODEPIPELINE"
+  }
+
+  environment {
+    type            = "LINUX_CONTAINER"
+    compute_type    = "BUILD_GENERAL1_SMALL"
+    image           = "aws/codebuild/standard:2.0"
+    privileged_mode = true
+  }
+}
 
 #__________ CorePipeline __________#
 data "aws_iam_policy_document" "codepipeline" {
@@ -126,6 +147,23 @@ resource "aws_codepipeline" "codepipeline" {
 
       configuration = {
         ProjectName = aws_codebuild_project.codebuild.id
+      }
+    }
+  }
+  stage {
+    name = "Test"
+
+    action {
+      name             = "Test"
+      category         = "Test"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = 1
+      input_artifacts  = ["Source"]
+      output_artifacts = ["Test"]
+
+      configuration = {
+        ProjectName = aws_codebuild_project.codetest.id
       }
     }
   }
