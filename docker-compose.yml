@@ -16,7 +16,7 @@ services:
       args:
         WORKDIR:               $WORKDIR
         HOST:                  $HOST
-        PORT:                  $API_PORT
+        API_PORT:              $API_PORT
         AWS_ACCESS_KEY_ID:     $AWS_ACCESS_KEY_ID
         AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
         DB_HOST:               $DB_HOST
@@ -42,7 +42,7 @@ services:
       args:
         WORKDIR:           $WORKDIR
         HOST:              $HOST
-        PORT:              $FRONT_PORT
+        FRONT_PORT:        $FRONT_PORT
         API_KEY:           $API_KEY
         AUTH_DOMAIN:       $AUTH_DOMAIN
         PROJECT_ID:        $PROJECT_ID

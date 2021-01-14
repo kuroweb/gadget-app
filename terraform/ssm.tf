@@ -1,38 +1,11 @@
 ####################
 # SSMパラメータストア #
 ####################
-variable "AWS_ACCESS_KEY_ID" {}
-variable "AWS_SECRET_ACCESS_KEY" {}
-variable "DB_HOST" {}
-variable "DB_NAME" {}
-variable "DB_USERNAME" {}
-variable "DB_PASSWORD" {}
-variable "S3_REGION" {}
-variable "S3_BUCKET" {}
-variable "API_BASE_URL" {}
-variable "BROWSER_BASE_URL" {}
-variable "API_KEY" {}
-variable "AUTH_DOMAIN" {}
-variable "DATABASE_URL" {}
-variable "PROJECT_ID" {}
-variable "STORAGE_BUCKET" {}
-variable "MESSAGE_SENDER_ID" {}
-variable "GITHUB_TOKEN" {}
-variable "GITHUB_USER" {}
-variable "GITHUB_REPO" {}
-variable "GITHUB_BRANCH" {}
-variable "WEBHOOK_TOKEN" {}
-variable "AWS_DEFAULT_REGION" {}
-variable "AWS_ACCOUNT_ID" {}
-variable "API_IMAGE" {}
-variable "API_IMAGE_TAG" {}
-variable "FRONT_IMAGE" {}
-variable "FRONT_IMAGE_TAG" {}
-variable "DOCKERHUB_USER" {}
-variable "DOCKERHUB_PASS" {}
-variable "RAILS_MASTER_KEY" {}
 
 #__________ 共通 __________#
+variable "AWS_ACCESS_KEY_ID" {}
+variable "AWS_SECRET_ACCESS_KEY" {}
+
 resource "aws_ssm_parameter" "access-key-id" {
   name = "access-key-id"
   value = var.AWS_ACCESS_KEY_ID
@@ -47,6 +20,21 @@ resource "aws_ssm_parameter" "secret-access-key" {
 }
 
 #__________ API __________#
+variable "API_PORT" {}
+variable "DB_HOST" {}
+variable "DB_NAME" {}
+variable "DB_USERNAME" {}
+variable "DB_PASSWORD" {}
+variable "S3_REGION" {}
+variable "S3_BUCKET" {}
+variable "RAILS_MASTER_KEY" {}
+
+resource "aws_ssm_parameter" "api-port" {
+  name = "api-port"
+  value = var.API_PORT
+  type = "SecureString"
+  description = "API_PORT"
+}
 resource "aws_ssm_parameter" "db-host" {
   name = "db-host"
   value = var.DB_HOST
@@ -91,6 +79,36 @@ resource "aws_ssm_parameter" "rails-master-key" {
 }
 
 #__________ FRONT __________#
+variable "WORKDIR" {}
+variable "HOST" {}
+variable "FRONT_PORT" {}
+variable "API_BASE_URL" {}
+variable "BROWSER_BASE_URL" {}
+variable "API_KEY" {}
+variable "AUTH_DOMAIN" {}
+variable "DATABASE_URL" {}
+variable "PROJECT_ID" {}
+variable "STORAGE_BUCKET" {}
+variable "MESSAGE_SENDER_ID" {}
+
+resource "aws_ssm_parameter" "workdir" {
+  name = "workdir"
+  value = var.WORKDIR
+  type = "SecureString"
+  description = "WORKDIR"
+}
+resource "aws_ssm_parameter" "host" {
+  name = "host"
+  value = var.HOST
+  type = "SecureString"
+  description = "HOST"
+}
+resource "aws_ssm_parameter" "front-port" {
+  name = "front-port"
+  value = var.FRONT_PORT
+  type = "SecureString"
+  description = "FRONT_PORT"
+}
 resource "aws_ssm_parameter" "api-base-url" {
   name = "api-base-url"
   value = var.API_BASE_URL
@@ -141,6 +159,20 @@ resource "aws_ssm_parameter" "message-sender-id" {
 }
 
 #__________ CodePipeline _________#
+variable "GITHUB_TOKEN" {}
+variable "GITHUB_USER" {}
+variable "GITHUB_REPO" {}
+variable "GITHUB_BRANCH" {}
+variable "WEBHOOK_TOKEN" {}
+variable "AWS_DEFAULT_REGION" {}
+variable "AWS_ACCOUNT_ID" {}
+variable "API_IMAGE" {}
+variable "API_IMAGE_TAG" {}
+variable "FRONT_IMAGE" {}
+variable "FRONT_IMAGE_TAG" {}
+variable "DOCKERHUB_USER" {}
+variable "DOCKERHUB_PASS" {}
+
 resource "aws_ssm_parameter" "default-region" {
   name = "default-region"
   value = var.AWS_DEFAULT_REGION
