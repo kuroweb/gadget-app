@@ -47,13 +47,13 @@
                       v-model="name"
                       label="名前"
                       icon="mdi-account-edit"
-                      rules="max:30|required"
+                      rules="max:20|required"
                     />
                     <EditTextArea
                       v-model="profile"
                       label="プロフィール"
                       icon="mdi-account-details"
-                      rules="max:300"
+                      rules="max:255"
                     />
                     <v-row justify="center">
                       <v-btn
