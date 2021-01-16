@@ -61,4 +61,19 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+  
+  #############################################
+  # rspec内でのFactory_bocメソッドのクラス名を省略 #
+  #############################################
+  config.include FactoryBot::Syntax::Methods
+end
+
+##############################
+# ShouldaMatcherをセットアップ #
+##############################
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
 end

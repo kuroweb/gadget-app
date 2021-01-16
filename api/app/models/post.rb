@@ -1,5 +1,9 @@
 class Post < ApplicationRecord
   include Rails.application.routes.url_helpers
+
+  ###################
+  #  アソシエーション  #
+  ###################
   has_many_attached :images
   belongs_to :user
   has_many :tag_maps, dependent: :destroy
@@ -8,6 +12,14 @@ class Post < ApplicationRecord
   has_many :liked_users, through: :likes, source: :user
   has_many :comments, dependent: :destroy
 
+  ################
+  # バリデーション #
+  ################
+  validates :description, presence: true, length: { maximum: 255 }
+
+  ################
+  #   メソッド    #
+  ################
   def images_url
     if images.attached?
       i = 0
