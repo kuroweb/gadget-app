@@ -1,12 +1,12 @@
 class User < ApplicationRecord
   include Rails.application.routes.url_helpers
+
+  ##############
+  # リレーション #
+  ##############
   has_one_attached :avatar
-  has_many :active_relationships, class_name: 'Relationship',
-    foreign_key: "follower_id",
-    dependent: :destroy
-  has_many :passive_relationships, class_name: 'Relationship',
-    foreign_key: "followed_id",
-    dependent: :destroy
+  has_many :active_relationships, class_name: 'Relationship', foreign_key: "follower_id", dependent: :destroy
+  has_many :passive_relationships, class_name: 'Relationship', foreign_key: "followed_id", dependent: :destroy
   has_many :following, through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
   has_many :posts, dependent: :destroy
@@ -18,11 +18,20 @@ class User < ApplicationRecord
   has_many :user_tag_maps, dependent: :destroy
   has_many :tags, through: :user_tag_maps
 
+  ################
+  # バリデーション #
+  ################
+  validates :name, presence: true, length: { maximum: 20 }
+  validates :email, presence: true, length: { maximum: 255 }, uniqueness: true
+  validates :profile, length: { maximum: 255 }
+
+  #############
+  #  メソッド  #
+  #############
   def avatar_url
     avatar.attached? ? url_for(avatar) : nil
   end
   
-  # フォロー機能
   def follow(other_user)
     following << other_user
   end
