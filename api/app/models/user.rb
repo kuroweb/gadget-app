@@ -21,6 +21,7 @@ class User < ApplicationRecord
   ################
   # バリデーション #
   ################
+  validates :uid, presence: true
   validates :name, presence: true, length: { maximum: 20 }
   validates :email, presence: true, length: { maximum: 255 }, uniqueness: true
   validates :profile, length: { maximum: 255 }
