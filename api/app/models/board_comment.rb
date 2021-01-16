@@ -1,9 +1,21 @@
 class BoardComment < ApplicationRecord
   include Rails.application.routes.url_helpers
+
+  ###################
+  #  アソシエーション  #
+  ###################
   has_many_attached :images
   belongs_to :board
   belongs_to :user
 
+  ################
+  # バリデーション #
+  ################
+  validates :description, presence: true, length: { maximum: 255 }
+
+  ################
+  #   メソッド    #
+  ################
   def images_url
     if images.attached?
       i = 0

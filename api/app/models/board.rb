@@ -1,11 +1,25 @@
 class Board < ApplicationRecord
   include Rails.application.routes.url_helpers
+
+  ###################
+  #  アソシエーション  #
+  ###################
   has_many_attached :images
   belongs_to :user
   has_many :board_comments, dependent: :destroy
   has_many :board_tag_maps, dependent: :destroy
   has_many :tags, through: :board_tag_maps
 
+  ################
+  # バリデーション #
+  ################
+  validates :description, presence: true, length: { maximum: 255 }
+  validates :title, presence: true, length: { maximum: 100 }
+  validates :board_type, presence: true
+
+  ################
+  #   メソッド    #
+  ################
   def images_url
     if images.attached?
       i = 0

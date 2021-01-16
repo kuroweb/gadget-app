@@ -31,6 +31,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'spring-commands-rspec'
   gem 'pry-rails'
+  gem 'shoulda-matchers'
 end
 
 group :development do
