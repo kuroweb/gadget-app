@@ -41,6 +41,9 @@ RUN apk update && \
     apk del build-dependencies
 RUN apk add --update --no-cache less
 
+RUN apk update
+RUN apk add vim
+
 COPY . .
 
 EXPOSE ${PORT}

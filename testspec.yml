@@ -30,6 +30,9 @@ phases:
       - docker-compose build
   build:
     commands:
+      - echo Starting Front Container Tests...
       - docker-compose run front yarn test
+      - echo Starting API Container Tests...
+      - docker-compose run api rspec
   post_build:
     commands:
