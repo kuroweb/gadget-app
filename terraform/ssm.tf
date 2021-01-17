@@ -25,6 +25,10 @@ variable "DB_HOST" {}
 variable "DB_NAME" {}
 variable "DB_USERNAME" {}
 variable "DB_PASSWORD" {}
+variable "TEST_DB_HOST" {}
+variable "TEST_DB_NAME" {}
+variable "TEST_DB_USERNAME" {}
+variable "TEST_DB_PASSWORD" {}
 variable "S3_REGION" {}
 variable "S3_BUCKET" {}
 variable "RAILS_MASTER_KEY" {}
@@ -34,6 +38,30 @@ resource "aws_ssm_parameter" "api-port" {
   value = var.API_PORT
   type = "SecureString"
   description = "API_PORT"
+}
+resource "aws_ssm_parameter" "test-db-host" {
+  name = "test-db-host"
+  value = var.TEST_DB_HOST
+  type = "SecureString"
+  description = "TEST_DB_HOST"
+}
+resource "aws_ssm_parameter" "test-db-name" {
+  name = "test-db-name"
+  value = var.TEST_DB_NAME
+  type = "SecureString"
+  description = "TEST_DB_NAME"
+}
+resource "aws_ssm_parameter" "test-db-username" {
+  name = "test-db-username"
+  value = var.TEST_DB_USERNAME
+  type = "SecureString"
+  description = "TEST_DB_USERNAME"
+}
+resource "aws_ssm_parameter" "test-db-password" {
+  name = "test-db-password"
+  value = var.TEST_DB_PASSWORD
+  type = "SecureString"
+  description = "TEST_DB_PASSWORD"
 }
 resource "aws_ssm_parameter" "db-host" {
   name = "db-host"

@@ -5,10 +5,10 @@ env:
     WORKDIR: workdir
     HOST: host
     API_PORT: api-port
-    DB_HOST: db-host
-    DB_NAME: db-name
-    DB_USERNAME: db-username
-    DB_PASSWORD: db-password
+    DB_HOST: test-db-host
+    DB_NAME: test-db-name
+    DB_USERNAME: test-db-username
+    DB_PASSWORD: test-db-password
     S3_REGION: s3-region
     S3_BUCKET: s3-bucket
     RAILS_MASTER_KEY: rails-master-key
@@ -33,6 +33,8 @@ phases:
       - echo Starting Front Container Tests...
       - docker-compose run front yarn test
       - echo Starting API Container Tests...
+      - docker-compose run api rails db:create
+      - docker-compose run api rails db:migrate
       - docker-compose run api rspec
   post_build:
     commands:
