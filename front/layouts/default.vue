@@ -10,7 +10,7 @@
         <nuxt />
       </v-container>
     </v-main>
-    <Footer />
+    <!-- <Footer /> -->
   </v-app>
 </template>
 <script>
