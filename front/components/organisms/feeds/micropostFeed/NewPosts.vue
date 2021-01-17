@@ -5,8 +5,8 @@
       @createPost="createPost"
       @closeDialog="createPostDialog = false"
     />
-    <v-row v-if="loading">
-      <v-col cols="12">
+    <v-row>
+      <v-col cols="12" v-if="loading">
         <v-skeleton-loader
           class="mx-auto"
           type="card"
@@ -14,33 +14,35 @@
           :key="n.id"
         />
       </v-col>
-    </v-row>
-    <v-row v-if="loading === false">
-      <v-col cols="12">
-        <v-btn
-          block
-          color="orange"
-          dark
-          rounded
-          @click="openCreatePostDialog"
-        >
-          新しい投稿を追加する
-        </v-btn>
-      </v-col>
-      <v-col cols="12">
-        <MicroPostCard
-          v-for="(post, index) in posts"
-          :key="index"
-          :post="post"
-        />
-        <VueInfiniteLoading
-          ref="infiniteLoading"
-          spinner="spiral"
-          @infinite="infiniteHandler"
-        >
-          <span slot="no-more">-----投稿は以上です-----</span>
-          <span slot="no-results"></span>
-        </VueInfiniteLoading>
+      <v-col cols="12" v-if="loading === false">
+        <v-row>
+          <v-col cols="12">
+            <v-btn
+              block
+              color="orange"
+              dark
+              rounded
+              @click="openCreatePostDialog"
+            >
+              新しい投稿を追加する
+            </v-btn>
+          </v-col>
+          <v-col cols="12">
+            <MicroPostCard
+              v-for="(post, index) in posts"
+              :key="index"
+              :post="post"
+            />
+            <VueInfiniteLoading
+              ref="infiniteLoading"
+              spinner="spiral"
+              @infinite="infiniteHandler"
+            >
+              <span slot="no-more">-----投稿は以上です-----</span>
+              <span slot="no-results"></span>
+            </VueInfiniteLoading>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
