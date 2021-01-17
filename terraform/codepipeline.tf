@@ -133,23 +133,23 @@ resource "aws_codepipeline" "codepipeline" {
     }
   }
 
-  stage {
-    name = "Test"
+  # stage {
+  #   name = "Test"
 
-    action {
-      name             = "Test"
-      category         = "Test"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      version          = 1
-      input_artifacts  = ["Source"]
-      output_artifacts = ["Test"]
+  #   action {
+  #     name             = "Test"
+  #     category         = "Test"
+  #     owner            = "AWS"
+  #     provider         = "CodeBuild"
+  #     version          = 1
+  #     input_artifacts  = ["Source"]
+  #     output_artifacts = ["Test"]
 
-      configuration = {
-        ProjectName = aws_codebuild_project.codetest.id
-      }
-    }
-  }
+  #     configuration = {
+  #       ProjectName = aws_codebuild_project.codetest.id
+  #     }
+  #   }
+  # }
 
   stage {
     name = "Build"
