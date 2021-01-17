@@ -12,9 +12,4 @@ class TagMap < ApplicationRecord
   validates :post_id, presence: true
   validates :tag_id, presence: true
 
-  ################
-  #   メソッド    #
-  ################
-
-
 end
