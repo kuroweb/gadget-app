@@ -11,9 +11,4 @@ class Like < ApplicationRecord
   ################
   validates_uniqueness_of :post_id, scope: :user_id
 
-  ################
-  #   メソッド    #
-  ################
-  
-
 end
