@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col lg="3" sm="8" cols="12">
+      <v-col xl="2" lg="3" sm="8" cols="12">
         <SideMenu
           @openMicropostFeed="openMicropostFeed"
           @openBoardList="openBoardList"
@@ -9,7 +9,7 @@
         />
       </v-col>
       <!-- メニュークリックに併せて表示内容を切り替え -->
-      <v-col lg="6" sm="8" cols="12">
+      <v-col xl="4" lg="6" sm="8" cols="12">
         <MicropostFeed
           :render="micropostFeed"
         />
@@ -20,7 +20,7 @@
           :render="gadgetList"
         />
       </v-col>
-      <v-col lg="3" sm="8" cols="12">
+      <v-col xl="2" lg="3" sm="8" cols="12">
         <v-card>
           <v-list>
             <v-subheader>ランキング</v-subheader>

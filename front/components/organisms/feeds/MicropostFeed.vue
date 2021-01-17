@@ -31,17 +31,17 @@
         タグフィード
         <v-icon>mdi-tag</v-icon>
       </v-tab>
-      <v-tab-item>
+      <v-tab-item class="pa-1">
         <NewPosts
           :load="loadNewPosts"
         />
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item class="pa-1">
         <FollowingUsers
           :load="loadFollowingUsers"
         />
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item class="pa-1">
         <FollowingTags
           :load="loadFollowingTags"
         />

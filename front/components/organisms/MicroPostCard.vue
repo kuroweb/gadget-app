@@ -35,7 +35,7 @@
       @closeDialog="deletePostDialog = false"
     />
     <v-card-title>
-      <v-container dense>
+      <v-container>
         <v-row>
           <v-col cols="4">
             <v-avatar 
