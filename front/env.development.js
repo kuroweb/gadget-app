@@ -1,6 +1,9 @@
 module.exports = {
+  // Axios //
   API_BASE_URL: process.env.API_BASE_URL,
   BROWSER_BASE_URL: process.env.BROWSER_BASE_URL,
+
+  // FirebaseAuth //
   API_KEY: process.env.API_KEY,
   AUTH_DOMAIN: process.env.AUTH_DOMAIN,
   DATABASE_URL: process.env.DATABASE_URL,

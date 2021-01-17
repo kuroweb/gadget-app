@@ -34,47 +34,79 @@
       @deletePost="deletePost"
       @closeDialog="deletePostDialog = false"
     />
-    <v-row justify="center">
-      <v-col>
-        <v-avatar 
-        size="84"
-        >
-          <img 
-            v-if="post.user.avatar_url"
-            :src="post.user.avatar_url"
-            alt="Avatar"
-          >
-          <img
-            v-else
-            src="~/assets/images/default_icon.jpeg"
-            alt="Avatar"
-          >
-        </v-avatar>
-      </v-col>
-      <v-col
-        align-self="center"
-      >
-        <h3>{{ post.user.name }}</h3>
-      </v-col>
-    </v-row>
-    <v-card
-      flat
-      :to="`/posts/${post.id}`"
-    >
-      <span>{{ post.description }}</span>
-    </v-card>
-    <Images
-      :images="post.images_url"
-    />
-    <Tags
-      :tags="post.tags"
-    />
-    <v-row>
-      <v-col cols="8" align-self="center">
-        <span>{{ $moment(post.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
-      </v-col>
-      <v-col cols="4">
+    <v-card-title>
+      <v-container dense>
+        <v-row>
+          <v-col cols="4">
+            <v-avatar 
+            size="64"
+            >
+              <img 
+                v-if="post.user.avatar_url"
+                :src="post.user.avatar_url"
+                alt="Avatar"
+              >
+              <img
+                v-else
+                src="~/assets/images/default_icon.jpeg"
+                alt="Avatar"
+              >
+            </v-avatar>
+          </v-col>
+          <v-col cols="8">
+            <h3>{{ post.user.name }}</h3>
+            <h6>{{ $moment(post.created_at).format('YYYY年MM月DD日 HH時mm分') }}</h6>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <Tags
+              :tags="post.tags"
+            />
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card-title>
+    <v-card-text>
+      <v-container>
+        <v-row>
+          <v-col>
+            <v-card
+              flat
+              :to="`/posts/${post.id}`"
+            >
+              <span>{{ post.description }}</span>
+            </v-card>
+          </v-col>
+        </v-row>
+        <Images
+          :images="post.images_url"
+        />
         <v-row justify="end" class="pr-3">
+          <div
+            v-if="$store.state.modules.user.data && post.user.id === $store.state.modules.user.data.id"
+          >
+            <v-btn
+              icon
+              text
+              color="grey darken-2"
+              @click="openEditPostDialog"
+            >
+              <v-icon>
+                mdi-pencil-box-multiple
+              </v-icon>
+            </v-btn>
+            <v-btn
+              icon
+              text
+              color="grey darken-2"
+              @click="openDeletePostDialog"
+            >
+              <v-icon>
+                mdi-delete
+              </v-icon>
+            </v-btn>
+          </div>
           <v-btn
             v-if="commentFeed === true"
             icon
@@ -96,7 +128,7 @@
               mdi-comment-outline
             </v-icon>
           </v-btn>
-          <span>{{ post.commentCounts }}</span>
+          <p>{{ post.commentCounts }}</p>
           <v-btn
             v-if="post.isLikedPost === true"
             icon
@@ -119,124 +151,70 @@
               mdi-heart-outline
             </v-icon>
           </v-btn>
-          <span>{{ post.likedUsersCounts }}</span>
+          <p>{{ post.likedUsersCounts }}</p>
         </v-row>
-      </v-col>
-    </v-row>
-    <!-- 管理者メニュー -->
-    <v-sheet
-      color="grey lighten-2"
-      rounded
-      v-if="$store.state.modules.user.data && post.user.id === $store.state.modules.user.data.id"
-    >
-      <v-row dense>
-        <v-col cols="6" align-self="center">
-          <span class="ml-3">管理メニュー</span>
-        </v-col>
-        <v-col cols="6">
-          <v-row justify="end">
-            <v-btn
-              icon
-              text
-              color="grey darken-2"
-              @click="openEditPostDialog"
-            >
-              <v-icon>
-                mdi-pencil-box-multiple
-              </v-icon>
-            </v-btn>
-            <v-btn
-              icon
-              text
-              color="grey darken-2"
-              @click="openDeletePostDialog"
-              class="mr-3"
-            >
-              <v-icon>
-                mdi-delete
-              </v-icon>
-            </v-btn>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-sheet>
-    <div
+      </v-container>
+    </v-card-text>
+    <v-container
       v-if="commentFeed"
     >
-      <v-row
-        class="pa-3"
-      >
-        <v-btn
-          block
-          color="orange"
-          dark
-          rounded
-          @click="openCreateCommentDialog"
-        >
-          コメントする
-        </v-btn>
-      </v-row>
-      <div
-        v-for="comment in post.comments"
-        :key="comment.id"
-      >
-        <v-card
-          class="mx-auto pa-3"
-        >
-          <v-row>
-            <v-col>
-              <v-avatar 
-                size="64"
-              >
-                <img 
-                  v-if="comment.user.avatar_url"
-                  :src="comment.user.avatar_url"
-                  alt="Avatar"
-                >
-                <img
-                  v-else
-                  src="~/assets/images/default_icon.jpeg"
-                  alt="Avatar"
-                >
-              </v-avatar>
-            </v-col>
-            <v-col align-self="center">
-              <h3>{{ comment.user.name }}</h3>
-            </v-col>
-          </v-row>
-          <span>{{ comment.description }}</span>
-          <Images
-            :images="comment.images_url"
-          />
-          <v-row class="pr-3">
-            <v-col cols="9" align-self="center">
-              <span>{{ $moment(comment.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
-            </v-col>
-            <v-col cols="3">
-              <v-row justify="end">
-                <v-btn
-                  rounded
-                  color="success"
-                  class="cyan darken-1"
-                  @click="openCreateReplyDialog(comment)"
-                >
-                  返信
-                </v-btn>
-              </v-row>
-            </v-col>
-          </v-row>
-          <!-- 管理者メニュー -->
-          <v-sheet
-            color="grey lighten-2"
+      <v-row>
+        <v-col>
+          <v-btn
+            block
+            color="orange"
+            dark
             rounded
-            v-if="$store.state.modules.user.data && comment.user.id === $store.state.modules.user.data.id"
+            @click="openCreateCommentDialog"
           >
-            <v-row dense>
-              <v-col cols="6" align-self="center">
-                <span class="ml-3">管理メニュー</span>
-              </v-col>
-              <v-col cols="6">
-                <v-row justify="end">
+            コメントする
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col
+         
+          v-for="comment in post.comments"
+          :key="comment.id"
+        >
+          <v-card
+            class="mx-auto pa-3"
+          >
+            <v-container>
+              <v-row>
+                <v-col>
+                  <v-avatar 
+                    size="64"
+                  >
+                    <img 
+                      v-if="comment.user.avatar_url"
+                      :src="comment.user.avatar_url"
+                      alt="Avatar"
+                    >
+                    <img
+                      v-else
+                      src="~/assets/images/default_icon.jpeg"
+                      alt="Avatar"
+                    >
+                  </v-avatar>
+                </v-col>
+                <v-col align-self="center">
+                  <h3>{{ comment.user.name }}</h3>
+                  <h6>{{ $moment(comment.created_at).format('YYYY年MM月DD日 HH時mm分') }}</h6>
+                </v-col>
+              </v-row>
+              <Images
+                :images="comment.images_url"
+              />
+              <v-row>
+                <v-col>
+                  <span>{{ comment.description }}</span>
+                </v-col>
+              </v-row>
+              <v-row justify="end">
+                <div
+                  v-if="$store.state.modules.user.data && comment.user.id === $store.state.modules.user.data.id"
+                >
                   <v-btn
                     icon
                     text
@@ -248,92 +226,93 @@
                       mdi-delete
                     </v-icon>
                   </v-btn>
-                </v-row>
-              </v-col>
-            </v-row>
-          </v-sheet>
-        </v-card>
-        <v-timeline
-          v-if="'childComments' in comment"
-          align-top
-        >
-          <v-timeline-item
-            v-for="child in comment.childComments"
-            :key="child.id"
-            small
-            color="grey"
-            right
-            hide-dot
-          >
-            <v-card
-              color="grey"
-            >
-              <v-card-title class="title white--text">
-                <v-icon dark>mdi-reply</v-icon>
-                返信コメント
-              </v-card-title>
-              <v-card-text class="white text--primary">
-                <v-row>
-                  <v-col>
-                    <v-avatar 
-                      size="48"
-                    >
-                      <img 
-                        v-if="child.user.avatar_url"
-                        :src="child.user.avatar_url"
-                        alt="Avatar"
-                      >
-                      <img
-                        v-else
-                        src="~/assets/images/default_icon.jpeg"
-                        alt="Avatar"
-                      >
-                    </v-avatar>
-                  </v-col>
-                  <v-col align-self="center">
-                    <h3>{{ child.user.name }}</h3>
-                  </v-col>
-                </v-row>
-                <span>{{ child.description }}</span>
-                <Images
-                  :images="child.images_url"
-                />
-                <v-row dense justify="start">
-                  <span>{{ $moment(child.created_at).format('YYYY年MM月DD日 HH時mm分') }}</span>
-                </v-row>
-                <!-- 管理者メニュー -->
-                <v-sheet
-                  color="grey lighten-2"
+                </div>
+                <v-btn
                   rounded
-                  v-if="$store.state.modules.user.data && child.user.id === $store.state.modules.user.data.id"
+                  color="success"
+                  class="cyan darken-1"
+                  @click="openCreateReplyDialog(comment)"
                 >
-                  <v-row dense>
-                    <v-col cols="6" align-self="center">
-                      <span class="ml-3">管理メニュー</span>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-row justify="end">
-                        <v-btn
-                          icon
-                          text
-                          color="grey darken-2"
-                          @click="openDeleteCommentDialog(child)"
-                          class="mr-3"
+                  返信
+                </v-btn>
+              </v-row>
+            </v-container>
+          </v-card>
+          <v-timeline
+            v-if="'childComments' in comment"
+            align-top
+          >
+            <v-timeline-item
+              v-for="child in comment.childComments"
+              :key="child.id"
+              small
+              color="grey"
+              right
+              hide-dot
+            >
+              <v-card
+                color="grey"
+              >
+                <v-card-title class="title white--text">
+                  <v-icon dark>mdi-reply</v-icon>
+                  返信コメント
+                </v-card-title>
+                <v-card-text class="white text--primary">
+                  <v-container>
+                    <v-row>
+                      <v-col>
+                        <v-avatar 
+                          size="48"
                         >
-                          <v-icon>
-                            mdi-delete
-                          </v-icon>
-                        </v-btn>
-                      </v-row>
-                    </v-col>
-                  </v-row>
-                </v-sheet>
-              </v-card-text>
-            </v-card>
-          </v-timeline-item>
-        </v-timeline>
-      </div>
-    </div>
+                          <img 
+                            v-if="child.user.avatar_url"
+                            :src="child.user.avatar_url"
+                            alt="Avatar"
+                          >
+                          <img
+                            v-else
+                            src="~/assets/images/default_icon.jpeg"
+                            alt="Avatar"
+                          >
+                        </v-avatar>
+                      </v-col>
+                      <v-col align-self="center">
+                        <h3>{{ child.user.name }}</h3>
+                        <h6>{{ $moment(child.created_at).format('YYYY年MM月DD日 HH時mm分') }}</h6>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <span>{{ child.description }}</span>
+                      </v-col>
+                    </v-row>
+                    <Images
+                      :images="child.images_url"
+                    />
+                    <v-row
+                      v-if="$store.state.modules.user.data && child.user.id === $store.state.modules.user.data.id"
+                      justify="end"
+                    >
+                      <v-btn
+                        icon
+                        text
+                        color="grey darken-2"
+                        @click="openDeleteCommentDialog(child)"
+                        class="mr-3"
+                      >
+                        <v-icon>
+                          mdi-delete
+                        </v-icon>
+                      </v-btn>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
+              </v-card>
+            </v-timeline-item>
+          </v-timeline>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-card>
 </template>
 
