@@ -1,7 +1,8 @@
 <template>
   <v-card
-    class="mx-auto ma-5"
+    class="mx-auto"
     :to="`/boards/${board.id}`"
+    flat
   >
     <v-card-title>
       <v-container>
@@ -52,6 +53,7 @@
         </v-row>
       </v-container>
     </v-card-text>
+    <v-divider></v-divider>
   </v-card>
 </template>
 
