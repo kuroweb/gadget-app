@@ -6,12 +6,12 @@
       message="ユーザーが存在しません。"
     />
     <v-row justify="center">
-      <v-col lg="3" sm="8" cols="12">
+      <v-col xl="2" lg="3" sm="8" cols="12">
         <v-card>
           <p>サイドメニュー</p>
         </v-card>
       </v-col>
-      <v-col lg="6" sm="8" cols="12">
+      <v-col xl="4" lg="6" sm="8" cols="12">
         <v-card>
           <v-toolbar
             color="cyan darken-1"
@@ -94,7 +94,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col lg="3" sm="8" cols="12">
+      <v-col xl="2" lg="3" sm="8" cols="12">
         <v-card>
           <p>サイドメニュー</p>
         </v-card>

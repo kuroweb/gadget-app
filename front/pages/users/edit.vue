@@ -7,156 +7,178 @@
       @loginSuccess="loginSuccess"
       @closeDialog="dialog = false"
     />
-    <v-card class="mx-auto mt-5 pa-5" width="400px">
-      <v-tabs
-        centered
-      >
-      
-        <v-tabs-slider></v-tabs-slider>
-        <v-tab>プロフィール</v-tab>
-        <v-tab>登録情報</v-tab>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <v-form>
-                <ValidationObserver>
-                  <div class="user-avatar-box">
-                    <EditAvatarForm
-                      v-model="avatar"
-                      label="アイコン画像"
-                      icon="mdi-account-edit"
-                      rules="size:1000"
-                      :avatar_url="avatar_url"
-                    />
-                    <v-row justify="center">
-                      <v-btn
-                        block
-                        color="success"
-                        @click="changeUserAvatar"
-                      >
-                        変更
-                      </v-btn>
-                    </v-row>
-                  </div>
-                </ValidationObserver>
-                <ValidationObserver
-                  v-slot="{ invalid }"
-                >
-                  <div class="profile-box">
-                    <EditTextField
-                      v-model="name"
-                      label="名前"
-                      icon="mdi-account-edit"
-                      rules="max:20|required"
-                    />
-                    <EditTextArea
-                      v-model="profile"
-                      label="プロフィール"
-                      icon="mdi-account-details"
-                      rules="max:255"
-                    />
-                    <v-row justify="center">
-                      <v-btn
-                        color="success"
-                        block
-                        class="white--text"
-                        :disabled="invalid"
-                        @click="changeUserProfile"
-                      >
-                        変更
-                      </v-btn>
-                    </v-row>
-                  </div>
-                </ValidationObserver>
-                <p v-if="error" class="errors">{{error}}</p>
-              </v-form>
-              <v-form>
-              </v-form>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <v-form>
-                <ValidationObserver
-                  v-slot="{ invalid }"
-                >
-                  <div class="email-box">
-                    <EditTextField
-                      v-model="email"
-                      label="メールアドレス"
-                      icon="mdi-account-edit"
-                      rules="max:255|required|email"
-                    />
-                    <v-row justify="center">
-                      <v-btn
-                        color="success"
-                        block
-                        class="white--text"
-                        :disabled="invalid"
-                        @click="openDialogForEmail"
-                      >
-                        変更
-                      </v-btn>
-                    </v-row>
-                  </div>
-                </ValidationObserver>
-                <ValidationObserver
-                  v-slot="{ invalid }"
-                >
-                  <div class="password-box">
-                    <h3>パスワードを変更する</h3>
-                    <TextFieldWithValidation
-                      v-model="password"
-                      label="変更後のパスワード"
-                      rules="required|min:6"
-                      :type="show1 ? 'text' : 'password'"
-                      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                      @click:append="show1 = !show1"
-                      vid="password"
-                    />
-                    <TextFieldWithValidation
-                      v-model="passwordConfirm"
-                      label="変更後のパスワード(再入力)"
-                      rules="required|min:6|confirmed:変更後のパスワード"
-                      :type="show2 ? 'text' : 'password'"
-                      :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                      @click:append="show2 = !show2"
-                    />  
-                    <v-row justify="center">
-                      <v-btn
-                        color="success"
-                        block
-                        class="white--text"
-                        :disabled="invalid"
-                        @click="openDialogForPassword"
-                      >
-                        変更
-                      </v-btn>
-                    </v-row>
-                  </div>
-                </ValidationObserver>
-                <p v-if="error" class="errors">{{error}}</p>
-              </v-form>
-              <div class="delete-box">
-                <h3>アカウントを削除する</h3>
-                <form>
-                  <v-row justify="center">
-                    <v-btn
-                      block
-                      color="white--text red"
-                      @click="openDialogForDeleteAccount"
-                    >削除
-                    </v-btn>
+    <v-row justify="center">
+      <v-col xl="4" lg="6" sm="8" cols="12">
+        <v-card class="mx-auto">
+          <v-tabs
+            fixed-tabs
+            centered
+            background-color="cyan darken-1"
+            color="white"
+            slider-color="orange"
+            icons-and-text
+          >
+            <v-tab class="ma-0 pa-0">
+              プロフィール
+              <v-icon>mdi-account</v-icon>
+            </v-tab>
+            <v-tab class="ma-0 pa-0">
+              登録情報
+              <v-icon>mdi-account-cog</v-icon>
+            </v-tab>
+            <v-tab-item>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-form>
+                        <ValidationObserver>
+                          <div class="user-avatar-box">
+                            <EditAvatarForm
+                              v-model="avatar"
+                              label="アイコン画像"
+                              icon="mdi-account-edit"
+                              rules="size:1000"
+                              :avatar_url="avatar_url"
+                            />
+                            <v-row justify="center">
+                              <v-btn
+                                block
+                                color="success"
+                                @click="changeUserAvatar"
+                              >
+                                変更
+                              </v-btn>
+                            </v-row>
+                          </div>
+                        </ValidationObserver>
+                        <ValidationObserver
+                          v-slot="{ invalid }"
+                        >
+                          <div class="profile-box">
+                            <EditTextField
+                              v-model="name"
+                              label="名前"
+                              icon="mdi-account-edit"
+                              rules="max:20|required"
+                            />
+                            <EditTextArea
+                              v-model="profile"
+                              label="プロフィール"
+                              icon="mdi-account-details"
+                              rules="max:255"
+                            />
+                            <v-row justify="center">
+                              <v-btn
+                                color="success"
+                                block
+                                class="white--text"
+                                :disabled="invalid"
+                                @click="changeUserProfile"
+                              >
+                                変更
+                              </v-btn>
+                            </v-row>
+                          </div>
+                        </ValidationObserver>
+                        <p v-if="error" class="errors">{{error}}</p>
+                      </v-form>
+                    </v-col>
                   </v-row>
-                </form>
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-      </v-tabs>
-    </v-card>
+                </v-container>
+              </v-card-text>
+            </v-tab-item>
+            <v-tab-item>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-form>
+                        <ValidationObserver
+                          v-slot="{ invalid }"
+                        >
+                          <div class="email-box">
+                            <EditTextField
+                              v-model="email"
+                              label="メールアドレス"
+                              icon="mdi-account-edit"
+                              rules="max:255|required|email"
+                            />
+                            <v-row justify="center">
+                              <v-btn
+                                color="success"
+                                block
+                                class="white--text"
+                                :disabled="invalid"
+                                @click="openDialogForEmail"
+                              >
+                                変更
+                              </v-btn>
+                            </v-row>
+                          </div>
+                        </ValidationObserver>
+                      </v-form>
+                    </v-col>
+                    <v-col cols="12">
+                      <ValidationObserver
+                        v-slot="{ invalid }"
+                      >
+                        <div class="password-box">
+                          <h3>パスワードを変更する</h3>
+                          <TextFieldWithValidation
+                            v-model="password"
+                            label="変更後のパスワード"
+                            rules="required|min:6"
+                            :type="show1 ? 'text' : 'password'"
+                            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                            @click:append="show1 = !show1"
+                            vid="password"
+                          />
+                          <TextFieldWithValidation
+                            v-model="passwordConfirm"
+                            label="変更後のパスワード(再入力)"
+                            rules="required|min:6|confirmed:変更後のパスワード"
+                            :type="show2 ? 'text' : 'password'"
+                            :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                            @click:append="show2 = !show2"
+                          />  
+                          <v-row justify="center">
+                            <v-btn
+                              color="success"
+                              block
+                              class="white--text"
+                              :disabled="invalid"
+                              @click="openDialogForPassword"
+                            >
+                              変更
+                            </v-btn>
+                          </v-row>
+                        </div>
+                      </ValidationObserver>
+                      <p v-if="error" class="errors">{{error}}</p>
+                    </v-col>
+                    <v-col cols="12">
+                      <h3>アカウントを削除する</h3>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-row justify="center">
+                        <v-btn
+                          block
+                          color="white--text red"
+                          @click="openDialogForDeleteAccount"
+                        >削除
+                        </v-btn>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+            </v-tab-item>
+          </v-tabs>
+        </v-card>
+      </v-col>
+    </v-row>
+
   </v-container>
 </template>
   
@@ -200,12 +222,12 @@ export default {
     const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
     const res = await $axios.$get(baseUrl + `/v1/users/${currentUser.id}`)
     return {
-      email: res.user.email,
-      emailOriginal: res.user.email,
-      name: res.user.name,
-      userId: res.user.id,
-      profile: res.user.profile,
-      avatar_url: res.user.avatar_url
+      email: res.email,
+      emailOriginal: res.email,
+      name: res.name,
+      userId: res.id,
+      profile: res.profile,
+      avatar_url: res.avatar_url
     }
   },
 
