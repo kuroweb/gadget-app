@@ -1,47 +1,55 @@
 <template>
   <div>
-    <v-row>
-      <v-col cols=3
-        align-self="center"
-        v-for="n in maxImageNum"
-        :key="n.id"
-      >
-        <v-row justify="center">
-          <v-avatar
-            justify="center"
-            v-if="$data['image' + n].length != 0"
-            size="62"
-          >
-            <img
-              v-if="$data['image' + n + 'Url']"
-              :src="$data['image' + n + 'Url']"
-            />
-          </v-avatar>
-        </v-row>
-        <v-row justify="center">
-          <v-btn
-            v-if="$data['image' + n].length != 0"
-            color="red"
-            class="white--text"
-            @click="removeImage(n)"
-          >
-            削除
-          </v-btn>
-        </v-row>
-        <div class="input-box">
-          <v-file-input
-            v-if="$data['image' + n].length == 0"
-            accept="image/*"
-            v-model="$data['image' + n]"
-            @change="addImage(n)"
-            prepend-icon="mdi-camera"
-            hide-input
-          />
-        </div>
-      </v-col>
-      <p v-if="imageError">{{ imageError }}</p>
-    </v-row>
+    <v-container>
+      <v-row>
+        <v-col cols=3
+          align-self="center"
+          v-for="n in maxImageNum"
+          :key="n.id"
+        >
+          <v-row>
+            <v-col cols="12" v-if="$data['image' + n].length != 0">
+              <v-row justify="center">
+                <v-avatar
+                  justify="center"
+                  size="62"
+                >
+                  <img
+                    v-if="$data['image' + n + 'Url']"
+                    :src="$data['image' + n + 'Url']"
+                  />
+                </v-avatar>
+              </v-row>
+            </v-col>
+            <v-col cols="12" v-if="$data['image' + n].length != 0">
+              <v-row justify="center">
+                <v-btn
+                  color="red"
+                  class="white--text"
+                  @click="removeImage(n)"
+                >
+                  削除
+                </v-btn>
+              </v-row>
+            </v-col>
+            <v-col cols="12" v-if="$data['image' + n].length == 0">
+              <div class="input-box">
+                <v-file-input
+                  accept="image/*"
+                  v-model="$data['image' + n]"
+                  @change="addImage(n)"
+                  prepend-icon="mdi-camera"
+                  hide-input
+                />
+              </div>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
+    <p v-if="imageError" class="red--text">{{ imageError }}</p>
   </div>
+
 </template>
 <script>
 export default {
@@ -67,7 +75,7 @@ export default {
         if (file.size > 1000000) {
           console.log('ファイルサイズが大きすぎます')
           this.$data['image' + n] = []
-          this.imageError = "画像のファイルサイズが1MBを超えています。"
+          this.imageError = "選択した画像のファイルサイズが1MBを超えています。"
         }
         if (file.size <= 1000000) {
           const fr = new FileReader()

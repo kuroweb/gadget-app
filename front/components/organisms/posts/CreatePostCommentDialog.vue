@@ -4,7 +4,7 @@
     max-width="500px"
     persistent
   >
-    <v-card class="mx-auto">
+    <v-card>
       <v-toolbar
         class="cyan darken-1"
         flat
@@ -22,29 +22,39 @@
           mdi-close
         </v-icon>
       </v-toolbar>
-      <v-card-text v-if="dialogStatus">
-        <v-form>
-          <ValidationObserver v-slot="ObserverProps">
-            <ImagesForm
-              @setImages="setImages"
-            />
-            <TextAreaWithValidation
-              v-model="description"
-              label="コメント内容"
-              rules="max:255|required"
-            />
-            <v-row justify="center">
-              <v-btn
-                color="success"
-                class="white--text"
-                @click="createComment"
-                :disabled="ObserverProps.invalid"
-              >送信
-              </v-btn>
-            </v-row>
-          </ValidationObserver>
-        </v-form>
-      </v-card-text>
+      <v-form>
+        <v-card-text v-if="dialogStatus">
+          <v-container>
+            <ValidationObserver v-slot="ObserverProps">
+              <v-row>
+                <v-col cols="12">
+                  <ImagesForm
+                    @setImages="setImages"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <TextAreaWithValidation
+                    v-model="description"
+                    label="コメント内容"
+                    rules="max:255|required"
+                  />
+                </v-col>
+                <v-col col="12">
+                  <v-row justify="center">
+                    <v-btn
+                      color="success"
+                      class="white--text"
+                      @click="createComment"
+                      :disabled="ObserverProps.invalid"
+                    >送信
+                    </v-btn>
+                  </v-row>
+                </v-col>
+              </v-row>
+            </ValidationObserver>
+          </v-container>
+        </v-card-text>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>
