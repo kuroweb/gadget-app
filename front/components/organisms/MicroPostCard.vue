@@ -1,6 +1,7 @@
 <template>
   <v-card
-    class="mx-auto ma-5"
+    class="mx-auto"
+    flat
   >
     <CreatePostCommentDialog
       :dialog="createCommentDialog"
@@ -315,6 +316,7 @@
         </v-row>
       </v-container>
     </v-card>
+    <v-divider></v-divider>
   </v-card>
 </template>
 

@@ -6,7 +6,7 @@
     @click:outside="closePreview"
   >
     <v-card
-      class="mx-auto"
+
       v-if="previewStatus"
     >
       <v-toolbar
@@ -37,7 +37,6 @@
           <v-img
             :src="image"
             contain
-            max-height="500"
           >
           </v-img>
         </v-carousel-item>
