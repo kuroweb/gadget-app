@@ -1,10 +1,10 @@
 <template>
   <v-dialog
     v-model="dialogStatus"
-    max-width="400px"
+    max-width="500px"
     persistent
   >
-    <v-card width="500px" class="mx-auto">
+    <v-card class="mx-auto">
       <v-toolbar
         class="cyan darken-1"
         flat
@@ -12,7 +12,7 @@
         <v-toolbar-title
           class="white--text font-weight-bold"
         >
-          投稿を削除する
+          投稿を削除しますか？
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-icon
@@ -23,16 +23,23 @@
         </v-icon>
       </v-toolbar>
       <v-card-text>
-        <v-row class="mt-5 mb-5" justify="center">
-          <h3>本当に投稿を削除しますか？</h3>
-        </v-row>
-        <v-row justify="center">
-          <v-btn
-            color="white--text red"
-            @click="deletePost"
-          >削除
-          </v-btn>
-        </v-row>
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <h3>この操作は取り消せません。投稿内容・投稿へのコメント・コメントに対する返信コメントが削除されます。</h3>
+            </v-col>
+            <v-col cols="12">
+              <v-row justify="center">
+                <v-btn
+                  color="white--text red"
+                  @click="deletePost"
+                >
+                  削除
+                </v-btn>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-card-text>
     </v-card>
   </v-dialog>

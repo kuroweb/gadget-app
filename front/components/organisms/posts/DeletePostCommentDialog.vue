@@ -1,10 +1,10 @@
 <template>
   <v-dialog
     v-model="dialogStatus"
-    max-width="400px"
+    max-width="500px"
     persistent
   >
-    <v-card class="mx-auto">
+    <v-card>
       <v-toolbar
         class="cyan darken-1"
         flat
@@ -12,27 +12,34 @@
         <v-toolbar-title
           class="white--text font-weight-bold"
         >
-          コメントを削除
+          コメントを削除しますか？
         </v-toolbar-title>
         <v-spacer></v-spacer>
-      <v-btn 
-        @click="closeDialog"
-        icon
-      >
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
+        <v-icon
+          dark
+          @click="closeDialog"
+        >
+          mdi-close
+        </v-icon>
       </v-toolbar>
       <v-card-text>
-        <v-row class="mt-5 mb-5" justify="center">
-          <h3>本当にコメントを削除しますか？</h3>
-        </v-row>
-        <v-row justify="center">
-          <v-btn
-            color="white--text red"
-            @click="deleteComment"
-          >削除
-          </v-btn>
-        </v-row>
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <h3>この操作は取り消せません。コメント内容・コメントに対する返信コメントが削除されます。</h3>
+            </v-col>
+            <v-col cols="12">
+              <v-row justify="center">
+                <v-btn
+                  color="white--text red"
+                  @click="deleteComment"
+                >
+                  削除
+                </v-btn>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-card-text>
     </v-card>
   </v-dialog>

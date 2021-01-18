@@ -22,31 +22,41 @@
           mdi-close
         </v-icon>
       </v-toolbar>
-      <v-form v-if="dialogStatus">
-        <v-card-text>
+      <v-form>
+        <v-card-text v-if="dialogStatus">
           <v-container>
             <ValidationObserver v-slot="ObserverProps">
-              <ImagesForm
-                @setImages="setImages"
-              />
-              <TextAreaWithValidation
-                v-model="description"
-                label="説明文"
-                rules="max:255|required"
-              />
-              <TagsForm
-                v-model="tag"
-                :initTags="tags"
-                @tags-changed="newTags => tags = newTags"
-              />
-              <v-row justify="center" class="mt-3">
-                <v-btn
-                  color="success"
-                  class="white--text"
-                  @click="createPost"
-                  :disabled="ObserverProps.invalid"
-                >送信
-                </v-btn>
+              <v-row>
+                <v-col cols="12">
+                  <ImagesForm
+                    @setImages="setImages"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <TextAreaWithValidation
+                    v-model="description"
+                    label="説明文"
+                    rules="max:255|required"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <TagsForm
+                    v-model="tag"
+                    :initTags="tags"
+                    @tags-changed="newTags => tags = newTags"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-row justify="center">
+                    <v-btn
+                      color="success"
+                      class="white--text"
+                      @click="createPost"
+                      :disabled="ObserverProps.invalid"
+                    >送信
+                    </v-btn>
+                  </v-row>
+                </v-col>
               </v-row>
             </ValidationObserver>
           </v-container>
