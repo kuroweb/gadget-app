@@ -3,6 +3,7 @@
     v-if="renderStatus"
   >
     <v-tabs
+      v-model="tab"
       fixed-tabs
       centered
       background-color="cyan darken-1"
@@ -31,6 +32,8 @@
         タグフィード
         <v-icon>mdi-tag</v-icon>
       </v-tab>
+    </v-tabs>
+    <v-tabs-items v-model="tab" touchless>
       <v-tab-item class="pa-1">
         <NewPosts
           :load="loadNewPosts"
@@ -46,7 +49,7 @@
           :load="loadFollowingTags"
         />
       </v-tab-item>
-    </v-tabs>
+    </v-tabs-items>
   </v-card>
 </template>
 <script>
@@ -70,7 +73,8 @@ export default {
       renderStatus: this.render,
       loadNewPosts: false,
       loadFollowingUsers: false,
-      loadFollowingTags: false
+      loadFollowingTags: false,
+      tab: null
     }
   },
   watch: {
