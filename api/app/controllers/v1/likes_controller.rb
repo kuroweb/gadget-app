@@ -1,8 +1,9 @@
 class V1::LikesController < ApplicationController
 
   def create
-    @like = Like.new(like_post_params)
-    if @like.save
+    like = Like.new(like_post_params)
+    if like.save
+      like.notice_post_like(like.user_id, like.post_id)
       render status: :created, json: true
     end
   end

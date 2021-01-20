@@ -23,5 +23,8 @@ Rails.application.routes.draw do
     resources :tags
     resources :user_tag_maps, only: [:create, :destroy]
     resources :tasks, only: :index
+    resources :notices, only: [:index]
+    get '/notices/unchecked', to: 'notices#unchecked'
+    get '/notices/checked', to: 'notices#checked'
   end
 end

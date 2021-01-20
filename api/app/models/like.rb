@@ -11,4 +11,21 @@ class Like < ApplicationRecord
   ################
   validates_uniqueness_of :post_id, scope: :user_id
 
+  ################
+  #   メソッド    #
+  ################
+  def notice_post_like(visitor_id, post_id)
+    post = Post.find(post_id)
+    visitor = User.find(visitor_id)
+    notice = visitor.active_notices.new(
+      visitor_id: visitor.id,
+      visited_id: post.user.id,
+      post_id: post.id,
+      action: 'like'
+    )
+    if visitor.id != post.user.id
+      notice.save
+    end
+  end
+
 end

@@ -19,7 +19,7 @@ export const actions = {
     let isLikedPost = false
     if (rootState.modules.user.data) {
       payload.liked_users.forEach(user => {
-        if (user.id = rootState.modules.user.data.id) {
+        if (user.id === rootState.modules.user.data.id) {
           isLikedPost = true
         }
       })
@@ -59,7 +59,7 @@ export const actions = {
       let isLikedPost = false
       if (rootState.modules.user.data) {
         post.liked_users.forEach(user => {
-          if (user.id = rootState.modules.user.data.id) {
+          if (user.id === rootState.modules.user.data.id) {
             isLikedPost = true
           }
         })
