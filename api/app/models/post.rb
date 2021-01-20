@@ -11,6 +11,7 @@ class Post < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :liked_users, through: :likes, source: :user
   has_many :comments, dependent: :destroy
+  has_many :notices, dependent: :destroy
 
   ################
   # バリデーション #
@@ -52,5 +53,4 @@ class Post < ApplicationRecord
   def self.search(post_name)
     Post.where(['description LIKE ?', "%#{post_name}%"])
   end
-
 end

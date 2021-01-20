@@ -46,6 +46,7 @@
         </v-icon>
       </v-btn>
     </div>
+    <NoticeFeed v-if="currentUser"/>
     <v-menu
       v-model="value"
       :offset-y="true"
@@ -91,7 +92,11 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import NoticeFeed from '~/components/organisms/NoticeFeed.vue'
 export default {
+  componetns: {
+    NoticeFeed
+  },
   data () {
     return {
       value: false,

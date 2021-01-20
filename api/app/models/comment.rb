@@ -7,6 +7,7 @@ class Comment < ApplicationRecord
   has_many_attached :images
   belongs_to :user
   belongs_to :post
+  has_many :notices, dependent: :destroy
 
   ################
   # バリデーション #

@@ -7,6 +7,7 @@ class BoardComment < ApplicationRecord
   has_many_attached :images
   belongs_to :board
   belongs_to :user
+  has_many :notices, dependent: :destroy
 
   ################
   # バリデーション #
