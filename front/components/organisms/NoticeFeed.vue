@@ -30,7 +30,7 @@
               <span id="notice-sublink">通知一覧</span>
             </v-card>
           </v-card-title>
-          <v-card-text v-for="notice in notices" :key="notice.id" >
+          <v-card-text v-for="notice in notices" :key="notice.id">
             <v-card flat :to="notice.noticeLink">
               <v-row>
                 <v-col>
@@ -123,6 +123,12 @@ export default {
                   n.noticeVisitor = `${n.visitor.name}さんが`
                   n.noticeAction = '掲示板にコメントしました'
                   n.noticeLink = `/boards/${n.board.id}`
+                  n.noticeTime = this.$moment(n.created_at).format('YYYY年MM月DD日 HH時mm分')
+                  break
+                case ('follow'):
+                  n.noticeVisitor = `${n.visitor.name}さんが`
+                  n.noticeAction = 'あなたをフォローしました'
+                  n.noticeLink = `/users/${n.visitor.id}`
                   n.noticeTime = this.$moment(n.created_at).format('YYYY年MM月DD日 HH時mm分')
                   break
               }

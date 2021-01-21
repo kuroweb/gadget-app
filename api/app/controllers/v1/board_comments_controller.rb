@@ -3,6 +3,7 @@ class V1::BoardCommentsController < ApplicationController
   def create
     @comment = BoardComment.new(comment_params)
     if @comment.save
+      @comment.notice_comment(@comment.user_id, @comment.board_id)
       render json: @comment.as_json(include: [{user: {methods: :avatar_url}},
                                               :board],
                                     methods: :images_url),

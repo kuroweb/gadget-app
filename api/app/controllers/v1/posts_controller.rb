@@ -3,7 +3,7 @@ class V1::PostsController < ApplicationController
 
   # 投稿一覧
   def index
-    # タイムライン用の投稿一覧を返す
+    # タイムライン表示
     if params[:user_id]
       user = User.find(params[:user_id])
       following = user.following.includes({posts: [{images_attachments: :blob},
@@ -28,6 +28,7 @@ class V1::PostsController < ApplicationController
                                               {comments: {include: {user: {methods: :avatar_url}},
                                                           methods: :images_url}}],
                                       methods: :images_url)
+    # タグフィード表示
     elsif params[:tag_feed_id]
       user = User.find(params[:tag_feed_id])
       tags = user.tags.includes({posts: [{images_attachments: :blob},
@@ -56,14 +57,14 @@ class V1::PostsController < ApplicationController
                                                 {comments: {include: {user: {methods: :avatar_url}},
                                                             methods: :images_url}}],
                                       methods: :images_url)
-    ## 新着投稿一覧を返す
+    # 新着表示
     else
       @posts = Post.includes({images_attachments: :blob},
-        {user: {avatar_attachment: :blob}},
-        :tags,
-        :liked_users,
-        {comments: [{user: {avatar_attachment: :blob}},
-                    {images_attachments: :blob}]}).page(params[:page]).per(5).order(created_at: "DESC")
+                              {user: {avatar_attachment: :blob}},
+                              :tags,
+                              :liked_users,
+                              {comments: [{user: {avatar_attachment: :blob}},
+                                          {images_attachments: :blob}]}).page(params[:page]).per(5).order(created_at: "DESC")
       render json: @posts.as_json(include: [{user: {methods: :avatar_url}},
                             :tags,
                             :liked_users,

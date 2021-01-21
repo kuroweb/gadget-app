@@ -32,4 +32,37 @@ class BoardComment < ApplicationRecord
     end
   end
 
+  def notice_comment(visitor_id, board_id)
+    board = Board.find(board_id)
+    visitor = User.find(visitor_id)
+
+    # マイクロポストの投稿者への通知
+    contributor_notice = visitor.active_notices.new(
+      visitor_id: visitor.id,
+      visited_id: board.user.id,
+      board_id: board.id,
+      action: 'board_comment'
+    )
+    if visitor_id != board.user.id
+      contributor_notice.save
+    end
+
+    # 他にコメントしていた人への通知
+    users = []
+    board.board_comments.each do |c|
+      users.push(c.user)
+    end
+    users.uniq.each do |user|
+      comment_notice = visitor.active_notices.new(
+        visitor_id: visitor.id,
+        visited_id: user.id,
+        board_id: board.id,
+        action: 'board_comments'
+      )
+      if visitor_id != user.id
+        comment_notice.save
+      end
+    end
+  end
+
 end
