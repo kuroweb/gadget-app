@@ -30,7 +30,7 @@
               <span id="notice-sublink">通知一覧</span>
             </v-card>
           </v-card-title>
-          <v-card-text v-for="notice in notices" :key="notice.id" >
+          <v-card-text v-for="notice in notices" :key="notice.id">
             <v-card flat :to="notice.noticeLink">
               <v-row>
                 <v-col>
@@ -46,7 +46,7 @@
                       alt="Avatar"
                     />
                   </v-avatar>
-                  <span>{{ notice.visitor.name }}さんが</span>
+                  <span>{{ notice.noticeVisitor }}</span>
                   <span>{{ notice.noticeAction }}</span>
                 </v-col>
               </v-row>
@@ -96,9 +96,41 @@ export default {
             res.forEach(n => {
               switch (n.action) {
                 case ('like'):
+                  n.noticeVisitor = `${n.visitor.name}さんが`
+                  n.noticeAction = 'あなたの投稿にいいねしました'
                   n.noticeLink = `/posts/${n.post.id}`
                   n.noticeTime = this.$moment(n.created_at).format('YYYY年MM月DD日 HH時mm分')
-                  n.noticeAction = 'あなたの投稿にいいねしました'
+                  break
+                case ('post_comment'):
+                  n.noticeVisitor = `${n.visitor.name}さんが`
+                  n.noticeAction = 'あなたの投稿にコメントしました'
+                  n.noticeLink = `/posts/${n.post.id}`
+                  n.noticeTime = this.$moment(n.created_at).format('YYYY年MM月DD日 HH時mm分')
+                  break
+                case ('post_comments'):
+                  n.noticeVisitor = `${n.visitor.name}さんが`
+                  n.noticeAction = '投稿にコメントしました'
+                  n.noticeLink = `/posts/${n.post.id}`
+                  n.noticeTime = this.$moment(n.created_at).format('YYYY年MM月DD日 HH時mm分')
+                  break
+                case ('board_comment'):
+                  n.noticeVisitor = `${n.visitor.name}さんが`
+                  n.noticeAction = 'あなたが作成した掲示板にコメントしました'
+                  n.noticeLink = `/boards/${n.board.id}`
+                  n.noticeTime = this.$moment(n.created_at).format('YYYY年MM月DD日 HH時mm分')
+                  break
+                case ('board_comments'):
+                  n.noticeVisitor = `${n.visitor.name}さんが`
+                  n.noticeAction = '掲示板にコメントしました'
+                  n.noticeLink = `/boards/${n.board.id}`
+                  n.noticeTime = this.$moment(n.created_at).format('YYYY年MM月DD日 HH時mm分')
+                  break
+                case ('follow'):
+                  n.noticeVisitor = `${n.visitor.name}さんが`
+                  n.noticeAction = 'あなたをフォローしました'
+                  n.noticeLink = `/users/${n.visitor.id}`
+                  n.noticeTime = this.$moment(n.created_at).format('YYYY年MM月DD日 HH時mm分')
+                  break
               }
             })
             this.notices = res

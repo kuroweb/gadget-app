@@ -5,6 +5,7 @@ class V1::CommentsController < ApplicationController
   def create
     @comment = Comment.new(comment_params)
     if @comment.save
+      @comment.notice_comment(@comment.user_id, @comment.post_id)
       render json: @comment.as_json(include: [{user: {methods: :avatar_url}},
                                               :post],
                                     methods: :images_url),

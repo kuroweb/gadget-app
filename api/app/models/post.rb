@@ -53,4 +53,5 @@ class Post < ApplicationRecord
   def self.search(post_name)
     Post.where(['description LIKE ?', "%#{post_name}%"])
   end
+
 end

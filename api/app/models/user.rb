@@ -55,4 +55,15 @@ class User < ApplicationRecord
     User.where(['name LIKE ?', "%#{user_name}%"])
   end
 
+  def notice_follow(visitor_id, visited_id)
+    visited = User.find(visited_id)
+    visitor = User.find(visitor_id)
+    follow_notice = visitor.active_notices.new(
+      visitor_id: visitor.id,
+      visited_id: visited.id,
+      action: 'follow'
+    )
+    follow_notice.save
+  end
+
 end

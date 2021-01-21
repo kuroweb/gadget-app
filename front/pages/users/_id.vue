@@ -83,9 +83,11 @@
                     </v-btn>
                   </v-row>
                 </v-col>
+                <v-col cols="12">
+                  <v-divider></v-divider>
+                </v-col>
               </v-row>
             </v-container>
-            <v-divider></v-divider>
             <MicroPostCard
               v-for="post in posts"
               :key="post.id"

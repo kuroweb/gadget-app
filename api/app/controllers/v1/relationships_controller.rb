@@ -5,6 +5,7 @@ class V1::RelationshipsController < ApplicationController
   ## if文でcurrent_userとother_userを比較すれば良いんじゃ？
   def create
     @current_user.follow(@other_user)
+    @current_user.notice_follow(@current_user.id, @other_user.id)
     render json: @other_user
   end
 
@@ -13,17 +14,15 @@ class V1::RelationshipsController < ApplicationController
     render json: @other_user
   end
   
-  # フォロー済みかどうかを判断
-  # リファクタリング => Userモデルに移動
-  def isFollowed
-    isFollowed = @current_user.following?(@other_user)
-    render json: isFollowed
-  end
-
+  # # フォロー済みかどうかを判断
+  # # リファクタリング => Userモデルに移動
+  # def isFollowed
+  #   isFollowed = @current_user.following?(@other_user)
+  #   render json: isFollowed
+  # end
 
   private
   
-  # front側から送られるパラメータでユーザーをセット
   def set_user
     @current_user = User.find(params[:user_id])
     @other_user = User.find(params[:follow_id])

@@ -31,5 +31,38 @@ class Comment < ApplicationRecord
       return nil
     end
   end
+
+  def notice_comment(visitor_id, post_id)
+    post = Post.find(post_id)
+    visitor = User.find(visitor_id)
+
+    # マイクロポストの投稿者への通知
+    contributor_notice = visitor.active_notices.new(
+      visitor_id: visitor.id,
+      visited_id: post.user.id,
+      post_id: post.id,
+      action: 'post_comment'
+    )
+    if visitor_id != post.user.id
+      contributor_notice.save
+    end
+
+    # 他にコメントしていた人への通知
+    users = []
+    post.comments.each do |c|
+      users.push(c.user)
+    end
+    users.uniq.each do |user|
+      comment_notice = visitor.active_notices.new(
+        visitor_id: visitor.id,
+        visited_id: user.id,
+        post_id: post.id,
+        action: 'post_comments'
+      )
+      if visitor_id != user.id
+        comment_notice.save
+      end
+    end
+  end
   
 end
