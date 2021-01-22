@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   namespace :v1 do
-    # get '/isFollowed', to: 'relationships#isFollowed'
     get 'tags/search', to: 'tags#search'
     get 'users/search', to: 'users#search'
     get 'posts/search', to: 'posts#search'
@@ -26,5 +25,6 @@ Rails.application.routes.draw do
     resources :notices, only: [:index]
     get '/notices/unchecked', to: 'notices#unchecked'
     get '/notices/checked', to: 'notices#checked'
+    resources :gadgets, only: [:index, :create, :show, :update, :destroy]
   end
 end

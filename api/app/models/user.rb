@@ -19,6 +19,7 @@ class User < ApplicationRecord
   has_many :tags, through: :user_tag_maps
   has_many :active_notices, class_name: 'Notice', foreign_key: 'visitor_id', dependent: :destroy
   has_many :passive_notices, class_name: 'Notice', foreign_key: 'visited_id', dependent: :destroy
+  has_many :gadgets, dependent: :destroy
 
   ################
   # バリデーション #

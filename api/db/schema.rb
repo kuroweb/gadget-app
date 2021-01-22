@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_19_102257) do
+ActiveRecord::Schema.define(version: 2021_01_21_150223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,26 @@ ActiveRecord::Schema.define(version: 2021_01_19_102257) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "gadget_tag_maps", force: :cascade do |t|
+    t.bigint "gadget_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gadget_id"], name: "index_gadget_tag_maps_on_gadget_id"
+    t.index ["tag_id"], name: "index_gadget_tag_maps_on_tag_id"
+  end
+
+  create_table "gadgets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "title", null: false
+    t.text "good_description", null: false
+    t.text "bad_description", null: false
+    t.integer "stars", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_gadgets_on_user_id"
   end
 
   create_table "likes", force: :cascade do |t|
@@ -159,6 +179,9 @@ ActiveRecord::Schema.define(version: 2021_01_19_102257) do
   add_foreign_key "boards", "users"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "gadget_tag_maps", "gadgets"
+  add_foreign_key "gadget_tag_maps", "tags"
+  add_foreign_key "gadgets", "users"
   add_foreign_key "likes", "posts"
   add_foreign_key "likes", "users"
   add_foreign_key "posts", "users"
