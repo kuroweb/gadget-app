@@ -3,6 +3,7 @@
     v-if="renderStatus"
   >
     <v-tabs
+      v-model="tab"
       fixed-tabs
       centered
       background-color="cyan darken-1"
@@ -15,26 +16,29 @@
         <v-icon>mdi-clock-time-eight</v-icon>
       </v-tab>
       <v-tab class="ma-0 pa-0">
-        雑談板
+        実装中
         <v-icon>mdi-forum</v-icon>
       </v-tab>
       <v-tab class="ma-0 pa-0">
-        質問板
+        実装中
         <v-icon>mdi-comment-question</v-icon>
       </v-tab>
-      <v-tab-item>
-        <NewBoards/>
-      </v-tab-item>
-      <v-tab-item>
-        <ForumBoards/>
-      </v-tab-item>
-      <v-tab-item>
-        <QuestionBoards/>
-      </v-tab-item>
     </v-tabs>
+    <v-tabs-items v-model="tab" touchless>
+      <v-tab-item class="pa-1">
+        <NewGadgets/>
+      </v-tab-item>
+      <v-tab-item class="pa-1">
+        <NewGadgets/>
+      </v-tab-item>
+      <v-tab-item class="pa-1">
+        <NewGadgets/>
+      </v-tab-item>
+    </v-tabs-items>
   </v-card>
 </template>
 <script>
+import NewGadgets from '~/components/organisms/feeds/gadgetFeed/NewGadgets.vue'
 export default {
   props: {
     render: {
@@ -44,7 +48,8 @@ export default {
   },
   data () {
     return {
-      renderStatus: this.render
+      renderStatus: this.render,
+      tab: null
     }
   },
   watch: {

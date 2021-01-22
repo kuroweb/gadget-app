@@ -89,8 +89,9 @@ ActiveRecord::Schema.define(version: 2021_01_21_150223) do
   create_table "gadgets", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "title", null: false
-    t.text "description", null: false
-    t.integer "star", null: false
+    t.text "good_description", null: false
+    t.text "bad_description", null: false
+    t.integer "stars", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_gadgets_on_user_id"

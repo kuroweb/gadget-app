@@ -3,6 +3,7 @@
     v-if="renderStatus"
   >
     <v-tabs
+      v-model="tab"
       fixed-tabs
       centered
       background-color="cyan darken-1"
@@ -31,22 +32,24 @@
         質問板
         <v-icon>mdi-comment-question</v-icon>
       </v-tab>
-      <v-tab-item>
+    </v-tabs>
+    <v-tabs-items v-model="tab" touchless>
+      <v-tab-item class="pa-1">
         <NewBoards
           :load="loadNewBoards"
         />
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item class="pa-1">
         <ForumBoards
           :load="loadForumBoards"
         />
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item class="pa-1">
         <QuestionBoards
           :load="loadQuestionBoards"
         />
       </v-tab-item>
-    </v-tabs>
+    </v-tabs-items>
   </v-card>
 </template>
 <script>
@@ -70,7 +73,8 @@ export default {
       renderStatus: this.render,
       loadNewBoards: false,
       loadForumBoards: false,
-      loadQuestionBoards: false
+      loadQuestionBoards: false,
+      tab: null
     }
   },
   watch: {
