@@ -16,7 +16,9 @@ class V1::GadgetsController < ApplicationController
     sent_tags = gadget_tags_params[:tags] === nil ? [] : gadget_tags_params[:tags]
     if gadget.save
       gadget.save_tag(sent_tags)
-      render json: gadget
+      render json: gadget.as_json(include: [:tags,
+                                          {user: {methods: :avatar_url}}],
+                                  methods: :images_url)
     end
   end
 
@@ -25,7 +27,8 @@ class V1::GadgetsController < ApplicationController
   end
 
   def destroy
-
+    gadget = Gadget.find(params[:id])
+    gadget.destroy
   end
 
   private

@@ -26,13 +26,13 @@
         <v-container>
           <v-row>
             <v-col cols="12">
-              <h3>この操作は取り消せません。投稿内容・投稿へのコメント・コメントに対する返信コメントが削除されます。</h3>
+              <h3>この操作は取り消せません。ガジェットが削除されます。</h3>
             </v-col>
             <v-col cols="12">
               <v-row justify="center">
                 <v-btn
                   color="white--text red"
-                  @click="deletePost"
+                  @click="deleteGadget"
                 >
                   削除
                 </v-btn>
@@ -54,7 +54,7 @@ export default {
       type: Boolean,
       required: true
     },
-    postId: {
+    gadgetId: {
       type: null,
     }
   },
@@ -74,10 +74,10 @@ export default {
     ...mapActions({
       setFlash: 'modules/info/setFlash'
     }),
-    async deletePost () {
-      this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`)
+    async deleteGadget () {
+      this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/gadgets/${this.gadgetId}`)
         .then(() => {
-          this.$emit('deletePost', this.postId)
+          this.$emit('deleteGadget', this.gadgetId)
           this.$emit('closeDialog')
           this.setFlash({
             status: true,

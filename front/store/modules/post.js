@@ -13,6 +13,9 @@ export const getters = {
 }
 
 export const actions = {
+  ////////////////
+  // 詳細ページ用 //
+  ////////////////
   setData ({ commit, rootState }, payload) {
     // ログイン中の場合は、いいね総数・いいね未・済のプロパティを追加
     payload.likedUsersCounts = payload.liked_users.length
@@ -51,6 +54,31 @@ export const actions = {
     payload.comments = commentData
     commit('setData', payload)
   },
+  reloadPostByCreateComment ({ commit }, comment) {
+    commit('reloadPostByCreateComment', comment)
+  },
+  reloadPostByDeleteComment ({ commit }, comment) {
+    commit('reloadPostByDeleteComment', comment)
+  },
+  reloadPostByEditPost ({ commit }, post) {
+    commit('reloadPostByEditPost', post)
+  },
+  reloadPostByDeletePost ({ commit }, postId) {
+    commit('reloadPostByDeletePost', postId)
+  },
+  reloadPostByCreatePost ({ commit }, post) {
+    commit('reloadPostByCreatePost', post)
+  },
+  reloadPostByLikedPost ({ commit }, post) {
+    commit('reloadPostByLikedPost', post)
+  },
+  reloadPostByDisLikedPost ({ commit }, post) {
+    commit('reloadPostByDisLikedPost', post)
+  },
+  
+  ////////////////
+  // 一覧ページ用 //
+  ////////////////
   setPosts ({ commit, rootState }, posts) {
     // いいね総数、いいね未・済のプロパティを追加
     const likeData = []
@@ -100,8 +128,6 @@ export const actions = {
     })
     commit('setPosts', commentData)
   },
-
-  // 一覧ページ用
   reloadPostsByCreateComment ({ commit }, comment) {
     commit('reloadPostsByCreateComment', comment)
   },
@@ -125,41 +151,117 @@ export const actions = {
   },
   reloadPostsByPageScrolling ({ commit }, posts) {
     commit('reloadPostsByPageScrolling', posts)
-  },
-
-  // 詳細ページ用
-  reloadPostByCreateComment ({ commit }, comment) {
-    commit('reloadPostByCreateComment', comment)
-  },
-  reloadPostByDeleteComment ({ commit }, comment) {
-    commit('reloadPostByDeleteComment', comment)
-  },
-  reloadPostByEditPost ({ commit }, post) {
-    commit('reloadPostByEditPost', post)
-  },
-  reloadPostByDeletePost ({ commit }, postId) {
-    commit('reloadPostByDeletePost', postId)
-  },
-  reloadPostByCreatePost ({ commit }, post) {
-    commit('reloadPostByCreatePost', post)
-  },
-  reloadPostByLikedPost ({ commit }, post) {
-    commit('reloadPostByLikedPost', post)
-  },
-  reloadPostByDisLikedPost ({ commit }, post) {
-    commit('reloadPostByDisLikedPost', post)
-  },
+  }
 }
 
 export const mutations = {
+  ////////////////
+  // 詳細ページ用 //
+  ////////////////
   setData (state, payload) {
     state.data = payload
   },
+  reloadPostByCreateComment (state, comment) {
+    state.data.commentCounts += 1
+    if (comment.reply_comment_id === null) {
+      comment.childComments = []
+      state.data.comments.push(comment)
+    } else {
+      state.data.comments.forEach(c => {
+        if (c.id === comment.reply_comment_id) {
+          if ('childComments' in c) {
+            c.childComments.push(comment)
+          } else {
+            c.childComments = []
+            c.childComments.push(comment)
+          }
+        }
+      })
+    }
+  },
+  reloadPostByDeleteComment (state, comment) {
+    // 親コメントの場合
+    if (comment.reply_comment_id === null) {
+      state.data.comments.forEach((c, index) => {
+        if (c.id === comment.id) {
+          // コメント数の集計
+          let newCommentCounts = 0
+          //// 子コメントが存在する場合
+          if ('childComments' in c) {
+            newCommentCounts = 1
+            newCommentCounts += c.childComments.length
+          //// 子コメントが存在しない場合
+          } else {
+            newCommentCounts = 1
+          }
+          state.data.comments.splice(index, 1)
+          state.data.commentCounts -= newCommentCounts
+        }
+      })
+    // 子コメントの場合
+    } else {
+      state.data.comments.forEach(c => {
+        if ('childComments' in c) {
+          c.childComments.forEach((child, index) => {
+            if (child.id === comment.id) {
+              c.childComments.splice(index, 1)
+              state.data.commentCounts -= 1
+            }
+          })
+        }
+      })
+    }
+  },
+  reloadPostByEditPost (state, post) {
+    state.data.images_url = post.images_url
+    state.data.description = post.description
+    state.data.tags = post.tags
+  },
+  reloadPostByLikedPost (state, post) {
+    state.data.isLikedPost = true
+    state.data.likedUsersCounts += 1
+  },
+  reloadPostByDisLikedPost (state, post) {
+    state.data.isLikedPost = false
+    state.data.likedUsersCounts -= 1
+  },
+  setLikedUsersCountUp (state, post) {
+    state.posts.forEach(p => {
+      if (p.id === post.id) {
+        const count = post.likedUsersCounts += 1
+        p.likedUsersCounts = count
+      }
+    })
+  },
+  setLikedUsersCountDown (state, post) {
+    state.posts.forEach(p => {
+      if (p.id === post.id) {
+        const count = post.likedUsersCounts -= 1
+        p.likedUsersCounts = count
+      }
+    })
+  },
+  setIsLikedPostTrue (state, post) {
+    state.posts.forEach(p => {
+      if (p.id === post.id) {
+        p.isLikedPost = true
+      }
+    })
+  },
+  setIsLikedPostFalse (state, post) {
+    state.posts.forEach(p => {
+      if (p.id === post.id) {
+        p.isLikedPost = false
+      }
+    })
+  },
+
+  ////////////////
+  // 一覧ページ用 //
+  ////////////////
   setPosts (state, payload) {
     state.posts = payload
   },
-
-  // 一覧ページ用
   reloadPostsByCreateComment (state, comment) {
     state.posts.forEach(post => {
       if (post.id === comment.post_id) {
@@ -264,102 +366,5 @@ export const mutations = {
     posts.forEach(post => {
       state.posts.push(post)
     })
-  },
-
-  // 詳細ページ用
-  reloadPostByCreateComment (state, comment) {
-    state.data.commentCounts += 1
-    if (comment.reply_comment_id === null) {
-      comment.childComments = []
-      state.data.comments.push(comment)
-    } else {
-      state.data.comments.forEach(c => {
-        if (c.id === comment.reply_comment_id) {
-          if ('childComments' in c) {
-            c.childComments.push(comment)
-          } else {
-            c.childComments = []
-            c.childComments.push(comment)
-          }
-        }
-      })
-    }
-  },
-  reloadPostByDeleteComment (state, comment) {
-    // 親コメントの場合
-    if (comment.reply_comment_id === null) {
-      state.data.comments.forEach((c, index) => {
-        if (c.id === comment.id) {
-          // コメント数の集計
-          let newCommentCounts = 0
-          //// 子コメントが存在する場合
-          if ('childComments' in c) {
-            newCommentCounts = 1
-            newCommentCounts += c.childComments.length
-          //// 子コメントが存在しない場合
-          } else {
-            newCommentCounts = 1
-          }
-          state.data.comments.splice(index, 1)
-          state.data.commentCounts -= newCommentCounts
-        }
-      })
-    // 子コメントの場合
-    } else {
-      state.data.comments.forEach(c => {
-        if ('childComments' in c) {
-          c.childComments.forEach((child, index) => {
-            if (child.id === comment.id) {
-              c.childComments.splice(index, 1)
-              state.data.commentCounts -= 1
-            }
-          })
-        }
-      })
-    }
-  },
-  reloadPostByEditPost (state, post) {
-    state.data.images_url = post.images_url
-    state.data.description = post.description
-    state.data.tags = post.tags
-  },
-  reloadPostByLikedPost (state, post) {
-    state.data.isLikedPost = true
-    state.data.likedUsersCounts += 1
-  },
-  reloadPostByDisLikedPost (state, post) {
-    state.data.isLikedPost = false
-    state.data.likedUsersCounts -= 1
-  },
-
-  setLikedUsersCountUp (state, post) {
-    state.posts.forEach(p => {
-      if (p.id === post.id) {
-        const count = post.likedUsersCounts += 1
-        p.likedUsersCounts = count
-      }
-    })
-  },
-  setLikedUsersCountDown (state, post) {
-    state.posts.forEach(p => {
-      if (p.id === post.id) {
-        const count = post.likedUsersCounts -= 1
-        p.likedUsersCounts = count
-      }
-    })
-  },
-  setIsLikedPostTrue (state, post) {
-    state.posts.forEach(p => {
-      if (p.id === post.id) {
-        p.isLikedPost = true
-      }
-    })
-  },
-  setIsLikedPostFalse (state, post) {
-    state.posts.forEach(p => {
-      if (p.id === post.id) {
-        p.isLikedPost = false
-      }
-    })
-  },
+  }
 }

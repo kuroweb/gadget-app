@@ -3,6 +3,12 @@
     class="mx-auto"
     flat
   >
+    <DeleteGadgetDialog
+      :dialog="deleteGadgetDialog"
+      :gadgetId="gadgetId"
+      @deleteGadget="deleteGadget"
+      @closeDialog="deleteGadgetDialog = false"
+    />
     <v-card-text>
       <ImagesV2
         :images="gadget.images_url"
@@ -51,14 +57,30 @@
         :value="gadget.stars"
       />
     </v-card-actions>
+    <v-card-actions>
+      <v-spacer/>
+      <v-btn
+        icon
+        text
+        color="grey darken-2"
+        @click="openDeleteGadgetDialog"
+      >
+        <v-icon>
+          mdi-delete
+        </v-icon>
+      </v-btn>
+    </v-card-actions>
     <v-divider></v-divider>
   </v-card>
 </template>
 <script>
+import { mapActions } from 'vuex'
+import DeleteGadgetDialog from '~/components/organisms/gadgets/DeleteGadgetDialog.vue'
 import Tags from "~/components/atoms/Tags.vue"
 import ImagesV2 from "~/components/atoms/Images_v2.vue"
 export default {
   components: {
+    DeleteGadgetDialog,
     ImagesV2,
     Tags
   },
@@ -67,5 +89,28 @@ export default {
       type: Object
     }
   },
+  data () {
+    return {
+      editGadgetDialog: false,
+      deleteGadgetDialog: false,
+      gadgetId: ''
+    }
+  },
+  methods: {
+    ...mapActions({
+      reloadGadgetsByEditGadget: 'modules/gadget/reloadGadgetsByEditGadget',
+      reloadGadgetsByDeleteGadget: 'modules/gadget/reloadGadgetsByDeleteGadget',
+    }),
+    openDeleteGadgetDialog () {
+      this.gadgetId = this.gadget.id
+      this.deleteGadgetDialog = true
+    },
+    editGadget (payload) {
+      this.reloadGadgetsByEditGadget(payload)
+    },
+    deleteGadget (payload) {
+      this.reloadGadgetsByDeleteGadget(payload)
+    },
+  }
 }
 </script>
