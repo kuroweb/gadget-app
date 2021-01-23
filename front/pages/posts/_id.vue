@@ -347,6 +347,7 @@ import CreatePostCommentDialog from '~/components/organisms/posts/CreatePostComm
 import CreatePostReplyDialog from '~/components/organisms/posts/CreatePostReplyDialog.vue'
 import DeletePostCommentDialog from '~/components/organisms/posts/DeletePostCommentDialog.vue'
 import EditPostDialog from '~/components/organisms/posts/EditPostDialog.vue'
+import DeletePostDialog from '~/components/organisms/posts/DeletePostDialog.vue'
 export default {
   components: {
     ErrorCard,
@@ -355,7 +356,8 @@ export default {
     CreatePostCommentDialog,
     CreatePostReplyDialog,
     DeletePostCommentDialog,
-    EditPostDialog
+    EditPostDialog,
+    DeletePostDialog
   },
   data () {
     return {

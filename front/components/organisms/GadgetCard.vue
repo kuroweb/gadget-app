@@ -94,7 +94,7 @@ import { mapActions } from 'vuex'
 import DeleteGadgetDialog from '~/components/organisms/gadgets/DeleteGadgetDialog.vue'
 import EditGadgetDialog from '~/components/organisms/gadgets/EditGadgetDialog.vue'
 import Tags from "~/components/atoms/Tags.vue"
-import ImagesV2 from "~/components/atoms/Images_v2.vue"
+import ImagesV2 from "~/components/atoms/ImagesV2.vue"
 export default {
   components: {
     DeleteGadgetDialog,
