@@ -6,20 +6,15 @@
       message="ユーザーが存在しません。"
     />
     <v-row justify="center">
-      <v-col xl="2" lg="3" sm="8" cols="12">
-        <v-card>
-          <p>サイドメニュー</p>
-        </v-card>
-      </v-col>
-      <v-col xl="4" lg="6" sm="8" cols="12">
-        <v-card>
+      <v-col xl="4" lg="4" sm="8" cols="12">
+        <v-card v-if="!error">
           <v-toolbar
             color="cyan darken-1"
             dark
             flat
           >
             <v-toolbar-title>
-              {{ otherUser.name }} さん
+              {{ otherUser.name }} さんのプロフィール
             </v-toolbar-title>
           </v-toolbar>
           <v-card-text>
@@ -83,22 +78,94 @@
                     </v-btn>
                   </v-row>
                 </v-col>
-                <v-col cols="12">
-                  <v-divider></v-divider>
-                </v-col>
               </v-row>
             </v-container>
-            <MicroPostCard
-              v-for="post in posts"
-              :key="post.id"
-              :post="post"
-            />
           </v-card-text>
         </v-card>
+        <!-- <v-card class="mx-auto ma-5">
+          <v-toolbar
+            color="cyan darken-1"
+            dark
+            flat
+          >
+            <v-toolbar-title>
+              {{ otherUser.name }} さんのガジェット
+            </v-toolbar-title>
+          </v-toolbar>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-card flat class="mx-auto ma-5">
+                  <span>一覧</span>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
+        <v-card class="mx-auto">
+          <v-toolbar
+            color="cyan darken-1"
+            dark
+            flat
+          >
+            <v-toolbar-title>
+              {{ otherUser.name }} さんの投稿一覧
+            </v-toolbar-title>
+          </v-toolbar>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <MicroPostCard
+                  v-for="post in posts"
+                  :key="post.id"
+                  :post="post"
+                />
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card> -->
       </v-col>
-      <v-col xl="2" lg="3" sm="8" cols="12">
-        <v-card>
-          <p>サイドメニュー</p>
+      <v-col xl="6" lg="6" sm="8" cols="12">
+        <v-card class="mx-auto">
+          <v-tabs
+            v-model="tab"
+            fixed-tabs
+            centered
+            background-color="cyan darken-1"
+            color="white"
+            slider-color="orange"
+            icons-and-text
+          >
+            <v-tab
+              class="ma-0 pa-0"
+            >
+              投稿
+              <v-icon>mdi-clock-time-eight</v-icon>
+            </v-tab>
+            <v-tab
+
+              class="ma-0 pa-0"
+            >
+              持ち物
+              <v-icon>mdi-account-heart</v-icon>
+            </v-tab>
+          </v-tabs>
+          <v-tabs-items v-model="tab" touchless>
+            <v-tab-item class="pa-1">
+              <MicroPostCard
+                v-for="post in posts"
+                :key="post.id"
+                :post="post"
+              />
+            </v-tab-item>
+            <v-tab-item class="pa-1">
+              <!-- <GadgetCard
+                v-for="(gadget, index) in gadgets"
+                :key="index"
+                :gadget="gadget"
+              /> -->
+            </v-tab-item>
+          </v-tabs-items>
         </v-card>
       </v-col>
     </v-row>
@@ -107,18 +174,21 @@
 <script>
 import _ from 'lodash'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
+import GadgetCard from '~/components/organisms/GadgetCard.vue'
 import MicroPostCard from '~/components/organisms/MicroPostCard.vue'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   components: {
     ErrorCard,
-    MicroPostCard
+    MicroPostCard,
+    GadgetCard
   },
   data () {
     return {
       isFollowed: false,
       editDialog: false,
       deleteDialog: false,
+      tab: null
     }
   },
   async fetch({ $axios, params, store }) {
