@@ -121,7 +121,6 @@ export default {
       images: [],
       tag: '',
       tags: [],
-      rating: '',
     }
   },
   watch: {

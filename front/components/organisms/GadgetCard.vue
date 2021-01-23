@@ -9,6 +9,12 @@
       @deleteGadget="deleteGadget"
       @closeDialog="deleteGadgetDialog = false"
     />
+    <EditGadgetDialog
+      :dialog="editGadgetDialog"
+      :gadgetId="gadgetId"
+      @editGadget="editGadget"
+      @closeDialog="editGadgetDialog = false"
+    />
     <v-card-text>
       <ImagesV2
         :images="gadget.images_url"
@@ -63,6 +69,16 @@
         icon
         text
         color="grey darken-2"
+        @click="openEditGadgetDialog"
+      >
+        <v-icon>
+          mdi-pencil-box-multiple
+        </v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        text
+        color="grey darken-2"
         @click="openDeleteGadgetDialog"
       >
         <v-icon>
@@ -76,11 +92,13 @@
 <script>
 import { mapActions } from 'vuex'
 import DeleteGadgetDialog from '~/components/organisms/gadgets/DeleteGadgetDialog.vue'
+import EditGadgetDialog from '~/components/organisms/gadgets/EditGadgetDialog.vue'
 import Tags from "~/components/atoms/Tags.vue"
 import ImagesV2 from "~/components/atoms/Images_v2.vue"
 export default {
   components: {
     DeleteGadgetDialog,
+    EditGadgetDialog,
     ImagesV2,
     Tags
   },
@@ -104,6 +122,10 @@ export default {
     openDeleteGadgetDialog () {
       this.gadgetId = this.gadget.id
       this.deleteGadgetDialog = true
+    },
+    openEditGadgetDialog () {
+      this.gadgetId = this.gadget.id
+      this.editGadgetDialog = true
     },
     editGadget (payload) {
       this.reloadGadgetsByEditGadget(payload)

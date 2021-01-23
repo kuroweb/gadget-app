@@ -158,7 +158,10 @@ export const mutations = {
     state.gadgets.forEach(p => {
       if (p.id === gadget.id) {
         p.images_url = gadget.images_url
-        p.description = gadget.description
+        p.title = gadget.title
+        p.good_description = gadget.good_description
+        p.bad_description = gadget.bad_description
+        p.stars = gadget.stars
         p.tags = gadget.tags
       }
     })
