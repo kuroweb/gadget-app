@@ -12,7 +12,7 @@
         <v-toolbar-title
           class="white--text font-weight-bold"
         >
-          投稿を編集する
+          ガジェットを編集する
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-icon
@@ -79,12 +79,39 @@
                     <p v-if="imageError" class="red--text">{{ imageError }}</p>
                   </div>
                 </v-col>
-                <v-col cols="12">
-                  <TextAreaWithValidation
-                    v-model="description"
-                    label="説明文"
-                    rules="max:255|required"
+                <v-col cols="12" class="pa-0">
+                  <TextFieldWithValidation
+                    v-model="title"
+                    label="ガジェット名"
+                    rules="max:64|required"
                   />
+                </v-col>
+                <v-col cols="12" class="pa-0">
+                  <TextAreaWithValidation
+                    v-model="good_description"
+                    label="お気に入りポイント"
+                    rules="max:1024|required"
+                  />
+                </v-col>
+                <v-col cols="12" class="pa-0">
+                  <TextAreaWithValidation
+                    v-model="bad_description"
+                    label="気になるポイント"
+                    rules="max:1024|required"
+                  />
+                </v-col>
+                <v-col cols="12" class="pa-0">
+                  <span>満足度</span>
+                  <v-row justify="center">
+                    <v-rating
+                      v-model="stars"
+                      background-color="orange lighten-3"
+                      color="orange"
+                      large
+                      length="5"
+                      size="64"
+                    ></v-rating>
+                  </v-row>
                 </v-col>
                 <v-col cols="12">
                   <TagsForm
@@ -98,7 +125,7 @@
                     <v-btn
                       color="success"
                       class="white--text"
-                      @click="updatePost"
+                      @click="updateGadget"
                       :disabled="ObserverProps.invalid"
                     >送信
                     </v-btn>
@@ -114,10 +141,12 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import TextFieldWithValidation from '~/components/molecules/inputs/TextFieldWithValidation.vue'
 import TextAreaWithValidation from '~/components/molecules/inputs/TextAreaWithValidation.vue'
 import TagsForm from '~/components/molecules/inputs/TagsForm.vue'
 export default {
   components: {
+    TextFieldWithValidation,
     TextAreaWithValidation,
     TagsForm
   },
@@ -126,7 +155,7 @@ export default {
       type: Boolean,
       required: true
     },
-    postId: {
+    gadgetId: {
       type: null,
     }
   },
@@ -144,9 +173,13 @@ export default {
       image4: [],
       imageError: null,
       images_url: [],
-      description: '',
+      title: '',
+      good_description: '',
+      bad_description: '',
+      stars: 3,
+      images: [],
       tag: '',
-      tags: []
+      tags: [],
     }
   },
   watch: {
@@ -155,8 +188,11 @@ export default {
       this.dialogStatus = newValue
       // モーダルウィンドウ内に必要なデータの初期化
       if (this.dialogStatus === true) {
-        const res = await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`)
-        this.description = res.description
+        const res = await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/gadgets/${this.gadgetId}`)
+        this.title = res.title
+        this.good_description = res.good_description
+        this.bad_description = res.bad_description
+        this.stars = res.stars
         this.images_url = res.images_url
         // tagの初期化
         if (res.tags.length !== 0) {
@@ -281,7 +317,7 @@ export default {
     ...mapActions({
       setFlash: 'modules/info/setFlash'
     }),
-    async updatePost () {
+    async updateGadget () {
       const data = new FormData()
       const config = {
         headders: {
@@ -289,33 +325,36 @@ export default {
         }
       }
       if (this.image1.length !== 0) {
-        data.append('post[images][]', this.image1)
+        data.append('gadget[images][]', this.image1)
       }
       if (this.image2.length !== 0) {
-        data.append('post[images][]', this.image2)
+        data.append('gadget[images][]', this.image2)
       }
       if (this.image3.length !== 0) {
-        data.append('post[images][]', this.image3)
+        data.append('gadget[images][]', this.image3)
       }
       if (this.image4.length !== 0) {
-        data.append('post[images][]', this.image4)
+        data.append('gadget[images][]', this.image4)
       }
-      data.append('post[description]', this.description)
-      data.append('post[user_id]', this.currentUser.id)
+      data.append('gadget[title]', this.title)
+      data.append('gadget[good_description]', this.good_description)
+      data.append('gadget[bad_description]', this.bad_description)
+      data.append('gadget[stars]', this.stars)
+      data.append('gadget[user_id]', this.$store.state.modules.user.data.id)
       if (this.tags.length !== 0) {
         this.tags.forEach(function(tag){
-        data.append('post[tags][]', tag.text)
+        data.append('gadget[tags][]', tag.text)
         })
       }
-      this.$axios.$patch(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`, data, config)
+      this.$axios.$patch(process.env.BROWSER_BASE_URL + `/v1/gadgets/${this.gadgetId}`, data, config)
         .then(res => {
           console.log('編集に成功しました')
-          this.$emit('editPost', res)
+          this.$emit('editGadget', res)
           this.$emit('closeDialog')
           this.resetData ()
           this.setFlash({
             status: true,
-            message: '投稿を更新しました'
+            message: 'ガジェットを更新しました'
           })
           setTimeout(() => {
             this.setFlash({
@@ -369,7 +408,10 @@ export default {
       this.image2 = []
       this.image3 = []
       this.image4 = []
-      this.description = ''
+      this.title = ''
+      this.good_description = ''
+      this.bad_description = ''
+      this.stars = 3
       this.tags = []
     }
   }

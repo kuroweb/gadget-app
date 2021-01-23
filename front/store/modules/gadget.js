@@ -68,6 +68,12 @@ export const actions = {
   reloadGadgetsByCreateGadget ({ commit }, gadget) {
     commit('reloadGadgetsByCreateGadget', gadget)
   },
+  reloadGadgetsByEditGadget ({ commit }, gadgetId) {
+    commit('reloadGadgetsByEditGadget', gadgetId)
+  },
+  reloadGadgetsByDeleteGadget ({ commit }, gadgetId) {
+    commit('reloadGadgetsByDeleteGadget', gadgetId)
+  },
   reloadGadgetsByPageScrolling ({ commit }, gadgets) {
     commit('reloadGadgetsByPageScrolling', gadgets)
   },
@@ -147,6 +153,25 @@ export const mutations = {
   },
   reloadGadgetsByCreateGadget (state, gadget) {
     state.gadgets.unshift(gadget)
+  },
+  reloadGadgetsByEditGadget (state, gadget) {
+    state.gadgets.forEach(p => {
+      if (p.id === gadget.id) {
+        p.images_url = gadget.images_url
+        p.title = gadget.title
+        p.good_description = gadget.good_description
+        p.bad_description = gadget.bad_description
+        p.stars = gadget.stars
+        p.tags = gadget.tags
+      }
+    })
+  },
+  reloadGadgetsByDeleteGadget (state, gadgetId) {
+    state.gadgets.forEach((p, index) => {
+      if (p.id === gadgetId) {
+        state.gadgets.splice(index, 1)
+      }
+    })
   },
   reloadGadgetsByPageScrolling (state, gadgets) {
     gadgets.forEach(gadget => {

@@ -8,7 +8,10 @@ class V1::GadgetsController < ApplicationController
   end
 
   def show
-
+    gadget = Gadget.find(params[:id])
+    render json: gadget.as_json(include: [:tags,
+                                          {user: {methods: :avatar_url}}],
+                                    methods: :images_url)
   end
 
   def create
@@ -16,16 +19,32 @@ class V1::GadgetsController < ApplicationController
     sent_tags = gadget_tags_params[:tags] === nil ? [] : gadget_tags_params[:tags]
     if gadget.save
       gadget.save_tag(sent_tags)
-      render json: gadget
+      render json: gadget.as_json(include: [:tags,
+                                            {user: {methods: :avatar_url}}],
+                                    methods: :images_url)
     end
   end
 
   def update
-
+    gadget = Gadget.find(params[:id])
+    sent_tags = gadget_tags_params[:tags] === nil ? [] : gadget_tags_params[:tags]
+    if gadget.update(gadget_content_params)
+      gadget.save_tag(sent_tags)
+      # imagesが空の場合に、updateメソッドで初期化
+      if gadget_content_params[:images] === nil
+        gadget.update(images: nil)
+      end
+      render json: gadget.as_json(include: [:tags,
+                                            {user: {methods: :avatar_url}}],
+                                    methods: :images_url)
+    else
+      render json: gadget.errors, status: :unprocessable_entity
+    end
   end
 
   def destroy
-
+    gadget = Gadget.find(params[:id])
+    gadget.destroy
   end
 
   private
