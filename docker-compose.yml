@@ -52,6 +52,8 @@ services:
         MESSAGE_SENDER_ID: $MESSAGE_SENDER_ID
         API_BASE_URL:      $API_BASE_URL
         BROWSER_BASE_URL:  $BROWSER_BASE_URL
+        GUEST_EMAIL:       $GUEST_EMAIL
+        GUEST_PASSWORD:    $GUEST_PASSWORD
     # command: yarn start
     command: yarn run dev
     volumes:

@@ -9,5 +9,9 @@ module.exports = {
   DATABASE_URL: process.env.DATABASE_URL,
   PROJECT_ID: process.env.PROJECT_ID,
   STORAGE_BUCKET: process.env.STORAGE_BUCKET,
-  MESSAGE_SENDER_ID: process.env.MESSAGE_SENDER_ID
+  MESSAGE_SENDER_ID: process.env.MESSAGE_SENDER_ID,
+
+  // GuestUser //
+  GUEST_EMAIL: process.env.GUEST_EMAIL,
+  GUEST_PASSWORD: process.env.GUEST_PASSWORD
 }

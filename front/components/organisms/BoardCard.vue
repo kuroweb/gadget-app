@@ -61,12 +61,12 @@
               </v-chip>
             </v-row>
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" v-if="$store.state.modules.user.data">
             <v-row justify="end">
               <!---------------->
               <!-- 管理メニュー -->
               <!---------------->
-              <div v-if="$store.state.modules.user.data">
+              <div>
                 <!-- adminユーザーの場合 -->
                 <div v-if="$store.state.modules.user.data.admin === true">
                   <v-btn
