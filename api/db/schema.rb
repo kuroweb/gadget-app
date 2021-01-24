@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_24_113632) do
+ActiveRecord::Schema.define(version: 2021_01_24_161229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,7 +112,7 @@ ActiveRecord::Schema.define(version: 2021_01_24_113632) do
     t.integer "post_id"
     t.integer "comment_id"
     t.integer "board_id"
-    t.integer "board_commnet_id"
+    t.integer "board_comment_id"
     t.string "action", default: "", null: false
     t.boolean "checked", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
@@ -169,6 +169,7 @@ ActiveRecord::Schema.define(version: 2021_01_24_113632) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "admin", default: false, null: false
+    t.boolean "guest", default: false, null: false
     t.index "lower((email)::text)", name: "index_users_on_LOWER_email", unique: true
   end
 
