@@ -6,9 +6,9 @@ class Board < ApplicationRecord
   ###################
   has_many_attached :images
   belongs_to :user
-  has_many :board_comments, dependent: :destroy
   has_many :board_tag_maps, dependent: :destroy
   has_many :tags, through: :board_tag_maps
+  has_many :board_comments, dependent: :destroy
   has_many :notices, dependent: :destroy
 
   ################

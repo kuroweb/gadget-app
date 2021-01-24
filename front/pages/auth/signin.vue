@@ -27,7 +27,17 @@
               class="mx-auto white--text mt-4"
               :disabled="invalid"
               @click="signIn"
-              >ログイン
+            >
+              ログイン
+            </v-btn>
+          </v-row>
+          <v-row justify="center">
+            <v-btn
+              color="orange"
+              class="mx-auto white--text mt-4"
+              @click="guestSignIn"
+            >
+              ゲストユーザーとしてログイン
             </v-btn>
           </v-row>
         </v-form>
@@ -60,12 +70,12 @@ export default {
       setLoading: "modules/info/setLoading",
       setFlash: "modules/info/setFlash",
     }),
-    async signIn() {
+    async signIn () {
       this.setLoading(true)
       firebaseApp
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .then((res) => {
+        .then(res => {
           this.login(res.user)
         })
         .then(() => {
@@ -82,8 +92,8 @@ export default {
           }, 2000)
           this.$router.push("/")
         })
-        .catch((error) => {
-          this.error = ((code) => {
+        .catch(error => {
+          this.error = (code => {
             switch (code) {
               case "auth/user-not-found":
                 return "メールアドレスが間違っています"
@@ -94,8 +104,44 @@ export default {
             }
           })(error.code)
           this.setLoading(false)
-        });
+        })
     },
+    async guestSignIn () {
+      this.setLoading(true)
+      firebaseApp
+        .auth()
+        .signInWithEmailAndPassword(process.env.GUEST_EMAIL, process.env.GUEST_PASSWORD)
+        .then(res => {
+          this.login(res.user)
+        })
+        .then(() => {
+          this.setFlash({
+            status: true,
+            message: "ゲストユーザーとしてログインしました"
+          })
+          this.setLoading(false)
+          setTimeout(() => {
+            this.setFlash({
+              status: false,
+              message: ""
+            }, 2000)
+            this.$router.push("/")
+          })
+        })
+        .catch(error => {
+          this.error = (code => {
+            switch (code) {
+              case "auth/user-not-found":
+                return "メールアドレスが間違っています"
+              case "auth/wrong-password":
+                return "※パスワードが正しくありません"
+              default:
+                return "※メールアドレスとパスワードをご確認ください"
+            }
+          })(error.code)
+          this.setLoading(false)
+        })
+    }
   },
 };
 </script>

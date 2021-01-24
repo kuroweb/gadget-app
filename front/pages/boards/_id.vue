@@ -121,41 +121,52 @@
                         :images="board.images_url"
                       />
                     </v-col>
-                    <v-col cols="12">
-                      <v-row justify="end" class="pr-3">
-                        <div
-                          v-if="$store.state.modules.user.data && board.user.id === $store.state.modules.user.data.id"
-                        >
-                          <v-btn
-                            icon
-                            text
-                            color="grey darken-2"
-                            @click="openEditBoardDialog"
-                          >
-                            <v-icon>
-                              mdi-pencil-box-multiple
-                            </v-icon>
-                          </v-btn>
-                          <v-btn
-                            icon
-                            text
-                            color="grey darken-2"
-                            @click="openDeleteBoardDialog"
-                          >
-                            <v-icon>
-                              mdi-delete
-                            </v-icon>
-                          </v-btn>
+                    <v-col cols="12" v-if="$store.state.modules.user.data">
+                      <v-row justify="end">
+                        <!---------------->
+                        <!-- 管理メニュー -->
+                        <!---------------->
+                        <div>
+                          <!-- adminユーザーの場合 -->
+                          <div v-if="$store.state.modules.user.data.admin === true">
+                            <v-btn
+                              icon
+                              text
+                              color="grey darken-2"
+                              @click="openDeleteBoardDialog"
+                            >
+                              <v-icon>
+                                mdi-delete
+                              </v-icon>
+                            </v-btn>
+                          </div>
+                          <!-- 一般ユーザーの場合 -->
+                          <div v-if="$store.state.modules.user.data.admin === false">
+                            <!-- 自身が作成したコンテンツの場合 -->
+                            <div v-if="$store.state.modules.user.data.id === board.user.id">
+                              <v-btn
+                                icon
+                                text
+                                color="grey darken-2"
+                                @click="openEditBoardDialog"
+                              >
+                                <v-icon>
+                                  mdi-pencil-box-multiple
+                                </v-icon>
+                              </v-btn>
+                              <v-btn
+                                icon
+                                text
+                                color="grey darken-2"
+                                @click="openDeleteBoardDialog"
+                              >
+                                <v-icon>
+                                  mdi-delete
+                                </v-icon>
+                              </v-btn>
+                            </div>
+                          </div>
                         </div>
-                        <v-btn
-                          icon
-                          text
-                        >
-                          <v-icon>
-                            mdi-comment-outline
-                          </v-icon>
-                        </v-btn>
-                        <p>{{ board.commentCounts }}</p>
                       </v-row>
                     </v-col>
                   </v-row>
@@ -215,20 +226,39 @@
                             </v-col>
                           </v-row>
                           <v-row justify="end">
-                            <div
-                              v-if="$store.state.modules.user.data && comment.user.id === $store.state.modules.user.data.id"
-                            >
-                              <v-btn
-                                icon
-                                text
-                                color="grey darken-2"
-                                @click="openDeleteCommentDialog(comment)"
-                                class="mr-3"
-                              >
-                                <v-icon>
-                                  mdi-delete
-                                </v-icon>
-                              </v-btn>
+                            <!---------------->
+                            <!-- 管理メニュー -->
+                            <!---------------->
+                            <div v-if="$store.state.modules.user.data">
+                              <!-- adminユーザーの場合 -->
+                              <div v-if="$store.state.modules.user.data.admin === true">
+                                <v-btn
+                                  icon
+                                  text
+                                  color="grey darken-2"
+                                  @click="openDeleteCommentDialog(comment)"
+                                >
+                                  <v-icon>
+                                    mdi-delete
+                                  </v-icon>
+                                </v-btn>
+                              </div>
+                              <!-- 一般ユーザーの場合 -->
+                              <div v-if="$store.state.modules.user.data.admin === false">
+                                <!-- 自身が作成したコンテンツの場合 -->
+                                <div v-if="$store.state.modules.user.data.id === comment.user.id">
+                                  <v-btn
+                                    icon
+                                    text
+                                    color="grey darken-2"
+                                    @click="openDeleteCommentDialog(comment)"
+                                  >
+                                    <v-icon>
+                                      mdi-delete
+                                    </v-icon>
+                                  </v-btn>
+                                </div>
+                              </div>
                             </div>
                             <v-btn
                               rounded
@@ -293,20 +323,42 @@
                                   :images="child.images_url"
                                 />
                                 <v-row
-                                  v-if="$store.state.modules.user.data && child.user.id === $store.state.modules.user.data.id"
                                   justify="end"
                                 >
-                                  <v-btn
-                                    icon
-                                    text
-                                    color="grey darken-2"
-                                    @click="openDeleteCommentDialog(child)"
-                                    class="mr-3"
-                                  >
-                                    <v-icon>
-                                      mdi-delete
-                                    </v-icon>
-                                  </v-btn>
+                                  <!---------------->
+                                  <!-- 管理メニュー -->
+                                  <!---------------->
+                                  <div v-if="$store.state.modules.user.data">
+                                    <!-- adminユーザーの場合 -->
+                                    <div v-if="$store.state.modules.user.data.admin === true">
+                                      <v-btn
+                                        icon
+                                        text
+                                        color="grey darken-2"
+                                        @click="openDeleteCommentDialog(child)"
+                                      >
+                                        <v-icon>
+                                          mdi-delete
+                                        </v-icon>
+                                      </v-btn>
+                                    </div>
+                                    <!-- 一般ユーザーの場合 -->
+                                    <div v-if="$store.state.modules.user.data.admin === false">
+                                      <!-- 自身が作成したコンテンツの場合 -->
+                                      <div v-if="$store.state.modules.user.data.id === child.user.id">
+                                        <v-btn
+                                          icon
+                                          text
+                                          color="grey darken-2"
+                                          @click="openDeleteCommentDialog(child)"
+                                        >
+                                          <v-icon>
+                                            mdi-delete
+                                          </v-icon>
+                                        </v-btn>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </v-row>
                               </v-container>
                             </v-card-text>
@@ -321,8 +373,6 @@
           </v-container>
         </v-card>
       </v-col>
-
-
       <v-col lg="3" sm="8" cols="12">
         <v-card>
           <p>関連ガジェットを表示</p>

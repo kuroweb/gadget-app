@@ -6,7 +6,7 @@ class CreateNotices < ActiveRecord::Migration[6.0]
       t.integer :post_id
       t.integer :comment_id
       t.integer :board_id
-      t.integer :board_commnet_id
+      t.integer :board_comment_id
       t.string :action, default: '', null: false
       t.boolean :checked, default: false, null: false
 
