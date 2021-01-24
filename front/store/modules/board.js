@@ -13,6 +13,9 @@ export const getters = {
 }
 
 export const actions = {
+  ////////////////
+  // 詳細ページ用 //
+  ////////////////
   setData ({ commit }, payload) {
     // コメント総数プロパティを追加
     payload.commentCounts = payload.board_comments.length
@@ -40,23 +43,6 @@ export const actions = {
     payload.board_comments = result
     commit('setData', payload)
   },
-  setBoards ({ commit }, boards) {
-    // コメント総数プロパティを追加
-    boards.forEach(board => {
-      board.commentCounts = board.board_comments.length
-    })
-    commit('setBoards', boards)
-  },
-
-  // 一覧ページ用
-  reloadBoardsByCreateBoard ({ commit }, board) {
-    commit('reloadBoardsByCreateBoard', board)
-  },
-  reloadBoardsByPageScrolling ({ commit }, boards) {
-    commit('reloadBoardsByPageScrolling', boards)
-  },
-
-  // 詳細ページ用
   reloadBoardByEditBoard ({ commit }, board) {
     commit('reloadBoardByEditBoard', board)
   },
@@ -71,28 +57,39 @@ export const actions = {
   },
   reloadBoardByCreateBoard ({ commit }, board) {
     commit('reloadBoardByCreateBoard', board)
+  },
+
+  ////////////////
+  // 一覧ページ用 //
+  ////////////////
+  setBoards ({ commit }, boards) {
+    // コメント総数プロパティを追加
+    boards.forEach(board => {
+      board.commentCounts = board.board_comments.length
+    })
+    commit('setBoards', boards)
+  },
+  reloadBoardsByCreateBoard ({ commit }, board) {
+    commit('reloadBoardsByCreateBoard', board)
+  },
+  reloadBoardsByEditBoard ({ commit }, boardId) {
+    commit('reloadBoardsByEditBoard', boardId)
+  },
+  reloadBoardsByDeleteBoard ({ commit }, boardId) {
+    commit('reloadBoardsByDeleteBoard', boardId)
+  },
+  reloadBoardsByPageScrolling ({ commit }, boards) {
+    commit('reloadBoardsByPageScrolling', boards)
   }
 }
 
 export const mutations = {
+  ////////////////
+  // 詳細ページ用 //
+  ////////////////
   setData (state, payload) {
     state.data = payload
   },
-  setBoards (state, payload) {
-    state.boards = payload
-  },
-
-  // 一覧ページ用
-  reloadBoardsByCreateBoard (state, board) {
-    board.commentCounts = 0
-    state.boards.unshift(board)
-  },
-  reloadBoardsByPageScrolling (state, boards) {
-    boards.forEach(board => {
-      state.boards.push(board)
-    })
-  },
-
   // 詳細ページ用
   reloadBoardByEditBoard (state, board) {
     state.data.images_url = board.images_url
@@ -152,4 +149,34 @@ export const mutations = {
       })
     }
   },
+
+  ////////////////
+  // 一覧ページ用 //
+  ////////////////
+  setBoards (state, payload) {
+    state.boards = payload
+  },
+  reloadBoardsByCreateBoard (state, board) {
+    board.commentCounts = 0
+    state.boards.unshift(board)
+  },
+  reloadBoardsByEditBoard (state, board) {
+    state.boards.forEach(p => {
+      if (p.id === board.id) {
+        p.title = board.title
+      }
+    })
+  },
+  reloadBoardsByDeleteBoard (state, boardId) {
+    state.boards.forEach((p, index) => {
+      if (p.id === boardId) {
+        state.boards.splice(index, 1)
+      }
+    })
+  },
+  reloadBoardsByPageScrolling (state, boards) {
+    boards.forEach(board => {
+      state.boards.push(board)
+    })
+  }
 }
