@@ -11,6 +11,7 @@
       <v-col xl="4" lg="6" sm="8" cols="12">
         <v-card class="mx-auto">
           <v-tabs
+            v-model="tab"
             fixed-tabs
             centered
             background-color="cyan darken-1"
@@ -26,6 +27,11 @@
               登録情報
               <v-icon>mdi-account-cog</v-icon>
             </v-tab>
+          </v-tabs>
+          <v-tabs-items
+            v-model="tab"
+            touchless
+          >
             <v-tab-item>
               <v-card-text>
                 <v-container>
@@ -43,11 +49,21 @@
                             />
                             <v-row justify="center">
                               <v-btn
+                                v-if="currentUser.guest === false"
                                 block
                                 color="success"
+                                class="white--text"
                                 @click="changeUserAvatar"
                               >
                                 変更
+                              </v-btn>
+                              <v-btn
+                                v-else
+                                block
+                                color="grey"
+                                class="white--text"
+                              >
+                                変更（ゲストユーザーのため変更できません）
                               </v-btn>
                             </v-row>
                           </div>
@@ -70,6 +86,7 @@
                             />
                             <v-row justify="center">
                               <v-btn
+                                v-if="currentUser.guest === false"
                                 color="success"
                                 block
                                 class="white--text"
@@ -77,6 +94,15 @@
                                 @click="changeUserProfile"
                               >
                                 変更
+                              </v-btn>
+                              <v-btn
+                                v-else
+                                color="grey"
+                                block
+                                class="white--text"
+                                :disabled="invalid"
+                              >
+                                変更（ゲストユーザーのため変更できません）
                               </v-btn>
                             </v-row>
                           </div>
@@ -106,6 +132,7 @@
                             />
                             <v-row justify="center">
                               <v-btn
+                                v-if="currentUser.guest === false"
                                 color="success"
                                 block
                                 class="white--text"
@@ -113,6 +140,15 @@
                                 @click="openDialogForEmail"
                               >
                                 変更
+                              </v-btn>
+                              <v-btn
+                                v-else
+                                color="grey"
+                                block
+                                class="white--text"
+                                :disabled="invalid"
+                              >
+                                変更（ゲストユーザーのため変更できません）
                               </v-btn>
                             </v-row>
                           </div>
@@ -144,6 +180,7 @@
                           />  
                           <v-row justify="center">
                             <v-btn
+                              v-if="currentUser.guest === false"
                               color="success"
                               block
                               class="white--text"
@@ -151,6 +188,15 @@
                               @click="openDialogForPassword"
                             >
                               変更
+                            </v-btn>
+                            <v-btn
+                              v-else
+                              color="grey"
+                              block
+                              class="white--text"
+                              :disabled="invalid"
+                            >
+                              変更（ゲストユーザーのため変更できません）
                             </v-btn>
                           </v-row>
                         </div>
@@ -163,10 +209,19 @@
                     <v-col cols="12">
                       <v-row justify="center">
                         <v-btn
+                          v-if="currentUser.guest === false"
                           block
                           color="white--text red"
                           @click="openDialogForDeleteAccount"
-                        >削除
+                        >
+                          削除
+                        </v-btn>
+                        <v-btn
+                          v-else
+                          block
+                          color="white--text grey"
+                        >
+                          変更（ゲストユーザーのため変更できません）
                         </v-btn>
                       </v-row>
                     </v-col>
@@ -174,7 +229,7 @@
                 </v-container>
               </v-card-text>
             </v-tab-item>
-          </v-tabs>
+          </v-tabs-items>
         </v-card>
       </v-col>
     </v-row>
@@ -215,6 +270,7 @@ export default {
       profile: '',
       isDeleteAccount: false,
       avatar: [],
+      tab: null
     }
   },
   async asyncData({ $axios, store }) {
