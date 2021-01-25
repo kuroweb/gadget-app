@@ -41,12 +41,6 @@
       justify="center"
       v-if="error === false"
     >
-      <v-col lg="3" sm="8" cols="12">
-        <v-card>
-          <p>関連投稿を表示</p>
-        </v-card>
-      </v-col>
-
       <v-col lg="6" sm="8" cols="12">
         <v-card>
           <v-toolbar
@@ -426,11 +420,6 @@
               </v-card>
             </v-card>
           </v-container>
-        </v-card>
-      </v-col>
-      <v-col lg="3" sm="8" cols="12">
-        <v-card>
-          <p>関連ガジェットを表示</p>
         </v-card>
       </v-col>
     </v-row>
