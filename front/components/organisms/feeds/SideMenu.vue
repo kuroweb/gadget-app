@@ -5,7 +5,12 @@
         dark
         flat
       >
-        <v-toolbar-title>Menu</v-toolbar-title>
+        <v-toolbar-title>
+          <v-icon class="mr-3">
+            mdi-menu
+          </v-icon>
+          Menu
+        </v-toolbar-title>
       </v-toolbar>
       <v-list>
         <v-list-item-group
@@ -19,6 +24,9 @@
           >
             <v-list-item-content>
               <v-list-item-title>
+                <v-icon class="mr-3">
+                  {{ item.icon }}
+                </v-icon>
                 {{ item.title }}
               </v-list-item-title>
             </v-list-item-content>
@@ -34,15 +42,18 @@ export default {
       menuItems: [
         {
           title: 'マイクロポスト',
-          name: 'openMicropostFeed'
+          name: 'openMicropostFeed',
+          icon: 'mdi-post-outline'
         },
         {
           title: '掲示板',
-          name: 'openBoardList'
+          name: 'openBoardList',
+          icon: 'mdi-forum'
         },
         {
           title: 'ガジェット',
-          name: 'openGadgetList'
+          name: 'openGadgetList',
+          icon: 'mdi-laptop'
         }
       ]
     }
