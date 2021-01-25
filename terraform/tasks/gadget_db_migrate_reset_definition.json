@@ -14,6 +14,10 @@
     "command": ["bundle", "exec", "rails", "db:migrate:reset"],
     "environment": [
       {
+        "name": "DISABLE_DATABASE_ENVIRONMENT_CHECK",
+        "value": "1"
+      },
+      {
         "name": "RAILS_ENV",
         "value": "production"
       },

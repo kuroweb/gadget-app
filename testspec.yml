@@ -15,13 +15,13 @@ env:
     FRONT_PORT: front-port
     API_KEY: api-key
     AUTH_DOMAIN: auth-domain
-    PROJECT_ID:  project-id
+    PROJECT_ID: project-id
     DATABASE_URL: database-url
     STORAGE_BUCKET: storage-bucket
     MESSAGE_SENDER_ID: message-sender-id
     API_BASE_URL: api-base-url
     BROWSER_BASE_URL: browser-base-url
-    AWS_ACCESS_KEY_ID:     access-key-id
+    AWS_ACCESS_KEY_ID: access-key-id
     AWS_SECRET_ACCESS_KEY: secret-access-key
 
 phases:
