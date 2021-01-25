@@ -516,7 +516,7 @@ export default {
           post_id: payload.id
         })
           .then(() => {
-            this.reloadPostsByLikedPost(payload)
+            this.reloadPostByLikedPost(payload)
           })
       } else {
         this.openSupportDialog()
@@ -533,7 +533,7 @@ export default {
           }
         })
           .then(() => {
-            this.reloadPostsByDisLikedPost(payload)
+            this.reloadPostByDisLikedPost(payload)
           })
       } else {
         this.openSupportDialog()
