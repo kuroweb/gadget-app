@@ -116,7 +116,9 @@ export default {
     }
   },
   mounted () {
-    this.admin = this.currentUser.admin
+    if (this.currentUser) {
+      this.admin = this.currentUser.admin
+    }
   },
   computed: {
     ...mapGetters({
