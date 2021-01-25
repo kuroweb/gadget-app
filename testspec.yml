@@ -21,6 +21,8 @@ env:
     MESSAGE_SENDER_ID: message-sender-id
     API_BASE_URL: api-base-url
     BROWSER_BASE_URL: browser-base-url
+    AWS_ACCESS_KEY_ID:     access-key-id
+    AWS_SECRET_ACCESS_KEY: secret-access-key
 
 phases:
 
