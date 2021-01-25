@@ -63,7 +63,7 @@
                                 color="grey"
                                 class="white--text"
                               >
-                                変更（ゲストユーザーのため変更できません）
+                                変更（ゲストユーザーのため変更不可）
                               </v-btn>
                             </v-row>
                           </div>
@@ -102,7 +102,7 @@
                                 class="white--text"
                                 :disabled="invalid"
                               >
-                                変更（ゲストユーザーのため変更できません）
+                                変更（ゲストユーザーのため変更不可）
                               </v-btn>
                             </v-row>
                           </div>
@@ -148,7 +148,7 @@
                                 class="white--text"
                                 :disabled="invalid"
                               >
-                                変更（ゲストユーザーのため変更できません）
+                                変更（ゲストユーザーのため変更不可）
                               </v-btn>
                             </v-row>
                           </div>
@@ -196,7 +196,7 @@
                               class="white--text"
                               :disabled="invalid"
                             >
-                              変更（ゲストユーザーのため変更できません）
+                              変更（ゲストユーザーのため変更不可）
                             </v-btn>
                           </v-row>
                         </div>
@@ -221,7 +221,7 @@
                           block
                           color="white--text grey"
                         >
-                          変更（ゲストユーザーのため変更できません）
+                          変更（ゲストユーザーのため変更不可）
                         </v-btn>
                       </v-row>
                     </v-col>

@@ -93,6 +93,10 @@ export const actions = {
         })
       }
     })
+  },
+
+  setAdmin ({ commit }, payload) {
+    commit('setAdmin', payload)
   }
 }
 
@@ -105,5 +109,9 @@ export const mutations = {
   
   setData (state, payload) {
     state.data = payload
+  },
+
+  setAdmin (state, payload) {
+    state.data.admin = payload
   }
 }

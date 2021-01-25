@@ -83,7 +83,17 @@
         <v-list-item
           @click="logOut"
         >
-          ログアウト
+          <v-list-item-title>ログアウト</v-list-item-title>
+        </v-list-item>
+        <v-divider/>
+        <v-list-item>
+          <v-switch
+            v-model="admin"
+            color="orange"
+            inset
+            @change="changeAdmin"
+            :label="`God mode`"
+          ></v-switch>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -93,14 +103,20 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import NoticeFeed from '~/components/organisms/NoticeFeed.vue'
+import Hint from '~/components/molecules/Hint.vue'
 export default {
   componetns: {
-    NoticeFeed
+    NoticeFeed,
+    Hint
   },
   data () {
     return {
       value: false,
+      admin: false
     }
+  },
+  mounted () {
+    this.admin = this.currentUser.admin
   },
   computed: {
     ...mapGetters({
@@ -124,7 +140,8 @@ export default {
   methods: {
     ...mapActions({
       logout: 'modules/user/logout',
-      setFlash: 'modules/info/setFlash'
+      setFlash: 'modules/info/setFlash',
+      setAdmin: 'modules/user/setAdmin'
     }),
     async logOut() {
       this.logout()
@@ -139,12 +156,9 @@ export default {
           message: ""
         })
       }, 2000)
-
-      // this.logout().then(() => {
-      //   this.$router.push('/')
-      // }).catch((error) => {
-      //   console.log(error.message)
-      // })
+    },
+    changeAdmin () {
+      this.setAdmin(this.admin)
     }
   }
 }
