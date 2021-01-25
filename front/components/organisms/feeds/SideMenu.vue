@@ -51,7 +51,7 @@ export default {
           icon: 'mdi-forum'
         },
         {
-          title: 'ガジェット',
+          title: 'みんなのガジェット',
           name: 'openGadgetList',
           icon: 'mdi-laptop'
         }
