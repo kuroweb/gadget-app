@@ -1,9 +1,13 @@
 class V1::PostsController < ApplicationController
   before_action :set_post, only: [:update, :destroy]
 
+  ################################################################################################
   # 投稿一覧
+  ################################################################################################
   def index
-    # タイムライン表示
+    #=============================================================================================
+    # タイムライン表示 / 動作確認中(1/26)
+    #=============================================================================================
     if params[:user_id]
       user = User.find(params[:user_id])
       following = user.following.includes({posts: [{images_attachments: :blob},
@@ -18,6 +22,7 @@ class V1::PostsController < ApplicationController
           posts.push(p)
         end
       end
+      posts.uniq!
       posts.sort! do |a, b|
         b[:created_at] <=> a[:created_at]
       end
@@ -28,7 +33,9 @@ class V1::PostsController < ApplicationController
                                               {comments: {include: {user: {methods: :avatar_url}},
                                                           methods: :images_url}}],
                                       methods: :images_url)
-    # タグフィード表示
+    #=============================================================================================
+    # タグフィード表示 / 動作確認済(1/26)
+    #=============================================================================================
     elsif params[:tag_feed_id]
       user = User.find(params[:tag_feed_id])
       tags = user.tags.includes({posts: [{images_attachments: :blob},
@@ -37,16 +44,13 @@ class V1::PostsController < ApplicationController
                                           :liked_users,
                                           {comments: [{user: {avatar_attachment: :blob}},
                                                       {images_attachments: :blob}]}]})
-      # 投稿を抽出
       posts = []
       tags.each do |tag|
         tag.posts.each do |p|
           posts.push(p)
         end
       end
-      # タブった投稿をリジェクト
       posts.uniq!
-      # 新着順でソート
       posts.sort! do |a, b|
         b[:created_at] <=> a[:created_at]
       end
@@ -57,15 +61,17 @@ class V1::PostsController < ApplicationController
                                                 {comments: {include: {user: {methods: :avatar_url}},
                                                             methods: :images_url}}],
                                       methods: :images_url)
-    # 新着表示
+    #=============================================================================================
+    # 新着表示 / 動作確認済(1/26)
+    #=============================================================================================
     else
-      @posts = Post.includes({images_attachments: :blob},
+      posts = Post.includes({images_attachments: :blob},
                               {user: {avatar_attachment: :blob}},
                               :tags,
                               :liked_users,
                               {comments: [{user: {avatar_attachment: :blob}},
-                                          {images_attachments: :blob}]}).page(params[:page]).per(5).order(created_at: "DESC")
-      render json: @posts.as_json(include: [{user: {methods: :avatar_url}},
+                                          {images_attachments: :blob}]}).page(params[:page]).per(5).order(created_at: 'DESC')
+      render json: posts.as_json(include: [{user: {methods: :avatar_url}},
                             :tags,
                             :liked_users,
                             {comments: {include: {user: {methods: :avatar_url}},
@@ -74,7 +80,9 @@ class V1::PostsController < ApplicationController
     end
   end
 
+  ################################################################################################
   # 投稿詳細
+  ################################################################################################
   def show
     @post = Post.includes({images_attachments: :blob},
                           {user: {avatar_attachment: :blob}},
@@ -90,7 +98,9 @@ class V1::PostsController < ApplicationController
                                 methods: :images_url)
   end
 
+  ################################################################################################
   # 投稿新規作成
+  ################################################################################################
   def create
     @post = Post.new(post_content_params)
     sent_tags = post_tags_params[:tags] === nil ? [] : post_tags_params[:tags]
@@ -108,7 +118,9 @@ class V1::PostsController < ApplicationController
     end
   end
 
+  ################################################################################################
   # 投稿更新
+  ################################################################################################
   def update
     sent_tags = post_tags_params[:tags] === nil ? [] : post_tags_params[:tags]
     if @post.update(post_content_params)
@@ -128,12 +140,16 @@ class V1::PostsController < ApplicationController
     end
   end
 
+  ################################################################################################
   # 投稿削除
+  ################################################################################################
   def destroy
     @post.destroy
   end
 
+  ################################################################################################
   # 投稿検索
+  ################################################################################################
   def search
     if params[:post_name]
       @posts = Post.search(params[:post_name])
@@ -141,6 +157,9 @@ class V1::PostsController < ApplicationController
     end
   end
 
+  ################################################################################################
+  # プライペートメソッド
+  ################################################################################################
   private
     def set_post
       @post = Post.find(params[:id])

@@ -5,8 +5,8 @@
       @createPost="createPost"
       @closeDialog="createPostDialog = false"
     />
-    <v-row v-if="loading">
-      <v-col cols="12">
+    <v-row>
+      <v-col cols="12" v-if="loading">
         <v-skeleton-loader
           class="mx-auto"
           type="card"
@@ -14,25 +14,35 @@
           :key="n.id"
         />
       </v-col>
-    </v-row>
-    <v-row v-if="loading === false">
-      <v-col cols="12">
-        <v-btn
-          block
-          color="orange"
-          dark
-          rounded
-          @click="openCreatePostDialog"
-        >
-          新しい投稿を追加する
-        </v-btn>
-      </v-col>
-      <v-col cols="12">
-        <MicroPostCard
-          v-for="(post, index) in posts"
-          :key="index"
-          :post="post"
-        />
+      <v-col cols="12" v-if="loading === false">
+        <v-row>
+          <v-col cols="12">
+            <v-btn
+              block
+              color="orange"
+              dark
+              rounded
+              @click="openCreatePostDialog"
+            >
+              新しい投稿を追加する
+            </v-btn>
+          </v-col>
+          <v-col cols="12">
+            <MicroPostCard
+              v-for="(post, index) in posts"
+              :key="index"
+              :post="post"
+            />
+            <VueInfiniteLoading
+              ref="infiniteLoading"
+              spinner="spiral"
+              @infinite="infiniteHandler"
+            >
+              <span slot="no-more">-----投稿は以上です-----</span>
+              <span slot="no-results"></span>
+            </VueInfiniteLoading>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -50,6 +60,7 @@ export default {
     return {
       loading: true,
       createPostDialog: false,
+      count: 1
     }
   },
   props: {
@@ -58,6 +69,7 @@ export default {
   watch: {
     async load () {
       this.loading = true
+      this.count = 1
       await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`, {
         params: {
           tag_feed_id: this.$store.state.modules.user.data.id,
@@ -71,16 +83,17 @@ export default {
     }
   },
   async mounted () {
-      await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`, {
-        params: {
-          tag_feed_id: this.$store.state.modules.user.data.id,
-          page: this.count
-        }
-      })
-        .then(res => {
-          this.setPosts(res)
-          setTimeout(this.stopLoading, 500)
-      })
+    this.count = 1
+    await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`, {
+      params: {
+        tag_feed_id: this.$store.state.modules.user.data.id,
+        page: this.count
+      }
+    })
+      .then(res => {
+        this.setPosts(res)
+        setTimeout(this.stopLoading, 500)
+    })
   },
   computed: {
     ...mapGetters({
@@ -90,7 +103,8 @@ export default {
   methods: {
     ...mapActions({
       setPosts: 'modules/post/setPosts',
-      reloadPostsByCreatePost: 'modules/post/reloadPostsByCreatePost'
+      reloadPostsByCreatePost: 'modules/post/reloadPostsByCreatePost',
+      reloadPostsByPageScrolling: 'modules/post/reloadPostsByPageScrolling'
     }),
     stopLoading () {
       this.loading = false
@@ -100,6 +114,25 @@ export default {
     },
     createPost (payload) {
       this.reloadPostsByCreatePost(payload)
+    },
+    async infiniteHandler () {
+      this.count += 1
+      await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`, {
+        params: {
+          tag_feed_id: this.$store.state.modules.user.data.id,
+          page: this.count
+        }
+      })
+        .then(res => {
+          if (res.length !== 0) {
+            setTimeout(() => {
+              this.reloadPostsByPageScrolling(res)
+              this.$refs.infiniteLoading.stateChanger.loaded()
+            }, 1000)
+          } else {
+            this.$refs.infiniteLoading.stateChanger.complete()
+          }
+        })
     }
   }
 }
