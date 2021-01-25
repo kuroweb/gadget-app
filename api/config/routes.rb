@@ -11,6 +11,7 @@ Rails.application.routes.draw do
         get '/following', to: 'users#following'
         get '/followers', to: 'users#followers'
         get '/posts', to: 'users#posts'
+        get '/guestmode', to: 'users#guestmode'
       end
     end
     resources :relationships, only: [:create, :destroy]

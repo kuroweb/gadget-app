@@ -118,6 +118,8 @@ variable "DATABASE_URL" {}
 variable "PROJECT_ID" {}
 variable "STORAGE_BUCKET" {}
 variable "MESSAGE_SENDER_ID" {}
+variable "GUEST_EMAIL" {}
+variable "GUEST_PASSWORD" {}
 
 resource "aws_ssm_parameter" "workdir" {
   name = "workdir"
@@ -184,6 +186,18 @@ resource "aws_ssm_parameter" "message-sender-id" {
   value = var.MESSAGE_SENDER_ID
   type = "SecureString"
   description = "MESSAGE_SENDER_ID"
+}
+resource "aws_ssm_parameter" "guest-email" {
+  name = "guest-email"
+  value = var.GUEST_EMAIL
+  type = "SecureString"
+  description = "GUEST_EMAIL"
+}
+resource "aws_ssm_parameter" "guest-password" {
+  name = "guest-password"
+  value = var.GUEST_PASSWORD
+  type = "SecureString"
+  description = "GUEST_PASSWORD"
 }
 
 #__________ CodePipeline _________#

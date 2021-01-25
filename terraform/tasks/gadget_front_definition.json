@@ -70,6 +70,14 @@
       {
         "name": "MESSAGE_SENDER_ID",
         "valueFrom": "message-sender-id"
+      },
+      {
+        "name": "GUEST_EMAIL",
+        "valueFrom": "guest-email"
+      },
+      {
+        "name": "GUEST_PASSWORD",
+        "valueFrom": "guest-password"
       }
     ]
   }
