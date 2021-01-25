@@ -32,10 +32,6 @@ class V1::UsersController < ApplicationController
                                 methods: :avatar_url)
   end
 
-  def test
-
-  end
-
   def create
     @user = User.new(user_params)
     if @user.save
@@ -51,8 +47,15 @@ class V1::UsersController < ApplicationController
     end
   end
 
+  # ゲストモードの有効化
+  def guestmode
+    user = User.find(params[:id])
+    user.guest = true
+    user.save
+  end
+
   def update_avatar
-    @user = User.find(params[:id])
+    @user = User.find(params[:user_id])
     @user.avatar.attach(params[:avatar])
     render json: @user
   end
