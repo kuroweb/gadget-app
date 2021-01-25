@@ -142,8 +142,8 @@ export default {
           this.setLoading(false)
         })
     }
-  },
-};
+  }
+}
 </script>
 
 
