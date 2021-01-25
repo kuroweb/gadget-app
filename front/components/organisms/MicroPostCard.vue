@@ -94,16 +94,41 @@
               <div v-if="$store.state.modules.user.data">
                 <!-- adminユーザーの場合 -->
                 <div v-if="$store.state.modules.user.data.admin === true">
-                  <v-btn
-                    icon
-                    text
-                    color="grey darken-2"
-                    @click="openDeletePostDialog"
-                  >
-                    <v-icon>
-                      mdi-delete
-                    </v-icon>
-                  </v-btn>
+                  <!-- 自身が作成したコンテンツの場合 -->
+                  <div v-if="$store.state.modules.user.data.id === post.user.id">
+                    <v-btn
+                      icon
+                      text
+                      color="grey darken-2"
+                      @click="openEditPostDialog"
+                    >
+                      <v-icon>
+                        mdi-pencil-box-multiple
+                      </v-icon>
+                    </v-btn>
+                    <v-btn
+                      icon
+                      text
+                      color="grey darken-2"
+                      @click="openDeletePostDialog"
+                    >
+                      <v-icon>
+                        mdi-delete
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                  <div v-else>
+                    <v-btn
+                      icon
+                      text
+                      color="grey darken-2"
+                      @click="openDeletePostDialog"
+                    >
+                      <v-icon>
+                        mdi-delete
+                      </v-icon>
+                    </v-btn>
+                  </div>
                 </div>
                 <!-- 一般ユーザーの場合 -->
                 <div v-if="$store.state.modules.user.data.admin === false">
