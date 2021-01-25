@@ -37,6 +37,10 @@
       @deletePost="deletePost"
       @closeDialog="deletePostDialog = false"
     />
+    <SupportDialog
+      :dialog="supportDialog"
+      @closeDialog="supportDialog = false"
+    />
     <v-row
       justify="center"
       v-if="error === false"
@@ -409,6 +413,7 @@ import CreatePostReplyDialog from '~/components/organisms/posts/CreatePostReplyD
 import DeletePostCommentDialog from '~/components/organisms/posts/DeletePostCommentDialog.vue'
 import EditPostDialog from '~/components/organisms/posts/EditPostDialog.vue'
 import DeletePostDialog from '~/components/organisms/posts/DeletePostDialog.vue'
+import SupportDialog from '~/components/organisms/SupportDialog.vue'
 export default {
   components: {
     ErrorCard,
@@ -418,7 +423,8 @@ export default {
     CreatePostReplyDialog,
     DeletePostCommentDialog,
     EditPostDialog,
-    DeletePostDialog
+    DeletePostDialog,
+    SupportDialog
   },
   data () {
     return {
@@ -428,6 +434,7 @@ export default {
       deleteCommentDialog: false,
       editPostDialog: false,
       deletePostDialog: false,
+      supportDialog: false,
       parentComment: '',
       comment: '',
     }
@@ -484,6 +491,9 @@ export default {
       this.postId = this.post.id
       this.deletePostDialog = true
     },
+    openSupportDialog () {
+      this.supportDialog = true
+    },
     createPostComment (payload) {
       this.reloadPostByCreateComment(payload)
     },
@@ -500,26 +510,34 @@ export default {
       this.$router.push("/")
     },
     likedPost (payload) {
-      this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/likes', {
-        user_id: this.$store.state.modules.user.data.id,
-        post_id: payload.id
-      })
-        .then(() => {
-          this.reloadPostByLikedPost(payload)
+      if (this.$store.state.modules.user.data) {
+        this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/likes', {
+          user_id: this.$store.state.modules.user.data.id,
+          post_id: payload.id
         })
+          .then(() => {
+            this.reloadPostsByLikedPost(payload)
+          })
+      } else {
+        this.openSupportDialog()
+      }
     },
     disLikedPost (payload) {
-      this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/likes/delete', {
-        params: {
-          like: {
-            user_id: this.$store.state.modules.user.data.id,
-            post_id: payload.id
+      if (this.$store.state.modules.user.data) {
+        this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/likes/delete', {
+          params: {
+            like: {
+              user_id: this.$store.state.modules.user.data.id,
+              post_id: payload.id
+            }
           }
-        }
-      })
-        .then(() => {
-          this.reloadPostByDisLikedPost(payload)
         })
+          .then(() => {
+            this.reloadPostsByDisLikedPost(payload)
+          })
+      } else {
+        this.openSupportDialog()
+      }
     }
   }
 }

@@ -4,7 +4,10 @@
     max-width="500px"
     persistent
   >
-    <v-card class="mx-auto">
+    <v-card
+      class="mx-auto"
+      v-if="$store.state.modules.user.data"
+    >
       <v-toolbar
         class="cyan darken-1"
         flat
@@ -63,6 +66,35 @@
         </v-card-text>
       </v-form>
     </v-card>
+    <v-card v-else>
+      <v-toolbar
+        class="cyan darken-1"
+        flat
+      >
+        <v-toolbar-title
+          class="white--text font-weight-bold"
+        >
+          ログインしてください
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-icon
+          dark
+          @click="closeDialog"
+        >
+          mdi-close
+        </v-icon>
+      </v-toolbar>
+      <v-card-text>
+        <v-col class="text-center" cols="12">
+          <span>ログインが必要な機能です</span>
+        </v-col>
+        <v-col cols="12">
+          <v-row justify="center">
+            <GuestLogginButtom/>
+          </v-row>
+        </v-col>
+      </v-card-text>
+    </v-card>
   </v-dialog>
 </template>
 <script>
@@ -70,11 +102,13 @@ import { mapActions } from 'vuex'
 import TextAreaWithValidation from '~/components/molecules/inputs/TextAreaWithValidation.vue'
 import ImagesForm from '~/components/molecules/inputs/ImagesForm.vue'
 import TagsForm from '~/components/molecules/inputs/TagsForm.vue'
+import GuestLogginButtom from '~/components/organisms/GuestLogginButtom.vue'
 export default {
   components: {
     TextAreaWithValidation,
     ImagesForm,
-    TagsForm
+    TagsForm,
+    GuestLogginButtom
   },
   props: {
     dialog: {
@@ -98,7 +132,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      setFlash: 'modules/info/setFlash'
+      setFlash: "modules/info/setFlash",
     }),
     async createPost () {
       const data = new FormData()
