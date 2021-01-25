@@ -149,7 +149,22 @@ export const actions = {
   reloadPostsByDisLikedPost ({ commit }, post) {
     commit('reloadPostsByDisLikedPost', post)
   },
-  reloadPostsByPageScrolling ({ commit }, posts) {
+  reloadPostsByPageScrolling ({ commit, rootState }, posts) {
+    // いいね総数、いいね未・済のプロパティを追加
+    const likeData = []
+    posts.forEach(post => {
+      post.likedUsersCounts = post.liked_users.length
+      let isLikedPost = false
+      if (rootState.modules.user.data) {
+        post.liked_users.forEach(user => {
+          if (user.id === rootState.modules.user.data.id) {
+            isLikedPost = true
+          }
+        })
+      }
+      post.isLikedPost = isLikedPost
+      likeData.push(post)
+    })
     commit('reloadPostsByPageScrolling', posts)
   }
 }
