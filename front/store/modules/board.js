@@ -99,7 +99,6 @@ export const mutations = {
     state.data.tags = board.tags
   },
   reloadBoardByCreateComment (state, comment) {
-    console.log('test')
     state.data.commentCounts += 1
     if (comment.reply_comment_id === null) {
       state.data.board_comments.push(comment)

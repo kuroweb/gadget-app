@@ -117,16 +117,16 @@ export default {
         .then(() => {
           this.setFlash({
             status: true,
-            message: "ゲストユーザーとしてログインしました"
+            message: "ゲストユーザーとしてログインしました",
           })
           this.setLoading(false)
           setTimeout(() => {
             this.setFlash({
               status: false,
-              message: ""
-            }, 2000)
-            this.$router.push("/")
-          })
+              message: "",
+            })
+          }, 2000)
+          this.$router.push("/")
         })
         .catch(error => {
           this.error = (code => {

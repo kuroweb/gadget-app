@@ -89,7 +89,7 @@
         </v-col>
         <v-col cols="12">
           <v-row justify="center">
-            <GuestLogginButtom/>
+            <GuestLogginButton/>
           </v-row>
         </v-col>
       </v-card-text>
@@ -103,7 +103,7 @@ import TextAreaWithValidation from '~/components/molecules/inputs/TextAreaWithVa
 import SelectFormWithValidation from '~/components/molecules/inputs/SelectFormWithValidation.vue'
 import ImagesForm from '~/components/molecules/inputs/ImagesForm.vue'
 import TagsForm from '~/components/molecules/inputs/TagsForm.vue'
-import GuestLogginButtom from '~/components/organisms/GuestLogginButtom.vue'
+import GuestLogginButton from '~/components/organisms/GuestLogginButton.vue'
 export default {
   components: {
     TextFieldWithValidation,
@@ -111,7 +111,7 @@ export default {
     SelectFormWithValidation,
     ImagesForm,
     TagsForm,
-    GuestLogginButtom
+    GuestLogginButton
   },
   props: {
     dialog: {

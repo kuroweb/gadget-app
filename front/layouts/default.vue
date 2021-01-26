@@ -1,16 +1,14 @@
 <template>
   <v-app style="background-color: #ECEFF1;">
     <Flash />
-    <Loading
-      v-if="loading"
-    />
+    <Loading/>
     <Header />
     <v-main>
       <v-container>
         <nuxt />
       </v-container>
     </v-main>
-    <!-- <Footer /> -->
+    <Footer />
   </v-app>
 </template>
 <script>
@@ -30,9 +28,6 @@ export default {
     Flash,
   },
   computed: {
-    ...mapGetters({
-      loading: 'modules/info/loading'
-    })
   }
 }
 </script>

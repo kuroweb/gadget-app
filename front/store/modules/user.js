@@ -41,7 +41,6 @@ export const getters = {
 export const actions = {
 
   async login({dispatch, state}, user) {
-    console.log('[STORE ACTIONS] - login')
     const token = await firebaseApp.auth().currentUser.getIdToken(true)
     const userInfo = {
       email: user.email,
@@ -52,12 +51,10 @@ export const actions = {
     Cookies.set('access_token', token) // saving token in cookie for server rendering
     await dispatch('setUser', userInfo)
     await dispatch('loadData', uid)
-    console.log('[STORE ACTIONS] - in login, response:', status)
 
   },
 
   async logout({commit, dispatch}) {
-    console.log('[STORE ACTIONS] - logout')
     await firebaseApp.auth().signOut()
 
     Cookies.remove('access_token');
@@ -66,7 +63,6 @@ export const actions = {
   },
 
   setUser({commit}, user) {
-    console.log('[STORE ACTIONS] - saveUser')
     commit('setUser', user)
   },
 
@@ -103,7 +99,6 @@ export const actions = {
 export const mutations = {
 
   setUser (state, user) {
-    console.log('[STORE MUTATIONS] - setUser:', user)
     state.user = user
   },
   
