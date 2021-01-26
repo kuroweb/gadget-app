@@ -28,6 +28,13 @@
           </v-col>
         </v-row>
       </v-col>
+      <v-col
+        v-if="posts.length === 0"
+        cols="12"
+        class="text-center"
+      >
+        <span>いいね済みのつぶやきがありません</span>
+      </v-col>
     </v-row>
   </v-container>
 </template>

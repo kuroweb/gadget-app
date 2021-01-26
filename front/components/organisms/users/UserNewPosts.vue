@@ -42,6 +42,13 @@
               <span slot="no-results"></span>
             </VueInfiniteLoading>
           </v-col>
+          <v-col
+            v-if="posts.length === 0"
+            cols="12"
+            class="text-center"
+          >
+            <span>つぶやきがありません</span>
+          </v-col>
         </v-row>
       </v-col>
     </v-row>
