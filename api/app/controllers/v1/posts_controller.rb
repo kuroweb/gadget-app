@@ -62,7 +62,7 @@ class V1::PostsController < ApplicationController
                                                             methods: :images_url}}],
                                       methods: :images_url)
     #=============================================================================================
-    # 特定ユーザーの投稿一覧 / チェック中
+    # 特定ユーザーの投稿一覧 / チェック済み
     #=============================================================================================
     elsif params[:post_user_id]
       user = User.find(params[:post_user_id])
@@ -80,7 +80,7 @@ class V1::PostsController < ApplicationController
                                                             methods: :images_url}}],
                                       methods: :images_url)
     #=============================================================================================
-    # 特定ユーザーがいいねした投稿一覧 / チェック中
+    # 特定ユーザーがいいねした投稿一覧 / チェック済み
     #=============================================================================================
     elsif params[:user_liked_posts_id]
       user = User.find(params[:user_liked_posts_id])
@@ -188,8 +188,13 @@ class V1::PostsController < ApplicationController
   ################################################################################################
   def search
     if params[:post_name]
-      @posts = Post.search(params[:post_name])
-      render json: @posts
+      @posts = Post.search(params[:post_name]).order(created_at: 'DESC')
+      render json: @posts.as_json(include: [{user: {methods: :avatar_url}},
+                                            :tags,
+                                            :liked_users,
+                                            {comments: {include: {user: {methods: :avatar_url}},
+                                                        methods: :images_url}}],
+                                    methods: :images_url)
     end
   end
 

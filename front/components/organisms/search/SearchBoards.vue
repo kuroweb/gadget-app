@@ -1,12 +1,12 @@
 <template>
   <v-card flat>
     <v-card-title>
-      投稿検索
+      掲示板検索
     </v-card-title>
     <v-card-text>
       <v-text-field
-        v-model="post"
-        hint="投稿名を入力して検索"
+        v-model="board"
+        hint="掲示板名を入力して検索"
       >
         <v-icon slot="prepend">mdi-magnify</v-icon>
       </v-text-field>
@@ -14,15 +14,15 @@
     <v-card-text>
       <v-card
         class="mx-auto ma-5 pa-5"
-        v-for="post in post_result"
-        :key="post.id"
+        v-for="board in board_result"
+        :key="board.id"
       >
         <v-card-title>
           <v-spacer/>
           <v-avatar size="64">
             <img
-              v-if="post.user.avatar_url"
-              :src="post.user.avatar_url"
+              v-if="board.user.avatar_url"
+              :src="board.user.avatar_url"
               alt="Avatar"
             />
             <img
@@ -32,24 +32,24 @@
             />
           </v-avatar>
           <v-spacer/>
-          <v-card flat :to="`/users/${post.user.id}`">
-            <span>{{ post.user.name }}</span>
+          <v-card flat :to="`/users/${board.user.id}`">
+            <span>{{ board.user.name }}</span>
           </v-card>
           <v-spacer/>
         </v-card-title>
         <v-card-text>
           <Tags
-            :tags="post.tags"
+            :tags="board.tags"
           />
         </v-card-text>
         <v-card-text>
-          <v-card flat :to="`/posts/${post.id}`">
-            <span>{{ post.description }}</span>
+          <v-card flat :to="`/boards/${board.id}`">
+            <span>{{ board.description }}</span>
           </v-card>
         </v-card-text>
         <v-card-text>
           <Images
-            :images="post.images_url"
+            :images="board.images_url"
           />
         </v-card-text>
       </v-card>
@@ -68,25 +68,25 @@ export default {
   },
   data () {
     return {
-      post: '',
-      post_result: []
+      board: '',
+      board_result: []
     }
   },
   watch: {
-    post () {
+    board () {
       this.delayFunc()
     }
   },
   methods: {
     search () {
       const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
-      this.$axios.$get(baseUrl + '/v1/posts/search', {
+      this.$axios.$get(baseUrl + '/v1/boards/search', {
         params: {
-          post_name: this.post
+          board_name: this.board
         }
       })
         .then(res => {
-          this.post_result = res
+          this.board_result = res
         })
         .catch(error => {
           console.log(error)

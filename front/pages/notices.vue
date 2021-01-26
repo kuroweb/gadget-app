@@ -79,6 +79,15 @@
                     </VueInfiniteLoading>
                   </v-col>
                 </v-row>
+                <v-row>
+                  <v-col
+                    v-if="notices.length === 0"
+                    cols="12"
+                    class="text-center"
+                  >
+                    <span>通知がありません</span>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
           </v-container>

@@ -77,6 +77,17 @@ class V1::GadgetsController < ApplicationController
   end
 
   ################################################################################################
+  # ガジェット検索
+  ################################################################################################
+  def search
+    if params[:gadget_name]
+      @gadgets = Gadget.search(params[:gadget_name]).order(created_at: 'DESC')
+      render json: @gadgets.as_json(include: [:tags,
+                                              {user: {methods: :avatar_url}}],
+                                    methods: :images_url)
+    end
+  end
+  ################################################################################################
   # プライペートメソッド
   ################################################################################################
   private

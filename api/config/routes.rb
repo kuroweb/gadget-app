@@ -3,6 +3,8 @@ Rails.application.routes.draw do
     get 'tags/search', to: 'tags#search'
     get 'users/search', to: 'users#search'
     get 'posts/search', to: 'posts#search'
+    get 'boards/search', to: 'boards#search'
+    get 'gadgets/search', to: 'gadgets#search'
     get 'users/isFollowed', to: 'users#isFollowed'
     get 'users/test', to: 'users#test'
     resources :users do

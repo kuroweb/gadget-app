@@ -50,7 +50,7 @@ class Gadget < ApplicationRecord
   end
 
   def self.search(gadget_name)
-    Gadget.where(['description LIKE ?', "%#{gadget_name}%"])
+    Gadget.where(['title LIKE ?', "%#{gadget_name}%"])
   end
 
 end
