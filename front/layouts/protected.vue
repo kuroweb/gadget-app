@@ -22,7 +22,7 @@ import Loading from '../components/atoms/Loading.vue'
 import Flash from '../components/atoms/Flash.vue'
 
 export default {
-  middleware: 'authenticated',
+
   components: {
     Header,
     Footer,

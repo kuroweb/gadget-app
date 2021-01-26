@@ -51,7 +51,7 @@ class Board < ApplicationRecord
   end
 
   def self.search(board_name)
-    Board.where(['description LIKE ?', "%#{board_name}%"])
+    Board.where(['title LIKE ?', "%#{board_name}%"])
   end
 
 end
