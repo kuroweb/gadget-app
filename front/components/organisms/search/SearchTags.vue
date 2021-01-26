@@ -1,57 +1,60 @@
 <template>
-  <v-card-text>
-    <v-text-field
-      v-model="tag"
-      hint="タグ名を入力して検索"
-    >
-      <v-icon slot="prepend">mdi-magnify</v-icon>
-    </v-text-field>
-    <v-card
-      class="mx-auto mt-3 pa-3"
-      v-for="tag in tags"
-      :key="tag.id"
-    >
-      <v-row>
-        <v-col sm="4" md="4" lg="4" cols="4">
-          <v-row justify="center">
-            <Tag
-              :tag="tag"
-            />
-          </v-row>
-        </v-col>
-        <v-col sm="4" md="4" lg="4" cols="4" align-self="center">
-          <v-row justify="center">
-            <h3>投稿数：{{ tag.posts.length }}</h3>
-          </v-row>
-        </v-col>
-        <v-col sm="4" md="4" lg="4" align-self="center">
-          <v-row justify="center">
-            <v-btn
-              v-if="tag.isFollowed === false"
-              @click="followTag(tag)"
-              class="success"
-            >
-              <v-icon>
-                mdi-tag
-              </v-icon>
-              フォローする
-            </v-btn>
-            <v-btn
-              v-if="tag.isFollowed === true"
-              @click="unFollowTag(tag)"
-              class="white--text"
-              color="red"
-            >
-              <v-icon>
-                mdi-tag
-              </v-icon>
-              フォロー解除
-            </v-btn>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-card>
-  </v-card-text>
+  <v-card flat>
+    <v-card-title>
+      タグ検索
+    </v-card-title>
+    <v-card-text>
+      <v-text-field
+        v-model="tag"
+        hint="タグ名を入力して検索"
+      >
+        <v-icon slot="prepend">mdi-magnify</v-icon>
+      </v-text-field>
+    </v-card-text>
+    <v-card-text>
+      <v-card
+        class="mx-auto ma-5 pa-5"
+        v-for="tag in tags"
+        :key="tag.id"
+      >
+        <v-card-title>
+          <Tag
+            :tag="tag"
+          />
+        </v-card-title>
+        <v-card-text>
+          <div>投稿数：{{ tag.posts.length }}</div>
+          <div>掲示板数：{{ tag.boards.length }}</div>
+          <div>フォローしているユーザー数：{{ tag.users.length }}</div>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            block
+            v-if="tag.isFollowed === false"
+            @click="followTag(tag)"
+            class="success"
+          >
+            <v-icon>
+              mdi-tag
+            </v-icon>
+            フォローする
+          </v-btn>
+          <v-btn
+            block
+            v-if="tag.isFollowed === true"
+            @click="unFollowTag(tag)"
+            class="white--text"
+            color="red"
+          >
+            <v-icon>
+              mdi-tag
+            </v-icon>
+            フォロー解除
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-card-text>
+  </v-card>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'

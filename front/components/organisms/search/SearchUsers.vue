@@ -1,68 +1,70 @@
 <template>
-  <v-card-text>
-    <v-text-field
-      v-model="user"
-      hint="ユーザー名を入力して検索"
-    >
-      <v-icon slot="prepend">mdi-magnify</v-icon>
-    </v-text-field>
-    <v-card
-      class="mx-auto mt-3 pa-3"
-      v-for="(user, index) in users"
-      :key="index"
-    >
-      <v-row>
-        <v-col sm="4" md="4" lg="4" cols="4">
-          <v-row justify="center">
-            <v-avatar size="64">
-              <img
-                v-if="user.avatar_url"
-                :src="user.avatar_url"
-                alt="Avatar"
-              />
-              <img
-                v-else
-                src="~/assets/images/default_icon.jpeg"
-                alt="Avatar"
-              />
-            </v-avatar>
-          </v-row>
-        </v-col>
-        <v-col sm="4" md="4" lg="4" cols="4" align-self="center">
-          <v-row justify="center">
-            <v-card flat :to="`/users/${user.id}`">
-              <h3>{{ user.name }}</h3>
-            </v-card>
-          </v-row>
-        </v-col>
-        <v-col sm="4" md="4" lg="4" align-self="center">
-          <v-row justify="center">
-            <v-btn
-              v-if="user.isFollowed === false"
-              @click="followUser(user)"
-              class="success"
-            >
-              <v-icon>
-                mdi-account
-              </v-icon>
-              フォローする
-            </v-btn>
-            <v-btn
-              v-if="user.isFollowed === true"
-              @click="unFollowUser(user)"
-              class="white--text"
-              color="red"
-            >
-              <v-icon>
-                mdi-account
-              </v-icon>
-              フォロー解除
-            </v-btn>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-card>
-  </v-card-text>
+  <v-card flat>
+    <v-card-title>
+      ユーザー検索
+    </v-card-title>
+    <v-card-text>
+      <v-text-field
+        v-model="user"
+        hint="ユーザー名を入力して検索"
+      >
+        <v-icon slot="prepend">mdi-magnify</v-icon>
+      </v-text-field>
+    </v-card-text>
+    <v-card-text>
+      <v-card
+        class="mx-auto ma-5 pa-5"
+        v-for="user in users"
+        :key="user.id"
+      >
+        <v-card-title>
+          <v-spacer/>
+          <v-avatar size="64">
+            <img
+              v-if="user.avatar_url"
+              :src="user.avatar_url"
+              alt="Avatar"
+            />
+            <img
+              v-else
+              src="~/assets/images/default_icon.jpeg"
+              alt="Avatar"
+            />
+          </v-avatar>
+          <v-spacer/>
+          <v-card flat :to="`/users/${user.id}`">
+            <span>{{ user.name }}</span>
+          </v-card>
+          <v-spacer/>
+        </v-card-title>
+        <v-card-actions>
+          <v-btn
+            block
+            v-if="user.isFollowed === false"
+            @click="followUser(user)"
+            class="success"
+          >
+            <v-icon>
+              mdi-account
+            </v-icon>
+            フォローする
+          </v-btn>
+          <v-btn
+            block
+            v-if="user.isFollowed === true"
+            @click="unFollowUser(user)"
+            class="white--text"
+            color="red"
+          >
+            <v-icon>
+              mdi-account
+            </v-icon>
+            フォロー解除
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-card-text>
+  </v-card>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'

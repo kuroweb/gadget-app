@@ -1,28 +1,43 @@
 class V1::BoardsController < ApplicationController
   
+  ################################################################################################
   # 掲示板一覧
+  ################################################################################################
   def index
+    #=============================================================================================
+    # 掲示板の種類別表示
+    #=============================================================================================
     if params[:board_type]
       @boards = Board.includes({images_attachments: :blob},
                                 {user: {avatar_attachment: :blob}},
                                 :tags,
                                 {board_comments: [{user: {avatar_attachment: :blob}},
                                                   {images_attachments: :blob}]}).where(board_type: params[:board_type]).order(created_at: "DESC").page(params[:page]).per(5)
+      render json: @boards.as_json(include: [{user: {methods: :avatar_url}},
+                                              :tags,
+                                              {board_comments: {include: {user: {methods: :avatar_url}},
+                                                                methods: :images_url}}],
+                                    methods: :images_url)
+    #=============================================================================================
+    # 新着表示 
+    #=============================================================================================
     else
       @boards = Board.includes({images_attachments: :blob},
                                 {user: {avatar_attachment: :blob}},
                                 :tags,
                                 {board_comments: [{user: {avatar_attachment: :blob}},
                                                   {images_attachments: :blob}]}).page(params[:page]).per(5).order(created_at: "DESC")
+      render json: @boards.as_json(include: [{user: {methods: :avatar_url}},
+                                              :tags,
+                                              {board_comments: {include: {user: {methods: :avatar_url}},
+                                                                methods: :images_url}}],
+                                    methods: :images_url)
     end
-    render json: @boards.as_json(include: [{user: {methods: :avatar_url}},
-                                            :tags,
-                                            {board_comments: {include: {user: {methods: :avatar_url}},
-                                                              methods: :images_url}}],
-                                      methods: :images_url)
   end
 
+  ################################################################################################
   # 掲示板詳細
+  ################################################################################################
   def show
     @board = Board.includes({images_attachments: :blob},
                             {user: {avatar_attachment: :blob}},
@@ -36,7 +51,9 @@ class V1::BoardsController < ApplicationController
                                 methods: :images_url)
   end
 
+  ################################################################################################
   # 掲示板新規作成
+  ################################################################################################
   def create
     @board = Board.new(board_content_params)
     sent_tags = board_tags_params[:tags] === nil ? [] : board_tags_params[:tags]
@@ -53,7 +70,9 @@ class V1::BoardsController < ApplicationController
     end
   end
 
-  # 投稿更新
+  ################################################################################################
+  # 掲示板更新
+  ################################################################################################
   def update
     @board = Board.find(params[:id])
     sent_tags = board_tags_params[:tags] === nil ? [] : board_tags_params[:tags]
@@ -73,15 +92,26 @@ class V1::BoardsController < ApplicationController
     end
   end
 
+  ################################################################################################
   # 掲示板削除
+  ################################################################################################
   def destroy
     @board = Board.find(params[:id])
     @board.destroy
   end
 
+  ################################################################################################
   # 掲示板検索
+  ################################################################################################
   def search
-
+    if params[:board_name]
+      @boards = Board.search(params[:board_name]).order(created_at: 'DESC')
+      render json: @boards.as_json(include: [{user: {methods: :avatar_url}},
+                                            :tags,
+                                            {board_comments: {include: {user: {methods: :avatar_url}},
+                                                              methods: :images_url}}],
+                                    methods: :images_url)
+    end
   end
 
   private
