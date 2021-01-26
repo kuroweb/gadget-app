@@ -83,7 +83,7 @@
         </v-col>
         <v-col cols="12">
           <v-row justify="center">
-            <GuestLogginButtom/>
+            <GuestLogginButton/>
           </v-row>
         </v-col>
       </v-card-text>
@@ -94,12 +94,12 @@
 import { mapActions } from 'vuex'
 import TextAreaWithValidation from '~/components/molecules/inputs/TextAreaWithValidation.vue'
 import ImagesForm from '~/components/molecules/inputs/ImagesForm.vue'
-import GuestLogginButtom from '~/components/organisms/GuestLogginButtom.vue'
+import GuestLogginButton from '~/components/organisms/GuestLogginButton.vue'
 export default {
   components: {
     TextAreaWithValidation,
     ImagesForm,
-    GuestLogginButtom
+    GuestLogginButton
   },
   props: {
     dialog: {

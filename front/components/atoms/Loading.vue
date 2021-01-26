@@ -1,5 +1,5 @@
 <template>
-  <div class="loader-container">
+  <div class="loader-container" v-if="loading">
     <div class="loader">
       <div class="ball-scale-multiple">
         <div></div>
@@ -11,13 +11,18 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import "loaders.css"
 export default {
   data() {
     return {
-      
     }
   },
+  computed: {
+    ...mapGetters ({
+    loading: 'modules/info/loading'
+  })
+  }
 }
 </script>
 

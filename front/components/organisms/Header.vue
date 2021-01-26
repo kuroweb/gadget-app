@@ -1,6 +1,6 @@
 <template>
   <v-app-bar
-    color="cyan darken-2" 
+    color="cyan darken-1" 
     dark 
     app 
     fixed
