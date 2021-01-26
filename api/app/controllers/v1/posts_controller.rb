@@ -6,7 +6,7 @@ class V1::PostsController < ApplicationController
   ################################################################################################
   def index
     #=============================================================================================
-    # タイムライン表示 / 動作確認中(1/26)
+    # タイムライン表示 / チェック済み
     #=============================================================================================
     if params[:user_id]
       user = User.find(params[:user_id])
@@ -34,7 +34,7 @@ class V1::PostsController < ApplicationController
                                                           methods: :images_url}}],
                                       methods: :images_url)
     #=============================================================================================
-    # タグフィード表示 / 動作確認済(1/26)
+    # タグフィード表示 / チェック済み
     #=============================================================================================
     elsif params[:tag_feed_id]
       user = User.find(params[:tag_feed_id])
@@ -62,7 +62,43 @@ class V1::PostsController < ApplicationController
                                                             methods: :images_url}}],
                                       methods: :images_url)
     #=============================================================================================
-    # 新着表示 / 動作確認済(1/26)
+    # 特定ユーザーの投稿一覧 / チェック中
+    #=============================================================================================
+    elsif params[:post_user_id]
+      user = User.find(params[:post_user_id])
+      posts = user.posts.includes({images_attachments: :blob},
+                                  {user: {avatar_attachment: :blob}},
+                                  :tags,
+                                  :liked_users,
+                                  {comments: [{user: {avatar_attachment: :blob}},
+                                              {images_attachments: :blob}]}).order(created_at: 'DESC')
+      user_posts = Kaminari.paginate_array(posts).page(params[:page]).per(5)
+      render json: user_posts.as_json(include: [{user: {methods: :avatar_url}},
+                                                :tags,
+                                                :liked_users,
+                                                {comments: {include: {user: {methods: :avatar_url}},
+                                                            methods: :images_url}}],
+                                      methods: :images_url)
+    #=============================================================================================
+    # 特定ユーザーがいいねした投稿一覧 / チェック中
+    #=============================================================================================
+    elsif params[:user_liked_posts_id]
+      user = User.find(params[:user_liked_posts_id])
+      posts = user.liked_posts.includes({images_attachments: :blob},
+                                  {user: {avatar_attachment: :blob}},
+                                  :tags,
+                                  :liked_users,
+                                  {comments: [{user: {avatar_attachment: :blob}},
+                                              {images_attachments: :blob}]}).order(created_at: 'DESC')
+      user_posts = Kaminari.paginate_array(posts).page(params[:page]).per(5)
+      render json: user_posts.as_json(include: [{user: {methods: :avatar_url}},
+                                                :tags,
+                                                :liked_users,
+                                                {comments: {include: {user: {methods: :avatar_url}},
+                                                            methods: :images_url}}],
+                                      methods: :images_url)
+    #=============================================================================================
+    # 新着表示 / チェック済み
     #=============================================================================================
     else
       posts = Post.includes({images_attachments: :blob},

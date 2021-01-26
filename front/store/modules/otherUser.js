@@ -1,7 +1,5 @@
 export const state = () => ({
   data: {},
-  following: {},
-  followers: {},
   users: {}
 })
 
@@ -9,30 +7,32 @@ export const getters = {
   data(state) {
     return state.data
   },
-  following(state) {
-    return state.following
-  },
-  followers(state) {
-    return state.followers
-  },
   users(state) {
     return state.users
   }
 }
 
 export const actions = {
-  setData ({ commit }, payload) {
-    commit('setData', payload)
-  },
-  setFollowing ({ commit }, payload) {
-    commit('setFollowing', payload)
-  },
-  setFollowers ({ commit }, payload) {
-    commit('setFollowers', payload)
+  ///////////////////////////////////////////////////////////////////////////////////////////////
+  // 詳細ページ用 / チェック済み
+  ///////////////////////////////////////////////////////////////////////////////////////////////
+  setData ({ commit, rootState }, user) {
+    // isFollowedプロパティの追加
+    user.isFollowed = false
+    if (rootState.modules.user.data) {
+      user.followers.forEach(f => {
+        if (f.id === rootState.modules.user.data.id) {
+          user.isFollowed = true
+        }
+      })
+    }
+    commit('setData', user)
   },
 
 
-  // 一覧ページ用
+  ///////////////////////////////////////////////////////////////////////////////////////////////
+  // 一覧ページ用 / 未チェック
+  ///////////////////////////////////////////////////////////////////////////////////////////////
   setUsers ({ commit, rootState }, users) {
     // isFollowedプロパティの追加
     users.forEach(user => {
@@ -59,17 +59,16 @@ export const actions = {
 }
 
 export const mutations = {
-  setData (state, payload)  {
-    state.data = payload
-  },
-  setFollowing (state, payload) {
-    state.following = payload
-  },
-  setFollowers (state, payload) {
-    state.followers = payload
+  ///////////////////////////////////////////////////////////////////////////////////////////////
+  // 詳細ページ用 / チェック済み
+  ///////////////////////////////////////////////////////////////////////////////////////////////
+  setData (state, user)  {
+    state.data = user
   },
 
-  // 一覧ページ用
+  ///////////////////////////////////////////////////////////////////////////////////////////////
+  // 一覧ページ用 / 未チェック
+  ///////////////////////////////////////////////////////////////////////////////////////////////
   setUsers (state, users) {
     state.users = users
   },

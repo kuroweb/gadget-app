@@ -1,9 +1,9 @@
 class User < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  ###################
-  #  アソシエーション  #
-  ###################
+  ################################################################################################
+  # アソシエーション
+  ################################################################################################
   has_one_attached :avatar
   has_many :active_relationships, class_name: 'Relationship', foreign_key: "follower_id", dependent: :destroy
   has_many :passive_relationships, class_name: 'Relationship', foreign_key: "followed_id", dependent: :destroy
@@ -21,17 +21,17 @@ class User < ApplicationRecord
   has_many :passive_notices, class_name: 'Notice', foreign_key: 'visited_id', dependent: :destroy
   has_many :gadgets, dependent: :destroy
 
-  ################
-  # バリデーション #
-  ################
+  ################################################################################################
+  # バリデーション
+  ################################################################################################
   validates :uid, presence: true
   validates :name, presence: true, length: { maximum: 20 }
   validates :email, presence: true, length: { maximum: 255 }, uniqueness: true
   validates :profile, length: { maximum: 255 }
 
-  ################
-  #   メソッド    #
-  ################
+  ################################################################################################
+  # メソッド
+  ################################################################################################
   def avatar_url
     avatar.attached? ? url_for(avatar) : nil
   end

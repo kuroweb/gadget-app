@@ -52,18 +52,18 @@
                   <v-row>
                     <v-col>
                       <p>フォロー</p>
-                      <p>{{ following.length }}人</p>
+                      <p>{{ otherUser.following.length }}人</p>
                     </v-col>
                     <v-col>
                       <p>フォロワー</p>
-                      <p>{{ followers.length }}人</p>
+                      <p>{{ otherUser.followers.length }}人</p>
                     </v-col>
                   </v-row>
                 </v-col>
                 <v-col cols="12" v-if="isAuthenticated && currentUser.id !== otherUser.id">
                   <v-row justify="center">
                     <v-btn
-                      v-if="!isFollowed"
+                      v-if="!otherUser.isFollowed"
                       color="success"
                       @click="follow"
                     >
@@ -82,48 +82,6 @@
             </v-container>
           </v-card-text>
         </v-card>
-        <!-- <v-card class="mx-auto ma-5">
-          <v-toolbar
-            color="cyan darken-1"
-            dark
-            flat
-          >
-            <v-toolbar-title>
-              {{ otherUser.name }} さんのガジェット
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-card flat class="mx-auto ma-5">
-                  <span>一覧</span>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
-        <v-card class="mx-auto">
-          <v-toolbar
-            color="cyan darken-1"
-            dark
-            flat
-          >
-            <v-toolbar-title>
-              {{ otherUser.name }} さんの投稿一覧
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <MicroPostCard
-                  v-for="post in posts"
-                  :key="post.id"
-                  :post="post"
-                />
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card> -->
       </v-col>
       <v-col xl="6" lg="6" sm="8" cols="12">
         <v-card class="mx-auto">
@@ -137,13 +95,21 @@
             icons-and-text
           >
             <v-tab
+              @change="changeUserNewPosts"
               class="ma-0 pa-0"
             >
-              投稿
+              つぶやき
               <v-icon>mdi-clock-time-eight</v-icon>
             </v-tab>
             <v-tab
-
+              @change="changeUserLikedPosts"
+              class="ma-0 pa-0"
+            >
+              いいね
+              <v-icon>mdi-heart-box</v-icon>
+            </v-tab>
+            <v-tab
+              @change="changeUserGadgets"
               class="ma-0 pa-0"
             >
               持ち物
@@ -152,18 +118,19 @@
           </v-tabs>
           <v-tabs-items v-model="tab" touchless>
             <v-tab-item class="pa-1">
-              <MicroPostCard
-                v-for="post in posts"
-                :key="post.id"
-                :post="post"
+              <UserNewPosts
+                :load="loadUserNewPosts"
               />
             </v-tab-item>
             <v-tab-item class="pa-1">
-              <!-- <GadgetCard
-                v-for="(gadget, index) in gadgets"
-                :key="index"
-                :gadget="gadget"
-              /> -->
+              <UserLikedPosts
+                :load="loadUserLikedPosts"
+              />
+            </v-tab-item>
+            <v-tab-item class="pa-1">
+              <UserGadgets
+                :load="loadUserGadgets"
+              />
             </v-tab-item>
           </v-tabs-items>
         </v-card>
@@ -174,161 +141,81 @@
 <script>
 import _ from 'lodash'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
-import GadgetCard from '~/components/organisms/GadgetCard.vue'
-import MicroPostCard from '~/components/organisms/MicroPostCard.vue'
+import UserNewPosts from '~/components/organisms/users/UserNewPosts.vue'
+import UserLikedPosts from '~/components/organisms/users/UserLikedPosts.vue'
+import UserGadgets from '~/components/organisms/users/UserGadgets.vue'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   components: {
     ErrorCard,
-    MicroPostCard,
-    GadgetCard
+    UserNewPosts,
+    UserLikedPosts,
+    UserGadgets
   },
   data () {
     return {
-      isFollowed: false,
-      editDialog: false,
-      deleteDialog: false,
-      tab: null
+      tab: null,
+      loadUserNewPosts: false,
+      loadUserLikedPosts: false,
+      loadUserGadgets: false
     }
   },
   async fetch({ $axios, params, store }) {
     const baseUrl = process.client ? process.env.BROWSER_BASE_URL : process.env.API_BASE_URL
     await $axios.$get(baseUrl + `/v1/users/${params.id}`)
       .then(res => {
-        // アクセス先ユーザーの基本情報をコミット
-        const data = {
-          id: res.id,
-          name: res.name,
-          profile: res.profile,
-          avatar_url: res.avatar_url,
-        }
-        store.commit('modules/otherUser/setData', data)
-        // アクセス先ユーザーのフォロー・フォロワー情報をコミット
-        store.commit('modules/otherUser/setFollowing', res.following)
-        store.commit('modules/otherUser/setFollowers', res.followers)
-        // アクセス先ユーザーの投稿情報をコミット
-        store.dispatch('modules/post/setPosts', res.posts)
+        store.dispatch('modules/otherUser/setData', res)
         store.commit('modules/info/setError', false)
       })
       .catch(error => {
         store.commit('modules/info/setError', true)
       })
   },
-  async mounted () {
-    if (this.currentUser !== null) {
-      await this.$axios.$get(process.env.BROWSER_BASE_URL + '/v1/users/isFollowed', {
-        params: {
-          current_user: this.$store.state.modules.user.data.id,
-          other_user: this.$store.state.modules.otherUser.data.id
-        }
-      })
-        .then(res => {
-          this.isFollowed = res
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    }
-  },
   computed: {
     ...mapGetters({
       currentUser: 'modules/user/data',
       isAuthenticated: 'modules/user/isAuthenticated',
       otherUser: 'modules/otherUser/data',
-      following: 'modules/otherUser/following',
-      followers: 'modules/otherUser/followers',
-      posts: 'modules/post/posts',
       error: 'modules/info/error'
     })
   },
   methods: {
     ...mapActions({
-      setFollowers: 'modules/otherUser/setFollowers',
-      setLikedUsersCountUp: 'modules/otherUser/setLikedUsersCountUp',
-      setLikedUsersCountDown: 'modules/otherUser/setLikedUsersCountDown',
-      setIsLikedPostTrue: 'modules/otherUser/setIsLikedPostTrue',
-      setIsLikedPostFalse: 'modules/otherUser/setIsLikedPostFalse',
+      setData: 'modules/otherUser/setData',
     }),
-
-    // フォローボタン関連
-    follow() {
-      this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/relationships', {
+    async follow() {
+      await this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/relationships', {
           user_id: this.currentUser.id,
           follow_id: this.otherUser.id
       })
+      await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}`)
         .then(res => {
-          this.isFollowed = true
-          return this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}/followers`)
-        })
-        .then(res => {
-          this.setFollowers (res)
-          console.log('フォローに成功')
-        })
-        .catch(() => {
-          console.log("フォローに失敗")
+          this.setData(res)
         })
     },
-    unfollow() {
-      this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/relationships/delete', {
+    async unfollow() {
+      await this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/relationships/delete', {
         params: {
           user_id: this.currentUser.id,
           follow_id: this.otherUser.id
         }
       })
+      await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}`)
         .then(res => {
-          this.isFollowed = false
-          return this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}/followers`)
-        })
-        .then(res => {
-          this.setFollowers (res)
-          console.log('フォロー解除に成功')
-        })
-        .catch(() => {
-          console.log("フォロー解除に失敗")
+          this.setData(res)
         })
     },
-
-    // ダイアログ関連
-    // MicroPostCardに移植予定
-    // 現在使用していないが動作するはず。
-    openEditDialog (post) {
-      this.postId = post.id
-      this.editDialog = true
+    changeUserNewPosts () {
+      this.loadUserNewPosts = !this.loadUserNewPosts
     },
-    openDeleteDialog (post) {
-      this.postId = post.id
-      this.deleteDialog = true
+    changeUserLikedPosts () {
+      this.loadUserLikedPosts = !this.loadUserLikedPosts
     },
-
-    // ライクボタン関連
-    // MicroPostCardに移植予定
-    // 現在使用していないが動作するはず。
-    createLikePost (post) {
-      const likeParams = {
-        user_id: this.currentUser.id,
-        post_id: post.id
-      }
-      this.$axios.$post(process.env.BROWSER_BASE_URL + `/v1/likes/`, { like: likeParams })
-        .then(() => {
-          this.setLikedUsersCountUp (post)
-          this.setIsLikedPostTrue (post)
-        })
+    changeUserGadgets () {
+      this.loadUserGadgets = !this.loadUserGadgets
     },
-    destroyLikePost (post) {
-      const likeParams = {
-        user_id: this.currentUser.id,
-        post_id: post.id
-      }
-      this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/likes/delete', { params: { like: likeParams } })
-        .then(res => {
-          this.setLikedUsersCountDown (post)
-          this.setIsLikedPostFalse (post)
-        })
-    }
   }
-
 }
 </script>
 <style scoped>
-
 </style>
