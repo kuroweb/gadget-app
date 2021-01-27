@@ -49,7 +49,7 @@
           >
             <v-tab-item>
               <v-card flat>
-                <v-card-actions>
+                <v-card-actions v-if="$store.state.modules.user.data">
                   <v-container>
                     <v-btn
                       rounded
@@ -131,32 +131,34 @@
             </v-tab-item>
             <v-tab-item>
               <v-card flat>
-                <v-card-actions>
-                  <v-btn
-                    rounded
-                    block
-                    v-if="tag.isFollowed === false"
-                    @click="followTag()"
-                    class="success"
-                  >
-                    <v-icon>
-                      mdi-tag
-                    </v-icon>
-                    フォローする
-                  </v-btn>
-                  <v-btn
-                    rounded
-                    block
-                    v-if="tag.isFollowed === true"
-                    @click="unFollowTag()"
-                    class="white--text"
-                    color="red"
-                  >
-                    <v-icon>
-                      mdi-tag
-                    </v-icon>
-                    フォロー解除
-                  </v-btn>
+                <v-card-actions v-if="$store.state.modules.user.data">
+                  <v-container>
+                    <v-btn
+                      rounded
+                      block
+                      v-if="tag.isFollowed === false"
+                      @click="followTag()"
+                      class="success"
+                    >
+                      <v-icon>
+                        mdi-tag
+                      </v-icon>
+                      フォローする
+                    </v-btn>
+                    <v-btn
+                      rounded
+                      block
+                      v-if="tag.isFollowed === true"
+                      @click="unFollowTag()"
+                      class="white--text"
+                      color="red"
+                    >
+                      <v-icon>
+                        mdi-tag
+                      </v-icon>
+                      フォロー解除
+                    </v-btn>
+                  </v-container>
                 </v-card-actions>
                 <v-card-title>
                   <Tag
@@ -211,32 +213,34 @@
             </v-tab-item>
             <v-tab-item>
               <v-card flat>
-                <v-card-actions>
-                  <v-btn
-                    rounded
-                    block
-                    v-if="tag.isFollowed === false"
-                    @click="followTag()"
-                    class="success"
-                  >
-                    <v-icon>
-                      mdi-tag
-                    </v-icon>
-                    フォローする
-                  </v-btn>
-                  <v-btn
-                    rounded
-                    block
-                    v-if="tag.isFollowed === true"
-                    @click="unFollowTag()"
-                    class="white--text"
-                    color="red"
-                  >
-                    <v-icon>
-                      mdi-tag
-                    </v-icon>
-                    フォロー解除
-                  </v-btn>
+                <v-card-actions v-if="$store.state.modules.user.data">
+                  <v-container>
+                    <v-btn
+                      rounded
+                      block
+                      v-if="tag.isFollowed === false"
+                      @click="followTag()"
+                      class="success"
+                    >
+                      <v-icon>
+                        mdi-tag
+                      </v-icon>
+                      フォローする
+                    </v-btn>
+                    <v-btn
+                      rounded
+                      block
+                      v-if="tag.isFollowed === true"
+                      @click="unFollowTag()"
+                      class="white--text"
+                      color="red"
+                    >
+                      <v-icon>
+                        mdi-tag
+                      </v-icon>
+                      フォロー解除
+                    </v-btn>
+                  </v-container>
                 </v-card-actions>
                 <v-card-title>
                   <Tag
@@ -247,8 +251,8 @@
                 <v-card-text>
                   <v-card
                     class="mx-auto ma-5 pa-5"
-                    v-for="user in tag.users"
-                    :key="user.id"
+                    v-for="(user, index) in tag.users"
+                    :key="index"
                   >
                     <v-card-title>
                       <v-spacer/>
@@ -270,7 +274,7 @@
                       </v-card>
                       <v-spacer/>
                     </v-card-title>
-                    <v-card-actions v-if="$store.state.modules.user.data.id !== user.id">
+                    <v-card-actions v-if="$store.state.modules.user.data && $store.state.modules.user.data.id !== user.id">
                       <v-btn
                         block
                         v-if="user.isFollowed === false"
@@ -301,32 +305,34 @@
             </v-tab-item>
             <v-tab-item>
               <v-card flat>
-                <v-card-actions>
-                  <v-btn
-                    rounded
-                    block
-                    v-if="tag.isFollowed === false"
-                    @click="followTag()"
-                    class="success"
-                  >
-                    <v-icon>
-                      mdi-tag
-                    </v-icon>
-                    フォローする
-                  </v-btn>
-                  <v-btn
-                    rounded
-                    block
-                    v-if="tag.isFollowed === true"
-                    @click="unFollowTag()"
-                    class="white--text"
-                    color="red"
-                  >
-                    <v-icon>
-                      mdi-tag
-                    </v-icon>
-                    フォロー解除
-                  </v-btn>
+                <v-card-actions v-if="$store.state.modules.user.data">
+                  <v-container>
+                    <v-btn
+                      rounded
+                      block
+                      v-if="tag.isFollowed === false"
+                      @click="followTag()"
+                      class="success"
+                    >
+                      <v-icon>
+                        mdi-tag
+                      </v-icon>
+                      フォローする
+                    </v-btn>
+                    <v-btn
+                      rounded
+                      block
+                      v-if="tag.isFollowed === true"
+                      @click="unFollowTag()"
+                      class="white--text"
+                      color="red"
+                    >
+                      <v-icon>
+                        mdi-tag
+                      </v-icon>
+                      フォロー解除
+                    </v-btn>
+                  </v-container>
                 </v-card-actions>
                 <v-card-title>
                   <Tag

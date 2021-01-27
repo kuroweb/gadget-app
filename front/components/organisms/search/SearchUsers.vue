@@ -1,5 +1,9 @@
 <template>
   <v-card flat>
+    <SupportDialog
+      :dialog="supportDialog"
+      @closeDialog="supportDialog = false"
+    />
     <v-card-title>
       ユーザー検索
     </v-card-title>
@@ -37,7 +41,7 @@
           </v-card>
           <v-spacer/>
         </v-card-title>
-        <v-card-actions v-if="$store.state.modules.user.data.id !== user.id">
+        <v-card-actions v-if="$store.state.modules.user.data && $store.state.modules.user.data.id !== user.id">
           <v-btn
             block
             v-if="user.isFollowed === false"
@@ -69,13 +73,15 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import _ from 'lodash'
+import SupportDialog from '~/components/organisms/SupportDialog.vue'
 export default {
   mounted () {
     this.resetUsers()
   },
   data () {
     return {
-      user: ''
+      user: '',
+      supportDialog: false,
     }
   },
   watch: {
@@ -110,24 +116,35 @@ export default {
         })
     },
     followUser (user) {
-      this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/relationships', {
-        user_id: this.$store.state.modules.user.data.id,
-        follow_id: user.id
-      })
-        .then(() => {
-          this.reloadUsersByFollow(user)
-        })
-    },
-    unFollowUser (user) {
-      this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/relationships/delete', {
-        params: {
+      if (this.$store.state.modules.user.data) {
+        this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/relationships', {
           user_id: this.$store.state.modules.user.data.id,
           follow_id: user.id
-        }
-      })
-        .then(() => {
-          this.reloadUsersByUnFollow(user)
         })
+          .then(() => {
+            this.reloadUsersByFollow(user)
+          })
+      } else {
+        this.openSupportDialog()
+      }
+    },
+    unFollowUser (user) {
+      if (this.$store.state.modules.user.data) {
+        this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/relationships/delete', {
+          params: {
+            user_id: this.$store.state.modules.user.data.id,
+            follow_id: user.id
+          }
+        })
+          .then(() => {
+            this.reloadUsersByUnFollow(user)
+          })
+      } else {
+        this.openSupportDialog()
+      }
+    },
+    openSupportDialog () {
+      this.supportDialog = true
     }
   },
   created () {

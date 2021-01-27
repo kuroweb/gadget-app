@@ -41,13 +41,21 @@
       </v-tab-item>
       <v-tab-item class="pa-1">
         <FollowingUsers
+          v-if="$store.state.modules.user.data"
           :load="loadFollowingUsers"
         />
+        <v-card flat v-else class="text-center">
+          <span>ログインするとフォローユーザーのつぶやきを一覧表示します。</span>
+        </v-card>
       </v-tab-item>
       <v-tab-item class="pa-1">
         <FollowingTags
+          v-if="$store.state.modules.user.data"
           :load="loadFollowingTags"
         />
+        <v-card flat v-else class="text-center">
+          <span>ログインするとフォロータグを含むつぶやきを一覧表示します。</span>
+        </v-card>
       </v-tab-item>
     </v-tabs-items>
   </v-card>

@@ -1,5 +1,9 @@
 <template>
   <v-card flat>
+    <SupportDialog
+      :dialog="supportDialog"
+      @closeDialog="supportDialog = false"
+    />
     <v-card-title>
       タグ検索
     </v-card-title>
@@ -28,7 +32,32 @@
           <div>ガジェット数：{{ tag.gadgets.length }}</div>
           <div>フォローしているユーザー数：{{ tag.users.length }}</div>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions v-if="$store.state.modules.user.data">
+          <v-btn
+            block
+            v-if="tag.isFollowed === false"
+            @click="followTag(tag)"
+            class="success"
+          >
+            <v-icon>
+              mdi-tag
+            </v-icon>
+            フォローする
+          </v-btn>
+          <v-btn
+            block
+            v-if="tag.isFollowed === true"
+            @click="unFollowTag(tag)"
+            class="white--text"
+            color="red"
+          >
+            <v-icon>
+              mdi-tag
+            </v-icon>
+            フォロー解除
+          </v-btn>
+        </v-card-actions>
+        <v-card-actions v-else>
           <v-btn
             block
             v-if="tag.isFollowed === false"
@@ -61,16 +90,19 @@
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import Tag from '~/components/atoms/Tag.vue'
+import SupportDialog from '~/components/organisms/SupportDialog.vue'
 export default {
   components: {
-    Tag
+    Tag,
+    SupportDialog
   },
   mounted () {
     this.resetTags()
   },
   data () {
     return {
-      tag: ''
+      tag: '',
+      supportDialog: false,
     }
   },
   watch: {
@@ -105,29 +137,40 @@ export default {
         })
     },
     followTag (tag) {
-      this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/user_tag_maps', {
-        follow_tag: {
-          user_id: this.$store.state.modules.user.data.id,
-          tag_id: tag.id
-        }
-      })
-        .then(() => {
-          this.reloadTagsByFollow(tag)
-        })
-    },
-    unFollowTag (tag) {
-      this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/user_tag_maps/delete', {
-        params: {
+      if (this.$store.state.modules.user.data) {
+        this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/user_tag_maps', {
           follow_tag: {
             user_id: this.$store.state.modules.user.data.id,
             tag_id: tag.id
           }
-        }
-      })
-        .then(() => {
-          this.reloadTagsByUnFollow(tag)
         })
-    }
+          .then(() => {
+            this.reloadTagsByFollow(tag)
+          })
+      } else {
+        this.openSupportDialog()
+      }
+    },
+    unFollowTag (tag) {
+      if (this.$store.state.modules.user.data) {
+        this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/user_tag_maps/delete', {
+          params: {
+            follow_tag: {
+              user_id: this.$store.state.modules.user.data.id,
+              tag_id: tag.id
+            }
+          }
+        })
+          .then(() => {
+            this.reloadTagsByUnFollow(tag)
+          })
+      } else {
+        this.openSupportDialog()
+      }
+    },
+    openSupportDialog () {
+      this.supportDialog = true
+    },
   },
   created () {
     this.delayFunc = _.debounce(this.search, 500)
