@@ -16,7 +16,7 @@ RSpec.describe Post, type: :model do
     subject(:post) { create(:post) }
     
     it { is_expected.to belong_to(:user) }
-    it { is_expected.to have_many(:tag_maps) }
+    it { is_expected.to have_many(:post_tag_maps) }
     it { is_expected.to have_many(:tags) }
     it { is_expected.to have_many(:likes) }
     it { is_expected.to have_many(:liked_users) }

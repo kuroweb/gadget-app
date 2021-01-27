@@ -35,7 +35,7 @@ describe('APIから投稿データを取得 -> Vuex Action で isLikedプロパ�
           id: 1
         }
       ],
-      comments: []
+      post_comments: []
     }
     // store/post.js setData(payload)を実行した結果を想定したデータ
     const result = {
@@ -61,7 +61,7 @@ describe('APIから投稿データを取得 -> Vuex Action で isLikedプロパ�
           id: 1
         }
       ],
-      comments: [],
+      post_comments: [],
       likedUsersCounts: 1,
       isLikedPost: true,
       commentCounts: 0
@@ -109,7 +109,7 @@ describe('APIから投稿データを取得 -> Vuex Action で isLikedプロパ�
       },
       tags: [],
       liked_users: [],
-      comments: []
+      post_comments: []
     }
     // store/post.js setData(payload)を実行した結果を想定したデータ
     const result = {
@@ -131,7 +131,7 @@ describe('APIから投稿データを取得 -> Vuex Action で isLikedプロパ�
       },
       tags: [],
       liked_users: [],
-      comments: [],
+      post_comments: [],
       likedUsersCounts: 0,
       isLikedPost: false,
       commentCounts: 0
