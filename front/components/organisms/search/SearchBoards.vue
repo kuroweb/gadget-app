@@ -47,7 +47,7 @@
             <span>{{ board.description }}</span>
           </v-card>
         </v-card-text>
-        <v-card-text>
+        <v-card-text v-if="board.images_url">
           <Images
             :images="board.images_url"
           />

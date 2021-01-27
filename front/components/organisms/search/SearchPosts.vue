@@ -47,7 +47,7 @@
             <span>{{ post.description }}</span>
           </v-card>
         </v-card-text>
-        <v-card-text>
+        <v-card-text v-if="post.images_url">
           <Images
             :images="post.images_url"
           />
@@ -99,5 +99,4 @@ export default {
 }
 </script>
 <style scoped>
-
 </style>

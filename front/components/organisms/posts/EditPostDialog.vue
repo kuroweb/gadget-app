@@ -28,56 +28,54 @@
             <ValidationObserver v-slot="ObserverProps">
               <v-row>
                 <v-col cols="12">
-                  <div>
-                    <v-container>
-                      <v-row>
-                        <v-col cols=3
-                          align-self="center"
-                          v-for="n in maxImageNum"
-                          :key="n.id"
-                        >
-                          <v-row>
-                            <v-col cols="12" v-if="$data['image' + n].length != 0">
-                              <v-row justify="center">
-                                <v-avatar
-                                  justify="center"
-                                  size="62"
-                                >
-                                  <img
-                                    v-if="$data['image' + n + 'Url']"
-                                    :src="$data['image' + n + 'Url']"
-                                  />
-                                </v-avatar>
-                              </v-row>
-                            </v-col>
-                            <v-col cols="12" v-if="$data['image' + n].length != 0">
-                              <v-row justify="center">
-                                <v-btn
-                                  color="red"
-                                  class="white--text"
-                                  @click="removeImage(n)"
-                                >
-                                  削除
-                                </v-btn>
-                              </v-row>
-                            </v-col>
-                            <v-col cols="12" v-if="$data['image' + n].length == 0">
-                              <div class="input-box">
-                                <v-file-input
-                                  accept="image/*"
-                                  v-model="$data['image' + n]"
-                                  @change="addImage(n)"
-                                  prepend-icon="mdi-camera"
-                                  hide-input
+                  <v-container>
+                    <v-row>
+                      <v-col cols=3
+                        align-self="center"
+                        v-for="n in maxImageNum"
+                        :key="n.id"
+                      >
+                        <v-row>
+                          <v-col cols="12" v-if="$data['image' + n].length != 0">
+                            <v-row justify="center">
+                              <v-avatar
+                                justify="center"
+                                size="62"
+                              >
+                                <img
+                                  v-if="$data['image' + n + 'Url']"
+                                  :src="$data['image' + n + 'Url']"
                                 />
-                              </div>
-                            </v-col>
-                          </v-row>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                    <p v-if="imageError" class="red--text">{{ imageError }}</p>
-                  </div>
+                              </v-avatar>
+                            </v-row>
+                          </v-col>
+                          <v-col cols="12" v-if="$data['image' + n].length != 0">
+                            <v-row justify="center">
+                              <v-btn
+                                color="red"
+                                class="white--text"
+                                @click="removeImage(n)"
+                              >
+                                削除
+                              </v-btn>
+                            </v-row>
+                          </v-col>
+                          <v-col cols="12" v-if="$data['image' + n].length == 0">
+                            <div class="input-box">
+                              <v-file-input
+                                accept="image/*"
+                                v-model="$data['image' + n]"
+                                @change="addImage(n)"
+                                prepend-icon="mdi-camera"
+                                hide-input
+                              />
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <p v-if="imageError" class="red--text">{{ imageError }}</p>
                 </v-col>
                 <v-col cols="12">
                   <TextAreaWithValidation

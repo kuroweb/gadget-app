@@ -79,8 +79,10 @@
                       </v-avatar>
                     </v-col>
                     <v-col cols="8">
-                      <h3>{{ post.user.name }}</h3>
-                      <h6>{{ $moment(post.created_at).format('YYYY年MM月DD日 HH時mm分') }}</h6>
+                      <v-card flat :to="`/users/${post.user.id}`">
+                        <h3>{{ post.user.name }}</h3>
+                        <h6>{{ $moment(post.created_at).format('YYYY年MM月DD日 HH時mm分') }}</h6>
+                      </v-card>
                     </v-col>
                     <v-col cols="12">
                       <Tags
