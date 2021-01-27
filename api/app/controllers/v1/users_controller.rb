@@ -34,7 +34,7 @@ class V1::UsersController < ApplicationController
                                     :tags,
                                     :liked_users,
                                     {user: {avatar_attachment: :blob}},
-                                    {comments: [{user: {avatar_attachment: :blob}},
+                                    {post_comments: [{user: {avatar_attachment: :blob}},
                                                 {images_attachments: :blob}]}]}).find(params[:id])
     render json: @user.as_json(include: [:following,
                                           :followers,
@@ -44,7 +44,7 @@ class V1::UsersController < ApplicationController
                                           {posts: {include: [:tags,
                                                               :liked_users,
                                                               {user: {methods: :avatar_url}},
-                                                              {comments: {include: {user: {methods: :avatar_url}},
+                                                              {post_comments: {include: {user: {methods: :avatar_url}},
                                                                           methods: :images_url}}],
                                                     methods: :images_url}}],
                                 methods: :avatar_url)
