@@ -13,12 +13,14 @@ RSpec.describe Tag, type: :model do
   describe "アソシエーションテスト" do
     subject(:tag) { create(:tag) }
 
-    it { is_expected.to have_many(:tag_maps)}
+    it { is_expected.to have_many(:post_tag_maps)}
     it { is_expected.to have_many(:posts)}
     it { is_expected.to have_many(:board_tag_maps)}
     it { is_expected.to have_many(:boards)}
     it { is_expected.to have_many(:user_tag_maps)}
     it { is_expected.to have_many(:users)}
+    it { is_expected.to have_many(:gadget_tag_maps)}
+    it { is_expected.to have_many(:gadgets)}
   end
   
 end

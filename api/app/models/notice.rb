@@ -14,7 +14,8 @@ class Notice < ApplicationRecord
   ################
   # バリデーション #
   ################
-
+  validates :visitor, presence: true
+  validates :visited, presence: true
 
   ################
   #   メソッド    #

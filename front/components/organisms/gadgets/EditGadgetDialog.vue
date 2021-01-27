@@ -90,14 +90,14 @@
                   <TextAreaWithValidation
                     v-model="good_description"
                     label="お気に入りポイント"
-                    rules="max:1024|required"
+                    rules="max:255|required"
                   />
                 </v-col>
                 <v-col cols="12" class="pa-0">
                   <TextAreaWithValidation
                     v-model="bad_description"
                     label="気になるポイント"
-                    rules="max:1024|required"
+                    rules="max:255|required"
                   />
                 </v-col>
                 <v-col cols="12" class="pa-0">
