@@ -37,7 +37,7 @@
           </v-card>
           <v-spacer/>
         </v-card-title>
-        <v-card-actions>
+        <v-card-actions v-if="$store.state.modules.user.data.id !== user.id">
           <v-btn
             block
             v-if="user.isFollowed === false"
@@ -136,5 +136,4 @@ export default {
 }
 </script>
 <style scoped>
-
 </style>

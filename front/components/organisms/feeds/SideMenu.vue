@@ -41,7 +41,7 @@ export default {
     return {
       menuItems: [
         {
-          title: 'マイクロポスト',
+          title: 'つぶやき',
           name: 'openMicropostFeed',
           icon: 'mdi-post-outline'
         },

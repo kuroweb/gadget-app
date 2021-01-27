@@ -60,7 +60,7 @@ export default {
       this.count = 1
       await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`, {
         params: {
-          user_liked_posts_id: this.$store.state.modules.user.data.id,
+          user_liked_posts_id: this.$store.state.modules.otherUser.data.id,
           page: this.count
         }
       })
@@ -74,7 +74,7 @@ export default {
     this.count = 1
     await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`, {
       params: {
-        user_liked_posts_id: this.$store.state.modules.user.data.id,
+        user_liked_posts_id: this.$store.state.modules.otherUser.data.id,
         page: this.count
       }
     })
@@ -101,7 +101,7 @@ export default {
       this.count += 1
       await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/posts`, {
         params: {
-          user_liked_posts_id: this.$store.state.modules.user.data.id,
+          user_liked_posts_id: this.$store.state.modules.otherUser.data.id,
           page: this.count
         }
       })

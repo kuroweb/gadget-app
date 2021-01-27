@@ -25,6 +25,7 @@
         <v-card-text>
           <div>投稿数：{{ tag.posts.length }}</div>
           <div>掲示板数：{{ tag.boards.length }}</div>
+          <div>ガジェット数：{{ tag.gadgets.length }}</div>
           <div>フォローしているユーザー数：{{ tag.users.length }}</div>
         </v-card-text>
         <v-card-actions>
@@ -134,5 +135,4 @@ export default {
 }
 </script>
 <style scoped>
-
 </style>

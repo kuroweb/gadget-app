@@ -47,7 +47,7 @@
             <span>{{ gadget.title }}</span>
           </v-card>
         </v-card-text>
-        <v-card-text>
+        <v-card-text v-if="gadget.images_url">
           <Images
             :images="gadget.images_url"
           />

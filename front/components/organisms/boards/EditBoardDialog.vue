@@ -1,100 +1,130 @@
 <template>
   <v-dialog
     v-model="dialogStatus"
-    max-width="400px"
+    max-width="500px"
     persistent
   >
-    <v-card width="500px" class="mx-auto">
-    <v-toolbar flat>
-      <v-toolbar-title>掲示板編集</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn 
-        @click="closeDialog"
-        icon
+    <v-card
+      class="mx-auto"
+      v-if="$store.state.modules.user.data"
+    >
+      <v-toolbar
+        class="cyan darken-1"
+        flat
       >
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-    </v-toolbar>
-      <v-card-text v-if="dialogStatus">
-        <v-form>
-          <ValidationObserver v-slot="ObserverProps">
-            <div class="create-post-box">
+        <v-toolbar-title
+          class="white--text font-weight-bold"
+        >
+          掲示板を編集する
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-icon
+          dark
+          @click="closeDialog"
+        >
+          mdi-close
+        </v-icon>
+      </v-toolbar>
+      <v-form>
+        <v-card-text v-if="dialogStatus">
+          <v-container>
+            <ValidationObserver v-slot="ObserverProps">
               <v-row>
-                <v-col cols=3 sm=3 md=3 lg=3 xl=3
-                  align-self="center"
-                  v-for="n in maxImageNum"
-                  :key="n.id"
-                >
-                  <v-row justify="center">
-                    <v-avatar
-                      justify="center"
-                      v-if="$data['image' + n].length != 0"
-                      size="62"
-                    >
-                      <img
-                        v-if="$data['image' + n + 'Url']"
-                        :src="$data['image' + n + 'Url']"
-                      />
-                    </v-avatar>
-                  </v-row>
+                <v-col cols="12">
+                  <v-container>
+                    <v-row>
+                      <v-col cols=3
+                        align-self="center"
+                        v-for="n in maxImageNum"
+                        :key="n.id"
+                      >
+                        <v-row>
+                          <v-col cols="12" v-if="$data['image' + n].length != 0">
+                            <v-row justify="center">
+                              <v-avatar
+                                justify="center"
+                                size="62"
+                              >
+                                <img
+                                  v-if="$data['image' + n + 'Url']"
+                                  :src="$data['image' + n + 'Url']"
+                                />
+                              </v-avatar>
+                            </v-row>
+                          </v-col>
+                          <v-col cols="12" v-if="$data['image' + n].length != 0">
+                            <v-row justify="center">
+                              <v-btn
+                                color="red"
+                                class="white--text"
+                                @click="removeImage(n)"
+                              >
+                                削除
+                              </v-btn>
+                            </v-row>
+                          </v-col>
+                          <v-col cols="12" v-if="$data['image' + n].length == 0">
+                            <div class="input-box">
+                              <v-file-input
+                                accept="image/*"
+                                v-model="$data['image' + n]"
+                                @change="addImage(n)"
+                                prepend-icon="mdi-camera"
+                                hide-input
+                              />
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <p v-if="imageError" class="red--text">{{ imageError }}</p>
+                </v-col>
+                <v-col cols="12">
+                  <SelectFormWithValidation
+                    v-model="type"
+                    :items="items"
+                    label="掲示板タイプ"
+                    rules="required"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <TextFieldWithValidation
+                    v-model="title"
+                    label="タイトル"
+                    rules="max:255|required"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <TextAreaWithValidation
+                    v-model="description"
+                    label="説明文"
+                    rules="max:80|required"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <TagsForm
+                    v-model="tag"
+                    :initTags="tags"
+                    @tags-changed="newTags => tags = newTags"
+                  />
+                </v-col>
+                <v-col cols="12">
                   <v-row justify="center">
                     <v-btn
-                      v-if="$data['image' + n].length != 0"
-                      color="red"
+                      color="success"
                       class="white--text"
-                      @click="removeImage(n)"
-                    >
-                      削除
+                      @click="updateBoard"
+                      :disabled="ObserverProps.invalid"
+                    >更新
                     </v-btn>
                   </v-row>
-                  <div class="input-box">
-                    <v-file-input
-                      v-if="$data['image' + n].length == 0"
-                      accept="image/*"
-                      v-model="$data['image' + n]"
-                      @change="addImage(n)"
-                      prepend-icon="mdi-camera"
-                      label="File input"
-                      hide-input
-                    />
-                  </div>
                 </v-col>
-                <p v-if="imageError">{{ imageError }}</p>
               </v-row>
-              <SelectFormWithValidation
-                v-model="type"
-                :items="items"
-                label="掲示板タイプ"
-                rules="required"
-              />
-              <TextFieldWithValidation
-                v-model="title"
-                label="タイトル"
-                rules="max:255|required"
-              />
-              <TextAreaWithValidation
-                v-model="description"
-                label="説明文"
-                rules="max:80|required"
-              />
-              <TagsForm
-                v-model="tag"
-                :initTags="tags"
-                @tags-changed="newTags => tags = newTags"
-              />
-              <v-row justify="center" class="mt-5">
-                <v-btn
-                  color="success"
-                  class="white--text"
-                  @click="updateBoard"
-                  :disabled="ObserverProps.invalid"
-                >更新
-                </v-btn>
-              </v-row>
-            </div>
-          </ValidationObserver>
-        </v-form>
-      </v-card-text>
+            </ValidationObserver>
+          </v-container>
+        </v-card-text>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>

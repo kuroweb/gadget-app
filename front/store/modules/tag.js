@@ -25,8 +25,11 @@ export const actions = {
     }
     commit('setData', tag)
   },
-  setIsFollowed ({ commit }, payload) {
-    commit('setIsFollowed', payload)
+  reloadTagByFollow ({ commit }) {
+    commit('reloadTagByFollow')
+  },
+  reloadTagByUnFollow ({ commit }) {
+    commit('reloadTagByUnFollow')
   },
 
   // 一覧ページ用
@@ -63,7 +66,12 @@ export const mutations = {
   setIsFollowed (state, payload) {
     state.data.isFollowed = payload
   },
-
+  reloadTagByFollow (state) {
+    state.data.isFollowed = true
+  },
+  reloadTagByUnFollow (state) {
+    state.data.isFollowed = false
+  },
   // 一覧ページ用
   setTags (state, tags) {
     state.tags = tags
