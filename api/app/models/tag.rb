@@ -3,7 +3,7 @@ class Tag < ApplicationRecord
   ###################
   #  アソシエーション  #
   ###################
-  has_many :tag_maps, dependent: :destroy, foreign_key: 'tag_id'
+  has_many :post_tag_maps, dependent: :destroy, foreign_key: 'tag_id'
   has_many :posts, through: :tag_maps
   has_many :board_tag_maps, dependent: :destroy, foreign_key: 'tag_id'
   has_many :boards, through: :board_tag_maps

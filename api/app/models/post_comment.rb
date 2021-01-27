@@ -1,4 +1,4 @@
-class Comment < ApplicationRecord
+class PostComment < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   ###################
@@ -49,7 +49,7 @@ class Comment < ApplicationRecord
 
     # 他にコメントしていた人への通知
     users = []
-    post.comments.each do |c|
+    post.post_comments.each do |c|
       users.push(c.user)
     end
     users.uniq.each do |user|

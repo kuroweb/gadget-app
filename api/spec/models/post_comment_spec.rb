@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe Comment, type: :model do
+RSpec.describe PostComment, type: :model do
   describe "バリデーションテスト" do
-    subject(:comment) { create(:comment) }
+    subject(:post_comment) { create(:post_comment) }
 
     it { is_expected.to be_valid }
     it { is_expected.to validate_presence_of(:description)}
@@ -10,7 +10,7 @@ RSpec.describe Comment, type: :model do
   end
   
   describe "アソシエーションテスト" do
-    subject(:comment) { create(:comment) }
+    subject(:post_comment) { create(:post_comment) }
 
     it { is_expected.to belong_to(:user) }
     it { is_expected.to belong_to(:post) }

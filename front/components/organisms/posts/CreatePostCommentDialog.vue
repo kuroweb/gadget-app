@@ -136,14 +136,14 @@ export default {
         }
       }
       this.images.forEach(image => {
-        data.append('comment[images][]', image)
+        data.append('post_comment[images][]', image)
       })
-      data.append('comment[description]', this.description)
-      data.append('comment[post_id]', this.postId)
-      data.append('comment[reply_comment_id]', '')
-      data.append('comment[user_id]', this.$store.state.modules.user.data.id)
+      data.append('post_comment[description]', this.description)
+      data.append('post_comment[post_id]', this.postId)
+      data.append('post_comment[reply_comment_id]', '')
+      data.append('post_comment[user_id]', this.$store.state.modules.user.data.id)
 
-      this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/comments', data, config)
+      this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/post_comments', data, config)
         .then(res => {
           console.log('投稿に成功しました')
           this.$emit('createPostComment', res)

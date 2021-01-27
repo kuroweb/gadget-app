@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :tag_map do
+  factory :post_tag_map do
     
   end
 end

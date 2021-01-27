@@ -84,7 +84,7 @@ class V1::UsersController < ApplicationController
   # アバター更新
   ################################################################################################
   def update_avatar
-    @user = User.find(params[:user_id])
+    @user = User.find(params[:id])
     @user.avatar.attach(params[:avatar])
     render json: @user
   end

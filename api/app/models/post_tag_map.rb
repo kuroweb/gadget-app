@@ -1,4 +1,4 @@
-class TagMap < ApplicationRecord
+class PostTagMap < ApplicationRecord
 
   ###################
   #  アソシエーション  #

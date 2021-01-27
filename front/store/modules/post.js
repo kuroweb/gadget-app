@@ -29,11 +29,11 @@ export const actions = {
     }
     payload.isLikedPost = isLikedPost
     // コメント総数プロパティを追加
-    payload.commentCounts = payload.comments.length
+    payload.commentCounts = payload.post_comments.length
     // 親コメント、子コメントで区別
     let parentComments = []
     let childComments = []
-    payload.comments.forEach(comment => {
+    payload.post_comments.forEach(comment => {
       if (comment.reply_comment_id === null) {
         parentComments.push(comment)
       } else {
@@ -51,7 +51,7 @@ export const actions = {
       })
       commentData.push(p)
     })
-    payload.comments = commentData
+    payload.post_comments = commentData
     commit('setData', payload)
   },
   reloadPostByCreateComment ({ commit }, comment) {
@@ -97,7 +97,7 @@ export const actions = {
     })
     // コメント総数プロパティを追加
     posts.forEach(post => {
-      post.commentCounts = post.comments.length
+      post.commentCounts = post.post_comments.length
     })
     // 投稿へのコメントを整理
     const commentData = []
@@ -105,7 +105,7 @@ export const actions = {
       // 親コメント、子コメントで区別
       let parentComments = []
       let childComments = []
-      post.comments.forEach(comment => {
+      post.post_comments.forEach(comment => {
         if (comment.reply_comment_id === null) {
           parentComments.push(comment)
         } else {
@@ -123,7 +123,7 @@ export const actions = {
         })
         result.push(p)
       })
-      post.comments = result
+      post.post_comments = result
       commentData.push(post)
     })
     commit('setPosts', commentData)
@@ -180,9 +180,9 @@ export const mutations = {
     state.data.commentCounts += 1
     if (comment.reply_comment_id === null) {
       comment.childComments = []
-      state.data.comments.push(comment)
+      state.data.post_comments.push(comment)
     } else {
-      state.data.comments.forEach(c => {
+      state.data.post_comments.forEach(c => {
         if (c.id === comment.reply_comment_id) {
           if ('childComments' in c) {
             c.childComments.push(comment)
@@ -197,7 +197,7 @@ export const mutations = {
   reloadPostByDeleteComment (state, comment) {
     // 親コメントの場合
     if (comment.reply_comment_id === null) {
-      state.data.comments.forEach((c, index) => {
+      state.data.post_comments.forEach((c, index) => {
         if (c.id === comment.id) {
           // コメント数の集計
           let newCommentCounts = 0
@@ -209,13 +209,13 @@ export const mutations = {
           } else {
             newCommentCounts = 1
           }
-          state.data.comments.splice(index, 1)
+          state.data.post_comments.splice(index, 1)
           state.data.commentCounts -= newCommentCounts
         }
       })
     // 子コメントの場合
     } else {
-      state.data.comments.forEach(c => {
+      state.data.post_comments.forEach(c => {
         if ('childComments' in c) {
           c.childComments.forEach((child, index) => {
             if (child.id === comment.id) {
@@ -283,12 +283,12 @@ export const mutations = {
         // 親コメントの場合
         if (comment.reply_comment_id === null) {
           comment.childComments = []
-          post.comments.push(comment)
+          post.post_comments.push(comment)
           post.commentCounts += 1
         // 子コメントの場合
         } else {
           post.commentCounts += 1
-          post.comments.forEach(c => {
+          post.post_comments.forEach(c => {
             if (c.id === comment.reply_comment_id) {
               if ('childComments' in c) {
                 c.childComments.push(comment)
@@ -307,7 +307,7 @@ export const mutations = {
       if (post.id === comment.post_id) {
         // 親コメントの場合
         if (comment.reply_comment_id === null) {
-          post.comments.forEach((c, index) => {
+          post.post_comments.forEach((c, index) => {
             if (c.id === comment.id) {
               // コメント数の集計
               let newCommentCounts = 0
@@ -319,13 +319,13 @@ export const mutations = {
               } else {
                 newCommentCounts = 1
               }
-              post.comments.splice(index, 1)
+              post.post_comments.splice(index, 1)
               post.commentCounts -= newCommentCounts
             }
           })
         // 子コメントの場合
         } else {
-          post.comments.forEach(c => {
+          post.post_comments.forEach(c => {
             if ('childComments' in c) {
               c.childComments.forEach((child, index) => {
                 if (child.id === comment.id) {

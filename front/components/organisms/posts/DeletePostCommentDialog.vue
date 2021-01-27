@@ -76,7 +76,7 @@ export default {
       setFlash: 'modules/info/setFlash'
     }),
     async deleteComment () {
-      this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/comments/delete', {
+      this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/post_comments/delete', {
         params: {
           comment_id: this.comment.id,
           reply_comment_id: this.comment.reply_comment_id

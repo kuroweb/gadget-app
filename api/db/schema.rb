@@ -66,17 +66,6 @@ ActiveRecord::Schema.define(version: 2021_01_24_161229) do
     t.index ["user_id"], name: "index_boards_on_user_id"
   end
 
-  create_table "comments", force: :cascade do |t|
-    t.text "description", null: false
-    t.integer "reply_comment_id"
-    t.bigint "user_id", null: false
-    t.bigint "post_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["post_id"], name: "index_comments_on_post_id"
-    t.index ["user_id"], name: "index_comments_on_user_id"
-  end
-
   create_table "gadget_tag_maps", force: :cascade do |t|
     t.bigint "gadget_id", null: false
     t.bigint "tag_id", null: false
@@ -110,13 +99,33 @@ ActiveRecord::Schema.define(version: 2021_01_24_161229) do
     t.integer "visitor_id", null: false
     t.integer "visited_id", null: false
     t.integer "post_id"
-    t.integer "comment_id"
+    t.integer "post_comment_id"
     t.integer "board_id"
     t.integer "board_comment_id"
     t.string "action", default: "", null: false
     t.boolean "checked", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "post_comments", force: :cascade do |t|
+    t.text "description", null: false
+    t.integer "reply_comment_id"
+    t.bigint "user_id", null: false
+    t.bigint "post_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_post_comments_on_post_id"
+    t.index ["user_id"], name: "index_post_comments_on_user_id"
+  end
+
+  create_table "post_tag_maps", force: :cascade do |t|
+    t.bigint "post_id"
+    t.bigint "tag_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_post_tag_maps_on_post_id"
+    t.index ["tag_id"], name: "index_post_tag_maps_on_tag_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -135,15 +144,6 @@ ActiveRecord::Schema.define(version: 2021_01_24_161229) do
     t.index ["followed_id"], name: "index_relationships_on_followed_id"
     t.index ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true
     t.index ["follower_id"], name: "index_relationships_on_follower_id"
-  end
-
-  create_table "tag_maps", force: :cascade do |t|
-    t.bigint "post_id"
-    t.bigint "tag_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["post_id"], name: "index_tag_maps_on_post_id"
-    t.index ["tag_id"], name: "index_tag_maps_on_tag_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -179,16 +179,16 @@ ActiveRecord::Schema.define(version: 2021_01_24_161229) do
   add_foreign_key "board_tag_maps", "boards"
   add_foreign_key "board_tag_maps", "tags"
   add_foreign_key "boards", "users"
-  add_foreign_key "comments", "posts"
-  add_foreign_key "comments", "users"
   add_foreign_key "gadget_tag_maps", "gadgets"
   add_foreign_key "gadget_tag_maps", "tags"
   add_foreign_key "gadgets", "users"
   add_foreign_key "likes", "posts"
   add_foreign_key "likes", "users"
+  add_foreign_key "post_comments", "posts"
+  add_foreign_key "post_comments", "users"
+  add_foreign_key "post_tag_maps", "posts"
+  add_foreign_key "post_tag_maps", "tags"
   add_foreign_key "posts", "users"
-  add_foreign_key "tag_maps", "posts"
-  add_foreign_key "tag_maps", "tags"
   add_foreign_key "user_tag_maps", "tags"
   add_foreign_key "user_tag_maps", "users"
 end
