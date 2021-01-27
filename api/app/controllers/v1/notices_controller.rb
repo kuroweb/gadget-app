@@ -5,7 +5,7 @@ class V1::NoticesController < ApplicationController
     notices = user.passive_notices.includes({visitor: {avatar_attachment: :blob}},
                                             :visited,
                                             :post,
-                                            :comment,
+                                            :post_comment,
                                             :board,
                                             :board_comment).page(params[:page]).per(10).order(created_at: "DESC")
     render json: notices.as_json(include: [{visitor: {methods: :avatar_url}},

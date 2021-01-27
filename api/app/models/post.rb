@@ -6,11 +6,11 @@ class Post < ApplicationRecord
   ###################
   has_many_attached :images
   belongs_to :user
-  has_many :tag_maps, dependent: :destroy
-  has_many :tags, through: :tag_maps
+  has_many :post_tag_maps, dependent: :destroy
+  has_many :tags, through: :post_tag_maps
   has_many :likes, dependent: :destroy
   has_many :liked_users, through: :likes, source: :user
-  has_many :comments, dependent: :destroy
+  has_many :post_comments, dependent: :destroy
   has_many :notices, dependent: :destroy
 
   ################

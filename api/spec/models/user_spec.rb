@@ -61,7 +61,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:posts) }
     it { is_expected.to have_many(:likes) }
     it { is_expected.to have_many(:liked_posts) }
-    it { is_expected.to have_many(:comments) }
+    it { is_expected.to have_many(:post_comments) }
     it { is_expected.to have_many(:boards) }
     it { is_expected.to have_many(:board_comments) }
     it { is_expected.to have_many(:user_tag_maps) }

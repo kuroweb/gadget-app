@@ -12,7 +12,7 @@ class User < ApplicationRecord
   has_many :posts, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :liked_posts, through: :likes, source: :post
-  has_many :comments, dependent: :destroy
+  has_many :post_comments, dependent: :destroy
   has_many :boards, dependent: :destroy
   has_many :board_comments, dependent: :destroy
   has_many :user_tag_maps, dependent: :destroy

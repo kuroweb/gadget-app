@@ -49,21 +49,12 @@
                             />
                             <v-row justify="center">
                               <v-btn
-                                v-if="currentUser.guest === false"
                                 block
                                 color="success"
                                 class="white--text"
                                 @click="changeUserAvatar"
                               >
                                 変更
-                              </v-btn>
-                              <v-btn
-                                v-else
-                                block
-                                color="grey"
-                                class="white--text"
-                              >
-                                変更（ゲストユーザーのため変更不可）
                               </v-btn>
                             </v-row>
                           </div>
@@ -86,7 +77,6 @@
                             />
                             <v-row justify="center">
                               <v-btn
-                                v-if="currentUser.guest === false"
                                 color="success"
                                 block
                                 class="white--text"
@@ -94,15 +84,6 @@
                                 @click="changeUserProfile"
                               >
                                 変更
-                              </v-btn>
-                              <v-btn
-                                v-else
-                                color="grey"
-                                block
-                                class="white--text"
-                                :disabled="invalid"
-                              >
-                                変更（ゲストユーザーのため変更不可）
                               </v-btn>
                             </v-row>
                           </div>

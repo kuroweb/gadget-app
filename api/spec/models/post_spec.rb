@@ -20,7 +20,7 @@ RSpec.describe Post, type: :model do
     it { is_expected.to have_many(:tags) }
     it { is_expected.to have_many(:likes) }
     it { is_expected.to have_many(:liked_users) }
-    it { is_expected.to have_many(:comments) }
+    it { is_expected.to have_many(:post_comments) }
   end
 
 end

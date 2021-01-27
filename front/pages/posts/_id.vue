@@ -230,7 +230,7 @@
                     </v-col>
                     <v-col
                       cols="12"
-                      v-for="comment in post.comments"
+                      v-for="comment in post.post_comments"
                       :key="comment.id"
                     >
                       <v-card
