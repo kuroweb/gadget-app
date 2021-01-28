@@ -2,11 +2,11 @@
   <v-dialog
     v-model="previewStatus"
     persistent
-    max-width="500"
+    class="mx-auto"
+    max-width="700"
     @click:outside="closePreview"
   >
     <v-card
-
       v-if="previewStatus"
     >
       <v-toolbar
@@ -29,17 +29,13 @@
       <v-carousel
         v-model="selectImageNum"
         hide-delimiters
+        height="auto"
       >
         <v-carousel-item
           v-for="image in images"
           :key="image.id"
-        >
-          <v-img
-            :src="image"
-            contain
-          >
-          </v-img>
-        </v-carousel-item>
+          :src="image"
+        />
       </v-carousel>
     </v-card>
   </v-dialog>
