@@ -25,6 +25,7 @@
             color="white"
             slider-color="orange"
             icons-and-text
+            show-arrows
           >
             <v-tab class="ma-0 pa-0">
               投稿

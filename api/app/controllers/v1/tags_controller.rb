@@ -21,7 +21,7 @@ class V1::TagsController < ApplicationController
                                   {user: {avatar_attachment: :blob}}]},
                         {gadgets: [{images_attachments: :blob},
                                   :tags,
-                                  {user: {avatar_attachment: :blob}}]},).find(params[:id])
+                                  {user: {avatar_attachment: :blob}}]}).find(params[:id])
     render json: @tag.as_json(include: [{users: {methods: :avatar_url}},
                                         {posts: {methods: :images_url,
                                                   include: [:tags,
