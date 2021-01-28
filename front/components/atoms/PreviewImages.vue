@@ -4,6 +4,7 @@
     persistent
     class="mx-auto"
     max-width="700"
+    max-height="700"
     @click:outside="closePreview"
   >
     <v-card
@@ -34,8 +35,13 @@
         <v-carousel-item
           v-for="image in images"
           :key="image.id"
-          :src="image"
-        />
+        >
+          <v-img
+            :src="image"
+            max-height="500"
+          >
+          </v-img>
+        </v-carousel-item>
       </v-carousel>
     </v-card>
   </v-dialog>
