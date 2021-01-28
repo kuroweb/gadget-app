@@ -31,7 +31,7 @@ class V1::TagsController < ApplicationController
                                                             {user: {methods: :avatar_url}}]}},
                                         {gadgets: {methods: :images_url,
                                                   include: [:tags,
-                                                            {user: {methods: :avatar_url}}]}},])
+                                                            {user: {methods: :avatar_url}}]}}])
   end
   
   ################################################################################################
