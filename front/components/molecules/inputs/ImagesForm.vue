@@ -72,12 +72,12 @@ export default {
     addImage (n) {
       const file = this.$data['image' + n]
       if (file !== undefined && file !== null) {
-        if (file.size > 1000000) {
+        if (file.size > 5000000) {
           console.log('ファイルサイズが大きすぎます')
           this.$data['image' + n] = []
-          this.imageError = "選択した画像のファイルサイズが1MBを超えています。"
+          this.imageError = "選択した画像のファイルサイズが5MBを超えています。"
         }
-        if (file.size <= 1000000) {
+        if (file.size <= 5000000) {
           const fr = new FileReader()
           fr.readAsDataURL(file)
           fr.addEventListener('load', () => {
