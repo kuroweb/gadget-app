@@ -208,14 +208,14 @@ VeeValidateを使用してフォームにバリデーションを設定してい
 - タイムライン => フォロー済みユーザーのつぶやきのみ新着順で表示
 - タグフィード => フォロー済みタグを含むつぶやきのみ新着順で表示
 
-![feed_new.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/4eec36e3-e22b-a647-dc61-faeefb8ce152.gif)
+![feed_new.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/17205179-4ec2-0213-e85d-b5f353ecb2d6.gif)
 
 ### 6. タグ管理機能
 
 タグをフォローすることができます。
 タグフィードに表示したいタグをフォローします。
 
-![feed_new.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/12c8317a-cbc1-7288-93c1-33c5f3842153.gif)
+![tag_follow.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/c52e25f3-04e8-cf4a-2fdb-5f426eb8fe80.gif)
 
 つぶやき・掲示板・私物ガジェットはタグ付けすることができます。
 タグをタップするとタグ詳細ページに遷移し、タグを含むつぶやき・掲示板・私物ガジェット・フォローしているユーザーの一覧を表示します。
