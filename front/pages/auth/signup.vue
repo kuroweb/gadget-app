@@ -8,7 +8,7 @@
       v-slot="{ invalid }"
     >
       <v-form>
-        <p v-if="error" class="errors">{{error}}</p>
+        <p v-if="error" class="errors">{{ error }}</p>
         <TextFieldWithValidation
           v-model="name"
           label="名前"
@@ -84,8 +84,10 @@ export default {
     }),
     async signUp () {
       this.setLoading(true)
-      firebaseApp.auth().createUserWithEmailAndPassword(this.email, this.password)
-        .then((res) => {
+      firebaseApp
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then(res => {
           const user = {
             name: this.name,
             email: res.user.email,
@@ -93,39 +95,43 @@ export default {
           }
           this.login(res.user)
           this.$axios.$post(process.env.BROWSER_BASE_URL + "/v1/users", { user })
-        .then((res) => {
-          this.loadData(res.uid)
-        })
-        .then((res) => {
-          this.setLoading(false)
-          this.setFlash({
-            status: true,
-            message: "登録に成功しました"
-          })
-          setTimeout(() => {
-            this.setFlash({
-              status: false,
-              message: ""
+            .then(res => {
+              this.loadData(res.uid)
             })
-          }, 2000)
-          this.$router.push("/")
+            .then(() => {
+              this.setFlash({
+                status: true,
+                message: "登録に成功しました"
+              })
+              this.setLoading(false)
+              setTimeout(() => {
+                this.setFlash({
+                  status: false,
+                  message: ""
+                })
+              }, 2000)
+              this.$router.push("/")
+            .catch(() => {
+              this.setLoading(false)
+            })
+          })
         })
-        .catch((error) => {
+        .catch(error => {
           this.error = (code => {
             switch (code) {
               case "auth/email-already-in-use":
-                return "既にそのメールアドレスは使われています";
+                return "既にそのメールアドレスは使われています"
               case "auth/wrong-password":
-                return "※パスワードが正しくありません";
+                return "※パスワードが正しくありません"
               case "auth/weak-password":
-                return "※パスワードは最低6文字以上にしてください";
+                return "※パスワードは最低6文字以上にしてください"
               default:
-                return "※メールアドレスとパスワードをご確認ください";
+                return "※メールアドレスとパスワードをご確認ください"
             }
-          })(error.code);
+          })(error.code)
+          this.setLoading(false)
         })
-      })
-    },
+    }
   }
 }
 </script>
