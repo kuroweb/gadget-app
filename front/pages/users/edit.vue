@@ -44,7 +44,7 @@
                               v-model="avatar"
                               label="アイコン画像"
                               icon="mdi-account-edit"
-                              rules="size:1000"
+                              rules="size:5000"
                               :avatar_url="avatar_url"
                             />
                             <v-row justify="center">
