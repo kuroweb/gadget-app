@@ -454,6 +454,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      setFlash: "modules/info/setFlash",
       reloadPostsByCreateComment: 'modules/post/reloadPostsByCreateComment',
       reloadPostsByDeleteComment: 'modules/post/reloadPostsByDeleteComment',
       reloadPostsByEditPost: 'modules/post/reloadPostsByEditPost',
@@ -512,6 +513,16 @@ export default {
         })
           .then(() => {
             this.reloadPostsByLikedPost(payload)
+            this.setFlash({
+              status: true,
+              message: "つぶやきにいいねしました"
+            })
+            setTimeout(() => {
+              this.setFlash({
+                status: false,
+                message: ""
+              })
+            }, 2000)
           })
       } else {
         this.openSupportDialog()
@@ -529,6 +540,16 @@ export default {
         })
           .then(() => {
             this.reloadPostsByDisLikedPost(payload)
+            this.setFlash({
+              status: true,
+              message: "いいねを解除しました"
+            })
+            setTimeout(() => {
+              this.setFlash({
+                status: false,
+                message: ""
+              })
+            }, 2000)
           })
       } else {
         this.openSupportDialog()
