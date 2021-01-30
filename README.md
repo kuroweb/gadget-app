@@ -22,9 +22,11 @@
 ネストした要素でもAjaxに動作します。
 
 例） 『コメントアイコンをタップ → コメント欄を表示 → 既にあるコメントに返信』
+
 ![post_comment_reply.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/bf395ffa-3d25-6d3e-a842-9a3414a1a138.gif)
 
 例） 『コメントを削除』
+
 ![post_comment_delete.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/541375a5-43db-2963-673f-c2e448cf90cf.gif)
 
 # ポートフォリオに使用した技術
