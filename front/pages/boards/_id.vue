@@ -88,8 +88,10 @@
                       </v-avatar>
                     </v-col>
                     <v-col cols="8">
-                      <h3>{{ board.user.name }}</h3>
-                      <h6>{{ $moment(board.created_at).format('YYYY年MM月DD日 HH時mm分') }}</h6>
+                      <v-card flat :to="`/users/${board.user.id}`">
+                        <h3>{{ board.user.name }}</h3>
+                        <h6>{{ $moment(board.created_at).format('YYYY年MM月DD日 HH時mm分') }}</h6>
+                      </v-card>
                     </v-col>
                     <v-col cols="12">
                       <Tags
@@ -232,8 +234,10 @@
                               </v-avatar>
                             </v-col>
                             <v-col align-self="center">
-                              <h3>{{ comment.user.name }}</h3>
-                              <h6>{{ $moment(comment.created_at).format('YYYY年MM月DD日 HH時mm分') }}</h6>
+                              <v-card flat :to="`/users/${comment.user.id}`">
+                                <h3>{{ comment.user.name }}</h3>
+                                <h6>{{ $moment(comment.created_at).format('YYYY年MM月DD日 HH時mm分') }}</h6>
+                              </v-card>
                             </v-col>
                           </v-row>
                           <Images
@@ -344,8 +348,10 @@
                                     </v-avatar>
                                   </v-col>
                                   <v-col align-self="center">
-                                    <h3>{{ child.user.name }}</h3>
-                                    <h6>{{ $moment(child.created_at).format('YYYY年MM月DD日 HH時mm分') }}</h6>
+                                    <v-card flat :to="`/users/${child.user.id}`">
+                                      <h3>{{ child.user.name }}</h3>
+                                      <h6>{{ $moment(child.created_at).format('YYYY年MM月DD日 HH時mm分') }}</h6>
+                                    </v-card>
                                   </v-col>
                                 </v-row>
                                 <v-row>

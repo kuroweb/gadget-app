@@ -38,7 +38,7 @@
         >
           <v-img
             :src="image"
-            max-height="500"
+            max-height="700"
           >
           </v-img>
         </v-carousel-item>
