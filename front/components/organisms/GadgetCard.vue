@@ -21,10 +21,14 @@
       />
     </v-card-text>
     <v-card-title>
-      <v-card flat :to="`/gadgets/${gadget.id}`">
-        <v-icon class="mr-3">mdi-laptop</v-icon>
-        <span>{{ gadget.title }}</span>
-      </v-card>
+      <v-row>
+        <v-col cols="12">
+          <v-card flat :to="`/gadgets/${gadget.id}`">
+            <v-icon class="mr-3">mdi-laptop</v-icon>
+            <span>{{ gadget.title }}</span>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-card-title>
     <v-card-text>
       <Tags
@@ -33,22 +37,26 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer/>
-      持ち主：
-      <v-avatar 
-      size="24"
-      >
-        <img 
-          v-if="gadget.user.avatar_url"
-          :src="gadget.user.avatar_url"
-          alt="Avatar"
-        >
-        <img
-          v-else
-          src="~/assets/images/default_icon.jpeg"
-          alt="Avatar"
-        >
-      </v-avatar>
-      <span>{{ gadget.user.name }}さん</span>
+      <v-card flat :to="`/users/${gadget.user.id}`">
+        <v-card-actions>
+          持ち主：
+          <v-avatar 
+          size="24"
+          >
+            <img 
+              v-if="gadget.user.avatar_url"
+              :src="gadget.user.avatar_url"
+              alt="Avatar"
+            >
+            <img
+              v-else
+              src="~/assets/images/default_icon.jpeg"
+              alt="Avatar"
+            >
+          </v-avatar>
+          <span>{{ gadget.user.name }}さん</span>
+        </v-card-actions>
+      </v-card>
     </v-card-actions>
     <v-card-actions>
       <v-spacer/>
