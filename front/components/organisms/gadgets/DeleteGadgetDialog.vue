@@ -3,6 +3,7 @@
     v-model="dialogStatus"
     max-width="500px"
     persistent
+    @click:outside="closeDialog"
   >
     <v-card class="mx-auto">
       <v-toolbar
@@ -31,10 +32,15 @@
             <v-col cols="12">
               <v-row justify="center">
                 <v-btn
+                  v-if="deletemode === 'admin'"
+                  color="white--text grey"
+                >削除（機能停止中）
+                </v-btn>
+                <v-btn
+                  v-if="deletemode === 'owner'"
                   color="white--text red"
                   @click="deleteGadget"
-                >
-                  削除
+                >削除
                 </v-btn>
               </v-row>
             </v-col>
@@ -56,6 +62,12 @@ export default {
     },
     gadgetId: {
       type: null,
+    },
+    deletemode: {
+      type: String
+    },
+    deletemode: {
+      type: String
     }
   },
   data () {

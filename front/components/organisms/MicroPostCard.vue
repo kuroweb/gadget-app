@@ -20,6 +20,7 @@
       :dialog="deleteCommentDialog"
       :postId="postId"
       :comment="comment"
+      :deletemode="deletemode"
       @deletePostComment="deletePostComment"
       @closeDialog="deleteCommentDialog = false"
     />
@@ -32,6 +33,7 @@
     <DeletePostDialog
       :dialog="deletePostDialog"
       :postId="postId"
+      :deletemode="deletemode"
       @deletePost="deletePost"
       @closeDialog="deletePostDialog = false"
     />
@@ -112,7 +114,7 @@
                       icon
                       text
                       color="grey darken-2"
-                      @click="openDeletePostDialog"
+                      @click="openDeletePostDialog(mode.owner)"
                     >
                       <v-icon>
                         mdi-delete
@@ -124,7 +126,7 @@
                       icon
                       text
                       color="grey darken-2"
-                      @click="openDeletePostDialog"
+                      @click="openDeletePostDialog(mode.admin)"
                     >
                       <v-icon>
                         mdi-delete
@@ -150,7 +152,7 @@
                       icon
                       text
                       color="grey darken-2"
-                      @click="openDeletePostDialog"
+                      @click="openDeletePostDialog(mode.owner)"
                     >
                       <v-icon>
                         mdi-delete
@@ -273,16 +275,31 @@
                   <div v-if="$store.state.modules.user.data">
                     <!-- adminユーザーの場合 -->
                     <div v-if="$store.state.modules.user.data.admin === true">
-                      <v-btn
-                        icon
-                        text
-                        color="grey darken-2"
-                        @click="openDeleteCommentDialog(comment)"
-                      >
-                        <v-icon>
-                          mdi-delete
-                        </v-icon>
-                      </v-btn>
+                      <!-- 自身が作成したコンテンツの場合 -->
+                      <div v-if="$store.state.modules.user.data.id === comment.user.id">
+                        <v-btn
+                          icon
+                          text
+                          color="grey darken-2"
+                          @click="openDeleteCommentDialog(comment, mode.owner)"
+                        >
+                          <v-icon>
+                            mdi-delete
+                          </v-icon>
+                        </v-btn>
+                      </div>
+                      <div v-else>
+                        <v-btn
+                          icon
+                          text
+                          color="grey darken-2"
+                          @click="openDeleteCommentDialog(comment, mode.admin)"
+                        >
+                          <v-icon>
+                            mdi-delete
+                          </v-icon>
+                        </v-btn>
+                      </div>
                     </div>
                     <!-- 一般ユーザーの場合 -->
                     <div v-if="$store.state.modules.user.data.admin === false">
@@ -292,7 +309,7 @@
                           icon
                           text
                           color="grey darken-2"
-                          @click="openDeleteCommentDialog(comment)"
+                          @click="openDeleteCommentDialog(comment, mode.owner)"
                         >
                           <v-icon>
                             mdi-delete
@@ -374,16 +391,31 @@
                         <div v-if="$store.state.modules.user.data">
                           <!-- adminユーザーの場合 -->
                           <div v-if="$store.state.modules.user.data.admin === true">
-                            <v-btn
-                              icon
-                              text
-                              color="grey darken-2"
-                              @click="openDeleteCommentDialog(child)"
-                            >
-                              <v-icon>
-                                mdi-delete
-                              </v-icon>
-                            </v-btn>
+                            <!-- 自身が作成したコンテンツの場合 -->
+                            <div v-if="$store.state.modules.user.data.id === child.user.id">
+                              <v-btn
+                                icon
+                                text
+                                color="grey darken-2"
+                                @click="openDeleteCommentDialog(child, mode.owner)"
+                              >
+                                <v-icon>
+                                  mdi-delete
+                                </v-icon>
+                              </v-btn>
+                            </div>
+                            <div v-else>
+                              <v-btn
+                                icon
+                                text
+                                color="grey darken-2"
+                                @click="openDeleteCommentDialog(child, mode.admin)"
+                              >
+                                <v-icon>
+                                  mdi-delete
+                                </v-icon>
+                              </v-btn>
+                            </div>
                           </div>
                           <!-- 一般ユーザーの場合 -->
                           <div v-if="$store.state.modules.user.data.admin === false">
@@ -393,7 +425,7 @@
                                 icon
                                 text
                                 color="grey darken-2"
-                                @click="openDeleteCommentDialog(child)"
+                                @click="openDeleteCommentDialog(child, mode.owner)"
                               >
                                 <v-icon>
                                   mdi-delete
@@ -454,6 +486,11 @@ export default {
       supportDialog: false,
       parentComment: '',
       comment: '',
+      mode: {
+        owner: 'owner',
+        admin: 'admin'
+      },
+      deletemode: ''
     }
   },
   methods: {
@@ -478,7 +515,8 @@ export default {
       this.parentComment = comment
       this.createReplyDialog = true
     },
-    openDeleteCommentDialog (comment) {
+    openDeleteCommentDialog (comment, payload) {
+      this.deletemode = payload
       this.postId = this.post.id
       this.comment = comment
       this.deleteCommentDialog = true
@@ -487,7 +525,8 @@ export default {
       this.postId = this.post.id
       this.editPostDialog = true
     },
-    openDeletePostDialog () {
+    openDeletePostDialog (payload) {
+      this.deletemode = payload
       this.postId = this.post.id
       this.deletePostDialog = true
     },

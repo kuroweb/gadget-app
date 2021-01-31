@@ -6,6 +6,7 @@
     <DeleteGadgetDialog
       :dialog="deleteGadgetDialog"
       :gadgetId="gadgetId"
+      :deletemode="deletemode"
       @deleteGadget="deleteGadget"
       @closeDialog="deleteGadgetDialog = false"
     />
@@ -95,7 +96,7 @@
               icon
               text
               color="grey darken-2"
-              @click="openDeleteGadgetDialog"
+              @click="openDeleteGadgetDialog(mode.owner)"
             >
               <v-icon>
                 mdi-delete
@@ -107,7 +108,7 @@
               icon
               text
               color="grey darken-2"
-              @click="openDeleteGadgetDialog"
+              @click="openDeleteGadgetDialog(mode.admin)"
             >
               <v-icon>
                 mdi-delete
@@ -133,7 +134,7 @@
               icon
               text
               color="grey darken-2"
-              @click="openDeleteGadgetDialog"
+              @click="openDeleteGadgetDialog(mode.owner)"
             >
               <v-icon>
                 mdi-delete
@@ -168,7 +169,12 @@ export default {
     return {
       editGadgetDialog: false,
       deleteGadgetDialog: false,
-      gadgetId: ''
+      gadgetId: '',
+      mode: {
+        owner: 'owner',
+        admin: 'admin'
+      },
+      deletemode: ''
     }
   },
   methods: {
@@ -176,7 +182,8 @@ export default {
       reloadGadgetsByEditGadget: 'modules/gadget/reloadGadgetsByEditGadget',
       reloadGadgetsByDeleteGadget: 'modules/gadget/reloadGadgetsByDeleteGadget',
     }),
-    openDeleteGadgetDialog () {
+    openDeleteGadgetDialog (payload) {
+      this.deletemode = payload
       this.gadgetId = this.gadget.id
       this.deleteGadgetDialog = true
     },

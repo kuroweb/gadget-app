@@ -14,6 +14,7 @@
     <DeleteGadgetDialog
       :dialog="deleteGadgetDialog"
       :gadgetId="gadgetId"
+      :deletemode="deletemode"
       @deleteGadget="deleteGadget"
       @closeDialog="deleteGadgetDialog = false"
     />
@@ -114,7 +115,7 @@
                         icon
                         text
                         color="grey darken-2"
-                        @click="openDeleteGadgetDialog"
+                        @click="openDeleteGadgetDialog(mode.owner)"
                       >
                         <v-icon>
                           mdi-delete
@@ -126,7 +127,7 @@
                         icon
                         text
                         color="grey darken-2"
-                        @click="openDeleteGadgetDialog"
+                        @click="openDeleteGadgetDialog(mode.admin)"
                       >
                         <v-icon>
                           mdi-delete
@@ -152,7 +153,7 @@
                         icon
                         text
                         color="grey darken-2"
-                        @click="openDeleteGadgetDialog"
+                        @click="openDeleteGadgetDialog(mode.owner)"
                       >
                         <v-icon>
                           mdi-delete
@@ -189,6 +190,11 @@ export default {
       gadgetId: '',
       editGadgetDialog: false,
       deleteGadgetDialog: false,
+      mode: {
+        owner: 'owner',
+        admin: 'admin'
+      },
+      deletemode: ''
     }
   },
   async fetch ({ $axios, params, store }) {
@@ -221,7 +227,8 @@ export default {
       this.gadgetId = this.gadget.id
       this.editGadgetDialog = true
     },
-    openDeleteGadgetDialog () {
+    openDeleteGadgetDialog (payload) {
+      this.deletemode = payload
       this.gadgetId = this.gadget.id
       this.deleteGadgetDialog = true
     },
