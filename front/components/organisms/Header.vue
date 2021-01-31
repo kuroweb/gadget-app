@@ -101,11 +101,9 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import NoticeFeed from '~/components/organisms/NoticeFeed.vue'
-import Hint from '~/components/molecules/Hint.vue'
 export default {
   componetns: {
-    NoticeFeed,
-    Hint
+    NoticeFeed
   },
   data () {
     return {

@@ -3,6 +3,7 @@
     v-model="dialogStatus"
     max-width="400px"
     persistent
+    @click:outside="closeDialog"
   >
     <v-card class="mx-auto">
       <v-toolbar
@@ -28,6 +29,12 @@
         </v-row>
         <v-row justify="center">
           <v-btn
+            v-if="deletemode === 'admin'"
+            color="white--text grey"
+          >削除（機能停止中）
+          </v-btn>
+          <v-btn
+            v-if="deletemode === 'owner'"
             color="white--text red"
             @click="deleteComment"
           >削除
@@ -52,6 +59,9 @@ export default {
     },
     comment: {
       type: null
+    },
+    deletemode: {
+      type: String
     }
   },
   data () {

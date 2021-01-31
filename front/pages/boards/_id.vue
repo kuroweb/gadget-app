@@ -22,6 +22,7 @@
       :dialog="deleteCommentDialog"
       :boardId="boardId"
       :comment="comment"
+      :deletemode="deletemode"
       @deleteBoardComment="deleteBoardComment"
       @closeDialog="deleteCommentDialog = false"
     />
@@ -34,6 +35,7 @@
     <DeleteBoardDialog
       :dialog="deleteBoardDialog"
       :boardId="boardId"
+      :deletemode="deletemode"
       @deleteBoard="deleteBoard"
       @closeDialog="deleteBoardDialog = false"
     />
@@ -141,7 +143,7 @@
                                 icon
                                 text
                                 color="grey darken-2"
-                                @click="openDeleteBoardDialog"
+                                @click="openDeleteBoardDialog(mode.owner)"
                               >
                                 <v-icon>
                                   mdi-delete
@@ -153,7 +155,7 @@
                                 icon
                                 text
                                 color="grey darken-2"
-                                @click="openDeleteBoardDialog"
+                                @click="openDeleteBoardDialog(mode.admin)"
                               >
                                 <v-icon>
                                   mdi-delete
@@ -179,7 +181,7 @@
                                 icon
                                 text
                                 color="grey darken-2"
-                                @click="openDeleteBoardDialog"
+                                @click="openDeleteBoardDialog(mode.owner)"
                               >
                                 <v-icon>
                                   mdi-delete
@@ -261,7 +263,7 @@
                                     icon
                                     text
                                     color="grey darken-2"
-                                    @click="openDeleteCommentDialog(comment)"
+                                    @click="openDeleteCommentDialog(comment, mode.owner)"
                                   >
                                     <v-icon>
                                       mdi-delete
@@ -273,7 +275,7 @@
                                     icon
                                     text
                                     color="grey darken-2"
-                                    @click="openDeleteCommentDialog(comment)"
+                                    @click="openDeleteCommentDialog(comment, mode.admin)"
                                   >
                                     <v-icon>
                                       mdi-delete
@@ -289,7 +291,7 @@
                                     icon
                                     text
                                     color="grey darken-2"
-                                    @click="openDeleteCommentDialog(comment)"
+                                    @click="openDeleteCommentDialog(comment, mode.owner)"
                                   >
                                     <v-icon>
                                       mdi-delete
@@ -377,7 +379,7 @@
                                           icon
                                           text
                                           color="grey darken-2"
-                                          @click="openDeleteCommentDialog(child)"
+                                          @click="openDeleteCommentDialog(child, mode.owner)"
                                         >
                                           <v-icon>
                                             mdi-delete
@@ -389,7 +391,7 @@
                                           icon
                                           text
                                           color="grey darken-2"
-                                          @click="openDeleteCommentDialog(child)"
+                                          @click="openDeleteCommentDialog(child, mode.admin)"
                                         >
                                           <v-icon>
                                             mdi-delete
@@ -405,7 +407,7 @@
                                           icon
                                           text
                                           color="grey darken-2"
-                                          @click="openDeleteCommentDialog(child)"
+                                          @click="openDeleteCommentDialog(child, mode.owner)"
                                         >
                                           <v-icon>
                                             mdi-delete
@@ -462,6 +464,11 @@ export default {
       deleteBoardDialog: false,
       parentComment: '',
       comment: '',
+      mode: {
+        owner: 'owner',
+        admin: 'admin'
+      },
+      deletemode: ''
     }
   },
   async fetch ({ $axios, params, store }) {
@@ -493,7 +500,6 @@ export default {
       reloadBoardByCreateComment: 'modules/board/reloadBoardByCreateComment',
       reloadBoardByDeleteComment: 'modules/board/reloadBoardByDeleteComment'
     }),
-    // ダイアログ関連
     openCreateCommentDialog () {
       this.boardId = this.board.id
       this.createCommentDialog = true
@@ -503,7 +509,8 @@ export default {
       this.parentComment = comment
       this.createReplyDialog = true
     },
-    openDeleteCommentDialog (comment) {
+    openDeleteCommentDialog (comment, payload) {
+      this.deletemode = payload
       this.boardId = this.board.id
       this.comment = comment
       this.deleteCommentDialog = true
@@ -512,7 +519,8 @@ export default {
       this.boardId = this.board.id
       this.editBoardDialog = true
     },
-    openDeleteBoardDialog () {
+    openDeleteBoardDialog (payload) {
+      this.deletemode = payload
       this.boardId = this.board.id
       this.deleteBoardDialog = true
     },

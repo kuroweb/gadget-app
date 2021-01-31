@@ -12,6 +12,7 @@
     <DeleteBoardDialog
       :dialog="deleteBoardDialog"
       :boardId="boardId"
+      :deletemode="deletemode"
       @deleteBoard="deleteBoard"
       @closeDialog="deleteBoardDialog = false"
     />
@@ -85,7 +86,7 @@
                       icon
                       text
                       color="grey darken-2"
-                      @click="openDeleteBoardDialog"
+                      @click="openDeleteBoardDialog(mode.owner)"
                     >
                       <v-icon>
                         mdi-delete
@@ -97,7 +98,7 @@
                       icon
                       text
                       color="grey darken-2"
-                      @click="openDeleteBoardDialog"
+                      @click="openDeleteBoardDialog(mode.admin)"
                     >
                       <v-icon>
                         mdi-delete
@@ -123,7 +124,7 @@
                       icon
                       text
                       color="grey darken-2"
-                      @click="openDeleteBoardDialog"
+                      @click="openDeleteBoardDialog(mode.owner)"
                     >
                       <v-icon>
                         mdi-delete
@@ -161,6 +162,11 @@ export default {
       boardId: '',
       editBoardDialog: false,
       deleteBoardDialog: false,
+      mode: {
+        owner: 'owner',
+        admin: 'admin'
+      },
+      deletemode: ''
     }
   },
   methods: {
@@ -172,7 +178,8 @@ export default {
       this.boardId = this.board.id
       this.editBoardDialog = true
     },
-    openDeleteBoardDialog () {
+    openDeleteBoardDialog (payload) {
+      this.deletemode = payload
       this.boardId = this.board.id
       this.deleteBoardDialog = true
     },
