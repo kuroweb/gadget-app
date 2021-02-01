@@ -9,7 +9,7 @@
 スマホ利用を想定しているのでモバイルからも気軽にお試し下さい！（ゲストログイン有ります）
 
 #### トップページ
-![Imgur](https://i.imgur.com/SbMsft8.gif)
+![Imgur](https://i.imgur.com/opDmDvW.gif)
 
 #### レスポンシブ対応
 
@@ -23,7 +23,7 @@
 
 例） 『コメントアイコンをタップ → コメント欄を表示 → 既にあるコメントに返信』
 
-![Imgur](https://i.imgur.com/opDmDvW.gif)
+![Imgur](https://i.imgur.com/SPP7Un7.gif)
 
 例） 『コメントを削除』
 
@@ -104,13 +104,13 @@
 RDSにはPostgreSQLを採用し、画像を除いたデータを保管。
 画像データはS3に保管しています。
 
-![スクリーンショット 2021-01-26 19.28.33.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/4b873df7-3103-702f-2db7-273f6bd43149.png)
+![Imgur](https://i.imgur.com/wjhVtBT.png)
 
 #### ER図
 
 一貫性のあるテーブル名称を意識しました。
 
-![ER_latest.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/5e990b5c-9302-9d78-26f0-c3de6a09ae25.png)
+![Imgur](https://i.imgur.com/oDLCNfX.png)
 
 # アプリの機能一覧
 
