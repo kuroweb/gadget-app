@@ -9,6 +9,7 @@
 スマホ利用を想定しているのでモバイルからも気軽にお試し下さい！（ゲストログイン有ります）
 
 #### トップページ
+![Imgur](https://i.imgur.com/opDmDvW.gifv)
 ![Imgur](https://i.imgur.com/opDmDvW.gif)
 
 #### レスポンシブ対応
