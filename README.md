@@ -9,14 +9,13 @@
 スマホ利用を想定しているのでモバイルからも気軽にお試し下さい！（ゲストログイン有ります） 
 
 #### トップページ
-![Imgur](https://i.imgur.com/opDmDvW.gifv)
-![Imgur](https://i.imgur.com/opDmDvW.gif)
+![toppage.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/d49a4b2d-00dc-3492-0b07-f61d540f7586.png)
 
 #### レスポンシブ対応
 
 スマホ利用も想定したUI設計。
 
-![Imgur](https://i.imgur.com/CguMOfY.gif)
+![responsive.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/ad9c516a-6424-d08c-37c5-e565d33861b3.gif)
 
 #### Ajax処理
 
@@ -24,11 +23,11 @@
 
 例） 『コメントアイコンをタップ → コメント欄を表示 → 既にあるコメントに返信』
 
-![Imgur](https://i.imgur.com/SPP7Un7.gif)
+![post_comment_reply.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/bf395ffa-3d25-6d3e-a842-9a3414a1a138.gif)
 
 例） 『コメントを削除』
 
-![Imgur](https://i.imgur.com/SbMsft8.gif)
+![post_comment_delete.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/541375a5-43db-2963-673f-c2e448cf90cf.gif)
 
 # ポートフォリオに使用した技術
 
@@ -105,13 +104,13 @@
 RDSにはPostgreSQLを採用し、画像を除いたデータを保管。
 画像データはS3に保管しています。
 
-![Imgur](https://i.imgur.com/wjhVtBT.png)
+![スクリーンショット 2021-01-26 19.28.33.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/4b873df7-3103-702f-2db7-273f6bd43149.png)
 
 #### ER図
 
 一貫性のあるテーブル名称を意識しました。
 
-![Imgur](https://i.imgur.com/oDLCNfX.png)
+![ER_latest.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/5e990b5c-9302-9d78-26f0-c3de6a09ae25.png)
 
 # アプリの機能一覧
 
