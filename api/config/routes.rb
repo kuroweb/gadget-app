@@ -1,13 +1,7 @@
 Rails.application.routes.draw do
   namespace :v1 do
-    get 'tags/search', to: 'tags#search'
-    get 'users/search', to: 'users#search'
-    get 'posts/search', to: 'posts#search'
-    get 'boards/search', to: 'boards#search'
-    get 'gadgets/search', to: 'gadgets#search'
-    get 'users/isFollowed', to: 'users#isFollowed'
-    get 'users/test', to: 'users#test'
     resources :users do
+      get :search, on: :collection
       member do
         patch '/update_avatar', to: 'users#update_avatar'
         get '/following', to: 'users#following'
@@ -17,17 +11,26 @@ Rails.application.routes.draw do
       end
     end
     resources :relationships, only: [:create, :destroy]
-    resources :posts
+    resources :posts do
+      get :search, on: :collection
+    end
     resources :likes, only: [:create, :destroy]
     resources :post_comments, only: [:create, :destroy]
-    resources :boards
+    resources :boards do
+      get :search, on: :collection
+    end
     resources :board_comments
-    resources :tags
+    resources :tags do
+      get :search, on: :collection
+    end
     resources :user_tag_maps, only: [:create, :destroy]
     resources :tasks, only: :index
-    resources :notices, only: [:index]
-    get '/notices/unchecked', to: 'notices#unchecked'
-    get '/notices/checked', to: 'notices#checked'
-    resources :gadgets, only: [:index, :create, :show, :update, :destroy]
+    resources :notices, only: [:index] do
+      get :unchecked, on: :collection
+      get :checked, on: :collection
+    end
+    resources :gadgets, only: [:index, :create, :show, :update, :destroy] do
+      get :search, on: :collection
+    end
   end
 end
