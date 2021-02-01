@@ -9,13 +9,13 @@
 スマホ利用を想定しているのでモバイルからも気軽にお試し下さい！（ゲストログイン有ります）
 
 #### トップページ
-![toppage.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/d49a4b2d-00dc-3492-0b07-f61d540f7586.png)
+[Imgur](https://i.imgur.com/opDmDvW.gifv)
 
 #### レスポンシブ対応
 
 スマホ利用も想定したUI設計。
 
-![responsive.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/ad9c516a-6424-d08c-37c5-e565d33861b3.gif)
+[Imgur](https://i.imgur.com/CguMOfY.gifv)
 
 #### Ajax処理
 
@@ -23,11 +23,11 @@
 
 例） 『コメントアイコンをタップ → コメント欄を表示 → 既にあるコメントに返信』
 
-![post_comment_reply.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/bf395ffa-3d25-6d3e-a842-9a3414a1a138.gif)
+[Imgur](https://i.imgur.com/opDmDvW.gifv)
 
 例） 『コメントを削除』
 
-![post_comment_delete.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/541375a5-43db-2963-673f-c2e448cf90cf.gif)
+[Imgur](https://i.imgur.com/SbMsft8.gifv)
 
 # ポートフォリオに使用した技術
 
