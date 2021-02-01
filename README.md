@@ -9,13 +9,13 @@
 スマホ利用を想定しているのでモバイルからも気軽にお試し下さい！（ゲストログイン有ります）
 
 #### トップページ
-![Imgur](https://i.imgur.com/SbMsft8.gifv)
+![Imgur](https://i.imgur.com/SbMsft8.gif)
 
 #### レスポンシブ対応
 
 スマホ利用も想定したUI設計。
 
-![Imgur](https://i.imgur.com/CguMOfY.gifv)
+![Imgur](https://i.imgur.com/CguMOfY.gif)
 
 #### Ajax処理
 
@@ -23,11 +23,11 @@
 
 例） 『コメントアイコンをタップ → コメント欄を表示 → 既にあるコメントに返信』
 
-![Imgur](https://i.imgur.com/opDmDvW.gifv)
+![Imgur](https://i.imgur.com/opDmDvW.gif)
 
 例） 『コメントを削除』
 
-![Imgur](https://i.imgur.com/SbMsft8.gifv)
+![Imgur](https://i.imgur.com/SbMsft8.gif)
 
 # ポートフォリオに使用した技術
 
