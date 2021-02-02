@@ -78,6 +78,10 @@
       {
         "name": "GUEST_PASSWORD",
         "valueFrom": "guest-password"
+      },
+      {
+        "name": "ADMIN_EMAIL",
+        "valueFrom": "admin-email"
       }
     ]
   }

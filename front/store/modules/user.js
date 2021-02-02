@@ -2,10 +2,19 @@ import firebaseApp from "@/plugins/firebase"
 import Cookies from 'js-cookie'
 
 export const state = () => ({
-  // firebaseの認証情報
+  ///////////////////////////////////////////////////////////////////////////////////
+  // FirebaseAuthentication（外部API）に保存されたユーザー情報
+  ///////////////////////////////////////////////////////////////////////////////////
   user: null,
-  // APIにあるユーザー情報
+
+  ///////////////////////////////////////////////////////////////////////////////////
+  // APIサーバーに保存されたユーザー情報
+  ///////////////////////////////////////////////////////////////////////////////////
   data: null,
+
+  ///////////////////////////////////////////////////////////////////////////////////
+  // ユーザー一覧表示 / Searchページで使用中
+  ///////////////////////////////////////////////////////////////////////////////////
   users: {}
 })
 
@@ -22,11 +31,6 @@ export const getters = {
 
   isAuthenticated(state) {
     return !!state.user && !!state.user.uid
-  },
-
-  // 削除予定
-  userId(state) {
-    return state.data.id
   },
 
   data(state) {
@@ -48,7 +52,7 @@ export const actions = {
     }
     const uid = user.uid
 
-    Cookies.set('access_token', token) // saving token in cookie for server rendering
+    Cookies.set('access_token', token)
     await dispatch('setUser', userInfo)
     await dispatch('loadData', uid)
 
@@ -76,7 +80,10 @@ export const actions = {
     }
   },
 
-  // 一覧ページ用
+  
+  ///////////////////////////////////////////////////////////////////////////////////
+  // ユーザー一覧ページ用 / Searchページで使用中
+  ///////////////////////////////////////////////////////////////////////////////////
   setUsers ({ commit, rootState }, users) {
     // isFollowedプロパティの追加
     users.forEach(user => {
@@ -108,5 +115,9 @@ export const mutations = {
 
   setAdmin (state, payload) {
     state.data.admin = payload
+  },
+
+  setGodmode (state, payload) {
+    state.data.godmode = payload
   }
 }

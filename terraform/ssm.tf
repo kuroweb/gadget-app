@@ -1,8 +1,10 @@
-####################
-# SSMパラメータストア #
-####################
+#############################################################
+# SSMパラメータストア
+#############################################################
 
-#__________ 共通 __________#
+#============================================================
+# Common
+#============================================================
 variable "AWS_ACCESS_KEY_ID" {}
 variable "AWS_SECRET_ACCESS_KEY" {}
 
@@ -19,7 +21,9 @@ resource "aws_ssm_parameter" "secret-access-key" {
   description = "AWS_SECRET_ACCESS_KEY"
 }
 
-#__________ API __________#
+#============================================================
+# API
+#============================================================
 variable "API_PORT" {}
 variable "DB_HOST" {}
 variable "DB_NAME" {}
@@ -106,7 +110,9 @@ resource "aws_ssm_parameter" "rails-master-key" {
   description = "RAILS_MASTER_KEY"
 }
 
-#__________ FRONT __________#
+#============================================================
+# FRONT
+#============================================================
 variable "WORKDIR" {}
 variable "HOST" {}
 variable "FRONT_PORT" {}
@@ -120,6 +126,7 @@ variable "STORAGE_BUCKET" {}
 variable "MESSAGE_SENDER_ID" {}
 variable "GUEST_EMAIL" {}
 variable "GUEST_PASSWORD" {}
+variable "ADMIN_EMAIL" {}
 
 resource "aws_ssm_parameter" "workdir" {
   name = "workdir"
@@ -199,8 +206,16 @@ resource "aws_ssm_parameter" "guest-password" {
   type = "SecureString"
   description = "GUEST_PASSWORD"
 }
+resource "aws_ssm_parameter" "admin-email" {
+  name = "admin-email"
+  value = var.ADMIN_EMAIL
+  type = "SecureString"
+  description = "ADMIN_EMAIL"
+}
 
-#__________ CodePipeline _________#
+#============================================================
+# CodePipeline
+#============================================================
 variable "GITHUB_TOKEN" {}
 variable "GITHUB_USER" {}
 variable "GITHUB_REPO" {}

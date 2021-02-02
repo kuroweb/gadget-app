@@ -32,9 +32,15 @@
             <v-col cols="12">
               <v-row justify="center">
                 <v-btn
-                  v-if="deletemode === 'admin'"
+                  v-if="deletemode === 'admin' && $store.state.modules.user.data.email !== admin_email"
                   color="white--text grey"
                 >削除（機能停止中）
+                </v-btn>
+                <v-btn
+                  v-if="deletemode === 'admin' && $store.state.modules.user.data.email === admin_email"
+                  color="white--text red"
+                  @click="deletePost"
+                >削除（管理者のみ）
                 </v-btn>
                 <v-btn
                   v-if="deletemode === 'owner'"
@@ -70,6 +76,7 @@ export default {
   data () {
     return {
       dialogStatus: this.dialog,
+      admin_email: process.env.ADMIN_EMAIL
     }
   },
   watch: {
