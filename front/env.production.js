@@ -1,9 +1,13 @@
 module.exports = {
-  // Axios //
+  ////////////////////////////////////////////////
+  // Axios
+  ////////////////////////////////////////////////
   API_BASE_URL: process.env.API_BASE_URL,
   BROWSER_BASE_URL: process.env.BROWSER_BASE_URL,
 
-  // FirebaseAuth //
+  ////////////////////////////////////////////////
+  // Firebase Authentication
+  ////////////////////////////////////////////////
   API_KEY: process.env.API_KEY,
   AUTH_DOMAIN: process.env.AUTH_DOMAIN,
   DATABASE_URL: process.env.DATABASE_URL,
@@ -11,7 +15,14 @@ module.exports = {
   STORAGE_BUCKET: process.env.STORAGE_BUCKET,
   MESSAGE_SENDER_ID: process.env.MESSAGE_SENDER_ID,
 
-  // GuestUser //
+  ////////////////////////////////////////////////
+  // GuestUser
+  ////////////////////////////////////////////////
   GUEST_EMAIL: process.env.GUEST_EMAIL,
-  GUEST_PASSWORD: process.env.GUEST_PASSWORD
+  GUEST_PASSWORD: process.env.GUEST_PASSWORD,
+
+  ////////////////////////////////////////////////
+  // AdminUser
+  ////////////////////////////////////////////////
+  ADMIN_EMAIL: process.env.ADMIN_EMAIL
 }

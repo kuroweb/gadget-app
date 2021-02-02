@@ -54,6 +54,7 @@ services:
         BROWSER_BASE_URL:  $BROWSER_BASE_URL
         GUEST_EMAIL:       $GUEST_EMAIL
         GUEST_PASSWORD:    $GUEST_PASSWORD
+        ADMIN_EMAIL:       $ADMIN_EMAIL
     # command: yarn start
     command: yarn run dev
     volumes:
