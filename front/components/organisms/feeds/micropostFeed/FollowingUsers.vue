@@ -42,6 +42,13 @@
           <span slot="no-results"></span>
         </VueInfiniteLoading>
       </v-col>
+      <v-col
+        v-if="posts.length === 0 && loading === false"
+        cols="12"
+        class="text-center"
+      >
+        <span>フォローしたユーザーの投稿が表示されます。</span>
+      </v-col>
     </v-row>
   </v-container>
 </template>

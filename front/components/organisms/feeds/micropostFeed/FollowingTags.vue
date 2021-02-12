@@ -38,9 +38,16 @@
               spinner="spiral"
               @infinite="infiniteHandler"
             >
-              <span slot="no-more">-----投稿は以上です-----</span>
+              <span slot="no-more">-----つぶやきは以上です-----</span>
               <span slot="no-results"></span>
             </VueInfiniteLoading>
+          </v-col>
+          <v-col
+            v-if="posts.length === 0 && loading === false"
+            cols="12"
+            class="text-center"
+          >
+            <span>フォローしたタグを含むつぶやきが表示されます。</span>
           </v-col>
         </v-row>
       </v-col>

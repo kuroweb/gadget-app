@@ -42,6 +42,13 @@
           <span slot="no-results"></span>
         </VueInfiniteLoading>
       </v-col>
+      <v-col
+        v-if="boards.length === 0 && loading === false"
+        cols="12"
+        class="text-center"
+      >
+        <span>質問掲示板が存在しません。</span>
+      </v-col>
     </v-row>
   </v-container>
 </template>

@@ -29,7 +29,7 @@
         </v-row>
       </v-col>
       <v-col
-        v-if="posts.length === 0"
+        v-if="posts.length === 0 && loading === false"
         cols="12"
         class="text-center"
       >
