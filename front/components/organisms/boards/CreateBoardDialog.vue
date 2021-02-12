@@ -25,45 +25,61 @@
           mdi-close
         </v-icon>
       </v-toolbar>
-      <v-card-text v-if="dialogStatus">
-        <v-form>
-          <ValidationObserver v-slot="ObserverProps">
-            <ImagesForm
-              @setImages="setImages"
-            />
-            <SelectFormWithValidation
-              v-model="type"
-              :items="items"
-              label="掲示板タイプ"
-              rules="required"
-            />
-            <TextFieldWithValidation
-              v-model="title"
-              label="タイトル"
-              rules="max:255|required"
-            />
-            <TextAreaWithValidation
-              v-model="description"
-              label="説明文"
-              rules="max:255|required"
-            />
-            <TagsForm
-              v-model="tag"
-              :initTags="tags"
-              @tags-changed="newTags => tags = newTags"
-            />
-            <v-row justify="center" class="mt-3">
-              <v-btn
-                color="success"
-                class="white--text"
-                @click="createBoard"
-                :disabled="ObserverProps.invalid || !ObserverProps.validated"
-              >作成
-              </v-btn>
-            </v-row>
-          </ValidationObserver>
-        </v-form>
-      </v-card-text>
+      <v-form>
+        <v-card-text v-if="dialogStatus">
+          <v-container>
+            <ValidationObserver v-slot="ObserverProps">
+              <v-row>
+                <v-col cols="12">
+                  <ImagesForm
+                    @setImages="setImages"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <SelectFormWithValidation
+                    v-model="type"
+                    :items="items"
+                    label="掲示板タイプ"
+                    rules="required"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <TextFieldWithValidation
+                    v-model="title"
+                    label="タイトル"
+                    rules="max:255|required"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <TextAreaWithValidation
+                    v-model="description"
+                    label="説明文"
+                    rules="max:255|required"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <TagsForm
+                    v-model="tag"
+                    :initTags="tags"
+                    @tags-changed="newTags => tags = newTags"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-row justify="center">
+                    <v-btn
+                      color="success"
+                      class="white--text"
+                      @click="createBoard"
+                      :disabled="ObserverProps.invalid || !ObserverProps.validated"
+                    >作成
+                    </v-btn>
+                  </v-row>
+                </v-col>
+              </v-row>
+            </ValidationObserver>
+          </v-container>
+        </v-card-text>
+      </v-form>
     </v-card>
     <v-card v-else>
       <v-toolbar
