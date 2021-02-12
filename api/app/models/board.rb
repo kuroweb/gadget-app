@@ -1,9 +1,9 @@
 class Board < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  ###################
-  #  アソシエーション  #
-  ###################
+  ################################################################################################
+  # アソシエーション
+  ################################################################################################
   has_many_attached :images
   belongs_to :user
   has_many :board_tag_maps, dependent: :destroy
@@ -11,16 +11,16 @@ class Board < ApplicationRecord
   has_many :board_comments, dependent: :destroy
   has_many :notices, dependent: :destroy
 
-  ################
-  # バリデーション #
-  ################
+  ################################################################################################
+  # バリデーション
+  ################################################################################################
   validates :description, presence: true, length: { maximum: 255 }
   validates :title, presence: true, length: { maximum: 100 }
   validates :board_type, presence: true
 
-  ################
-  #   メソッド    #
-  ################
+  ################################################################################################
+  # 画像データのURL取得
+  ################################################################################################
   def images_url
     if images.attached?
       i = 0
@@ -36,6 +36,9 @@ class Board < ApplicationRecord
     end
   end
 
+  ################################################################################################
+  # タグ更新
+  ################################################################################################
   def save_tag(sent_tags)
     current_tags = []
     current_tags = self.tags.pluck(:tag_name) unless self.tags.nil?
@@ -50,6 +53,9 @@ class Board < ApplicationRecord
     end
   end
 
+  ################################################################################################
+  # 検索
+  ################################################################################################
   def self.search(board_name)
     Board.where(['title LIKE ?', "%#{board_name}%"])
   end
