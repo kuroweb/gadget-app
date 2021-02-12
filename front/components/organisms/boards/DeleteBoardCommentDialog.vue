@@ -93,7 +93,7 @@ export default {
         }
       })
         .then(() => {
-          this.$emit('deleteCommentComment', this.comment)
+          this.$emit('deleteBoardComment', this.comment)
           this.$emit('closeDialog')
           this.setFlash({
             status: true,
