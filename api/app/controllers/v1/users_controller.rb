@@ -39,15 +39,19 @@ class V1::UsersController < ApplicationController
     render json: @user.as_json(include: [:following,
                                           :followers,
                                           {gadgets: {include: [:tags,
-                                                              {user: {methods: :avatar_url}}],
+                                                              {user: {methods: :avatar_url,
+                                                                      except: [:uid, :email]}}],
                                                       methods: :images_url}},
                                           {posts: {include: [:tags,
-                                                              :liked_users,
-                                                              {user: {methods: :avatar_url}},
-                                                              {post_comments: {include: {user: {methods: :avatar_url}},
+                                                              {liked_users: {except: [:uid, :email]}},
+                                                              {user: {methods: :avatar_url,
+                                                                      except: [:uid, :email]}},
+                                                              {post_comments: {include: {user: {methods: :avatar_url,
+                                                                                                except: [:uid, :email]}},
                                                                           methods: :images_url}}],
                                                     methods: :images_url}}],
-                                methods: :avatar_url)
+                                methods: :avatar_url,
+                                except: [:uid, :email])
   end
 
   ################################################################################################

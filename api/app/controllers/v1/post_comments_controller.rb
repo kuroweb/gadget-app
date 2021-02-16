@@ -7,7 +7,8 @@ class V1::PostCommentsController < ApplicationController
     @comment = PostComment.new(comment_params)
     if @comment.save
       @comment.notice_comment(@comment.user_id, @comment.post_id)
-      render json: @comment.as_json(include: [{user: {methods: :avatar_url}},
+      render json: @comment.as_json(include: [{user: {methods: :avatar_url,
+                                                      except: [:uid, :email]}},
                                               :post],
                                     methods: :images_url),
               status: :created

@@ -11,7 +11,8 @@ class V1::NoticesController < ApplicationController
                                             :post_comment,
                                             :board,
                                             :board_comment).page(params[:page]).per(10).order(created_at: "DESC")
-    render json: notices.as_json(include: [{visitor: {methods: :avatar_url}},
+    render json: notices.as_json(include: [{visitor: {methods: :avatar_url,
+                                                      except: [:uid, :email]}},
                                             :visited,
                                             :post,
                                             :board])
@@ -32,7 +33,8 @@ class V1::NoticesController < ApplicationController
   def checked
     user = User.find(params[:user_id])
     notices = user.passive_notices.where(checked: false)
-    render json: notices.as_json(include: [{visitor: {methods: :avatar_url}},
+    render json: notices.as_json(include: [{visitor: {methods: :avatar_url,
+                                                      except: [:uid, :email]}},
                                             :visited,
                                             :post,
                                             :board])
