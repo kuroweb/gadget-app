@@ -111,9 +111,6 @@ export default {
                 })
               }, 2000)
               this.$router.push("/")
-            .catch(() => {
-              this.setLoading(false)
-            })
           })
         })
         .catch(error => {

@@ -1,5 +1,5 @@
 class V1::UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :following, :followers, :posts]
+  before_action :set_user, only: [:edit, :update, :update_avatar, :destroy, :following, :followers, :posts]
 
   ################################################################################################
   # ユーザー一覧
@@ -51,7 +51,7 @@ class V1::UsersController < ApplicationController
                                                                           methods: :images_url}}],
                                                     methods: :images_url}}],
                                 methods: :avatar_url,
-                                except: [:uid, :email])
+                                except: [:uid])
   end
 
   ################################################################################################
@@ -70,8 +70,11 @@ class V1::UsersController < ApplicationController
   # ユーザー更新
   ################################################################################################
   def update
-    if @user.update(user_params)
+    if @user.uid = user_params[:uid]
+      @user.update(user_params)
       render json: @user
+    else
+      render status: 403, json: false
     end
   end
 
@@ -88,16 +91,23 @@ class V1::UsersController < ApplicationController
   # アバター更新
   ################################################################################################
   def update_avatar
-    @user = User.find(params[:id])
-    @user.avatar.attach(params[:avatar])
-    render json: @user
+    if @user.uid = params[:uid]
+      @user.avatar.attach(params[:avatar])
+      render json: @user
+    else
+      render status: 403, json: false
+    end
   end
 
   ################################################################################################
   # ユーザー削除
   ################################################################################################
   def destroy
-    @user.destroy
+    if @user.uid == params[:uid]
+      @user.destroy
+    else
+      render status: 403, json: false
+    end
   end
 
   ################################################################################################
@@ -105,9 +115,9 @@ class V1::UsersController < ApplicationController
   ################################################################################################
   def search
     if params[:user_name]
-      @users = User.includes({avatar_attachment: :blob},
+      users = User.includes({avatar_attachment: :blob},
                               :followers).search(params[:user_name])
-      render json: @users.as_json(include: :followers,
+      render json: users.as_json(include: :followers,
                                   methods: :avatar_url)
     end
   end
