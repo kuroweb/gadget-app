@@ -13,9 +13,11 @@ class V1::BoardsController < ApplicationController
                                 :tags,
                                 {board_comments: [{user: {avatar_attachment: :blob}},
                                                   {images_attachments: :blob}]}).where(board_type: params[:board_type]).order(created_at: "DESC").page(params[:page]).per(5)
-      render json: @boards.as_json(include: [{user: {methods: :avatar_url}},
+      render json: @boards.as_json(include: [{user: {methods: :avatar_url,
+                                                      except: [:uid, :email]}},
                                               :tags,
-                                              {board_comments: {include: {user: {methods: :avatar_url}},
+                                              {board_comments: {include: {user: {methods: :avatar_url,
+                                                                                  except: [:uid, :email]}},
                                                                 methods: :images_url}}],
                                     methods: :images_url)
     #=============================================================================================
@@ -27,9 +29,11 @@ class V1::BoardsController < ApplicationController
                                 :tags,
                                 {board_comments: [{user: {avatar_attachment: :blob}},
                                                   {images_attachments: :blob}]}).page(params[:page]).per(5).order(created_at: "DESC")
-      render json: @boards.as_json(include: [{user: {methods: :avatar_url}},
+      render json: @boards.as_json(include: [{user: {methods: :avatar_url,
+                                                      except: [:uid, :email]}},
                                               :tags,
-                                              {board_comments: {include: {user: {methods: :avatar_url}},
+                                              {board_comments: {include: {user: {methods: :avatar_url,
+                                                                                  except: [:uid, :email]}},
                                                                 methods: :images_url}}],
                                     methods: :images_url)
     end
@@ -44,9 +48,11 @@ class V1::BoardsController < ApplicationController
                             :tags,
                             {board_comments: [{user: {avatar_attachment: :blob}},
                                               {images_attachments: :blob}]}).find(params[:id])
-    render json: @board.as_json(include: [{user: {methods: :avatar_url}},
+    render json: @board.as_json(include: [{user: {methods: :avatar_url,
+                                                  except: [:uid, :email]}},
                                             :tags,
-                                            {board_comments: {include: {user: {methods: :avatar_url}},
+                                            {board_comments: {include: {user: {methods: :avatar_url,
+                                                                                except: [:uid, :email]}},
                                                               methods: :images_url}}],
                                 methods: :images_url)
   end
@@ -59,9 +65,11 @@ class V1::BoardsController < ApplicationController
     sent_tags = board_tags_params[:tags] === nil ? [] : board_tags_params[:tags]
     if @board.save
       @board.save_tag(sent_tags)
-      render json: @board.as_json(include: [{user: {methods: :avatar_url}},
+      render json: @board.as_json(include: [{user: {methods: :avatar_url,
+                                                    except: [:uid, :email]}},
                                             :tags,
-                                            {board_comments: {include: {user: {methods: :avatar_url}},
+                                            {board_comments: {include: {user: {methods: :avatar_url,
+                                                                                except: [:uid, :email]}},
                                                               methods: :images_url}}],
                                     methods: :images_url),
               status: :created
@@ -82,9 +90,11 @@ class V1::BoardsController < ApplicationController
       if board_content_params[:images] === nil
         @board.update(images: nil)
       end
-      render json: @board.as_json(include: [{user: {methods: :avatar_url}},
+      render json: @board.as_json(include: [{user: {methods: :avatar_url,
+                                                    except: [:uid, :email]}},
                                   :tags,
-                                  {board_comments: {include: {user: {methods: :avatar_url}},
+                                  {board_comments: {include: {user: {methods: :avatar_url,
+                                                                      except: [:uid, :email]}},
                                                     methods: :images_url}}],
                           methods: :images_url)
     else
@@ -106,14 +116,19 @@ class V1::BoardsController < ApplicationController
   def search
     if params[:board_name]
       @boards = Board.search(params[:board_name]).order(created_at: 'DESC')
-      render json: @boards.as_json(include: [{user: {methods: :avatar_url}},
+      render json: @boards.as_json(include: [{user: {methods: :avatar_url,
+                                                      except: [:uid, :email]}},
                                             :tags,
-                                            {board_comments: {include: {user: {methods: :avatar_url}},
+                                            {board_comments: {include: {user: {methods: :avatar_url,
+                                                                                except: [:uid, :email]}},
                                                               methods: :images_url}}],
                                     methods: :images_url)
     end
   end
 
+  ################################################################################################
+  # プライベートメソッド
+  ################################################################################################
   private
 
     def board_content_params

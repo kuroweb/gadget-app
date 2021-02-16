@@ -1,10 +1,14 @@
 class V1::BoardCommentsController < ApplicationController
 
+  ################################################################################################
+  # 掲示板コメント作成
+  ################################################################################################
   def create
     @comment = BoardComment.new(comment_params)
     if @comment.save
       @comment.notice_comment(@comment.user_id, @comment.board_id)
-      render json: @comment.as_json(include: [{user: {methods: :avatar_url}},
+      render json: @comment.as_json(include: [{user: {methods: :avatar_url,
+                                                      except: [:uid, :email]}},
                                               :board],
                                     methods: :images_url),
               status: :created
@@ -13,6 +17,9 @@ class V1::BoardCommentsController < ApplicationController
     end
   end
 
+  ################################################################################################
+  # 掲示板コメント削除
+  ################################################################################################
   def destroy
     @comment = BoardComment.find_by(id: params[:comment_id])
     # 親コメントを削除する場合、小コメントも併せて削除する
@@ -27,6 +34,9 @@ class V1::BoardCommentsController < ApplicationController
     end
   end
 
+  ################################################################################################
+  # プライベートメソッド
+  ################################################################################################
   private
 
     def comment_params

@@ -11,7 +11,8 @@ class V1::GadgetsController < ApplicationController
       user = User.find(params[:user_id])
       gadgets = user.gadgets.page(params[:page]).per(5).order(created_at: 'DESC')
       render json: gadgets.as_json(include: [:tags,
-                                            {user: {methods: :avatar_url}}],
+                                            {user: {methods: :avatar_url,
+                                                    except: [:uid, :email]}}],
                                     methods: :images_url)
     #=============================================================================================
     # 新着表示
@@ -19,7 +20,8 @@ class V1::GadgetsController < ApplicationController
     else
       gadgets = Gadget.all.page(params[:page]).per(5).order(created_at: 'DESC')
       render json: gadgets.as_json(include: [:tags,
-                                            {user: {methods: :avatar_url}}],
+                                            {user: {methods: :avatar_url,
+                                                    except: [:uid, :email]}}],
                                     methods: :images_url)
     end
   end
@@ -30,7 +32,8 @@ class V1::GadgetsController < ApplicationController
   def show
     gadget = Gadget.find(params[:id])
     render json: gadget.as_json(include: [:tags,
-                                          {user: {methods: :avatar_url}}],
+                                          {user: {methods: :avatar_url,
+                                                  except: [:uid, :email]}}],
                                     methods: :images_url)
   end
 
@@ -43,7 +46,8 @@ class V1::GadgetsController < ApplicationController
     if gadget.save
       gadget.save_tag(sent_tags)
       render json: gadget.as_json(include: [:tags,
-                                            {user: {methods: :avatar_url}}],
+                                            {user: {methods: :avatar_url,
+                                                    except: [:uid, :email]}}],
                                     methods: :images_url)
     end
   end
@@ -61,7 +65,8 @@ class V1::GadgetsController < ApplicationController
         gadget.update(images: nil)
       end
       render json: gadget.as_json(include: [:tags,
-                                            {user: {methods: :avatar_url}}],
+                                            {user: {methods: :avatar_url,
+                                                    except: [:uid, :email]}}],
                                     methods: :images_url)
     else
       render json: gadget.errors, status: :unprocessable_entity
@@ -83,10 +88,12 @@ class V1::GadgetsController < ApplicationController
     if params[:gadget_name]
       @gadgets = Gadget.search(params[:gadget_name]).order(created_at: 'DESC')
       render json: @gadgets.as_json(include: [:tags,
-                                              {user: {methods: :avatar_url}}],
+                                              {user: {methods: :avatar_url,
+                                                      except: [:uid, :email]}}],
                                     methods: :images_url)
     end
   end
+  
   ################################################################################################
   # プライペートメソッド
   ################################################################################################

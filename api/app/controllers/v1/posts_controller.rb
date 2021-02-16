@@ -27,10 +27,12 @@ class V1::PostsController < ApplicationController
         b[:created_at] <=> a[:created_at]
       end
       @timeline = Kaminari.paginate_array(posts).page(params[:page]).per(5)
-      render json: @timeline.as_json(include: [{user: {methods: :avatar_url}},
+      render json: @timeline.as_json(include: [{user: {methods: :avatar_url,
+                                                        except: [:uid, :email]}},
                                               :tags,
-                                              :liked_users,
-                                              {post_comments: {include: {user: {methods: :avatar_url}},
+                                              {liked_users: {except: [:uid, :email]}},
+                                              {post_comments: {include: {user: {methods: :avatar_url,
+                                                                                except: [:uid, :email]}},
                                                           methods: :images_url}}],
                                       methods: :images_url)
     #=============================================================================================
@@ -55,10 +57,12 @@ class V1::PostsController < ApplicationController
         b[:created_at] <=> a[:created_at]
       end
       @tag_feed = Kaminari.paginate_array(posts).page(params[:page]).per(5)
-      render json: @tag_feed.as_json(include: [{user: {methods: :avatar_url}},
+      render json: @tag_feed.as_json(include: [{user: {methods: :avatar_url,
+                                                        except: [:uid, :email]}},
                                                 :tags,
-                                                :liked_users,
-                                                {post_comments: {include: {user: {methods: :avatar_url}},
+                                                {liked_users: {except: [:uid, :email]}},
+                                                {post_comments: {include: {user: {methods: :avatar_url,
+                                                                                  except: [:uid, :email]}},
                                                             methods: :images_url}}],
                                       methods: :images_url)
     #=============================================================================================
@@ -73,10 +77,12 @@ class V1::PostsController < ApplicationController
                                   {post_comments: [{user: {avatar_attachment: :blob}},
                                               {images_attachments: :blob}]}).order(created_at: 'DESC')
       user_posts = Kaminari.paginate_array(posts).page(params[:page]).per(5)
-      render json: user_posts.as_json(include: [{user: {methods: :avatar_url}},
+      render json: user_posts.as_json(include: [{user: {methods: :avatar_url,
+                                                        except: [:uid, :email]}},
                                                 :tags,
-                                                :liked_users,
-                                                {post_comments: {include: {user: {methods: :avatar_url}},
+                                                {liked_users: {except: [:uid, :email]}},
+                                                {post_comments: {include: {user: {methods: :avatar_url,
+                                                                                  except: [:uid, :email]}},
                                                             methods: :images_url}}],
                                       methods: :images_url)
     #=============================================================================================
@@ -91,10 +97,12 @@ class V1::PostsController < ApplicationController
                                   {post_comments: [{user: {avatar_attachment: :blob}},
                                               {images_attachments: :blob}]}).order(created_at: 'DESC')
       user_posts = Kaminari.paginate_array(posts).page(params[:page]).per(5)
-      render json: user_posts.as_json(include: [{user: {methods: :avatar_url}},
+      render json: user_posts.as_json(include: [{user: {methods: :avatar_url,
+                                                        except: [:uid, :email]}},
                                                 :tags,
-                                                :liked_users,
-                                                {post_comments: {include: {user: {methods: :avatar_url}},
+                                                {liked_users: {except: [:uid, :email]}},
+                                                {post_comments: {include: {user: {methods: :avatar_url,
+                                                                                  except: [:uid, :email]}},
                                                             methods: :images_url}}],
                                       methods: :images_url)
     #=============================================================================================
@@ -107,10 +115,12 @@ class V1::PostsController < ApplicationController
                               :liked_users,
                               {post_comments: [{user: {avatar_attachment: :blob}},
                                           {images_attachments: :blob}]}).page(params[:page]).per(5).order(created_at: 'DESC')
-      render json: posts.as_json(include: [{user: {methods: :avatar_url}},
+      render json: posts.as_json(include: [{user: {methods: :avatar_url,
+                                                    except: [:uid, :email]}},
                             :tags,
-                            :liked_users,
-                            {post_comments: {include: {user: {methods: :avatar_url}},
+                            {liked_users: {except: [:uid, :email]}},
+                            {post_comments: {include: {user: {methods: :avatar_url,
+                                                              except: [:uid, :email]}},
                                           methods: :images_url}}],
                   methods: :images_url)
     end
@@ -126,10 +136,12 @@ class V1::PostsController < ApplicationController
                           :liked_users,
                           {post_comments: [{user: {avatar_attachment: :blob}},
                                       {images_attachments: :blob}]}).find(params[:id])
-    render json: @post.as_json(include: [{user: {methods: :avatar_url}},
+    render json: @post.as_json(include: [{user: {methods: :avatar_url,
+                                                  except: [:uid, :email]}},
                                           :tags,
-                                          :liked_users,
-                                          {post_comments: {include: {user: {methods: :avatar_url}},
+                                          {liked_users: {except: [:uid, :email]}},
+                                          {post_comments: {include: {user: {methods: :avatar_url,
+                                                                            except: [:uid, :email]}},
                                                       methods: :images_url}}],
                                 methods: :images_url)
   end
@@ -142,10 +154,12 @@ class V1::PostsController < ApplicationController
     sent_tags = post_tags_params[:tags] === nil ? [] : post_tags_params[:tags]
     if @post.save
       @post.save_tag(sent_tags)
-      render json: @post.as_json(include: [{user: {methods: :avatar_url}},
+      render json: @post.as_json(include: [{user: {methods: :avatar_url,
+                                                    except: [:uid, :email]}},
                                             :tags,
-                                            :liked_users,
-                                            {post_comments: {include: {user: {methods: :avatar_url}},
+                                            {liked_users: {except: [:uid, :email]}},
+                                            {post_comments: {include: {user: {methods: :avatar_url,
+                                                                              except: [:uid, :email]}},
                                                         methods: :images_url}}],
                                     methods: :images_url),
               status: :created
@@ -165,10 +179,12 @@ class V1::PostsController < ApplicationController
       if post_content_params[:images] === nil
         @post.update(images: nil)
       end
-      render json: @post.as_json(include: [{user: {methods: :avatar_url}},
+      render json: @post.as_json(include: [{user: {methods: :avatar_url,
+                                                    except: [:uid, :email]}},
                                             :tags,
-                                            :liked_users,
-                                            {post_comments: {include: {user: {methods: :avatar_url}},
+                                            {liked_users: {except: [:uid, :email]}},
+                                            {post_comments: {include: {user: {methods: :avatar_url,
+                                                                              except: [:uid, :email]}},
                                                         methods: :images_url}}],
                                     methods: :images_url)
     else
@@ -189,10 +205,12 @@ class V1::PostsController < ApplicationController
   def search
     if params[:post_name]
       @posts = Post.search(params[:post_name]).order(created_at: 'DESC')
-      render json: @posts.as_json(include: [{user: {methods: :avatar_url}},
+      render json: @posts.as_json(include: [{user: {methods: :avatar_url,
+                                                    except: [:uid, :email]}},
                                             :tags,
-                                            :liked_users,
-                                            {post_comments: {include: {user: {methods: :avatar_url}},
+                                            {liked_users: {except: [:uid, :email]}},
+                                            {post_comments: {include: {user: {methods: :avatar_url,
+                                                                              except: [:uid, :email]}},
                                                         methods: :images_url}}],
                                     methods: :images_url)
     end

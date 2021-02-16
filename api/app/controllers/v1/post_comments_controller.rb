@@ -1,10 +1,14 @@
 class V1::PostCommentsController < ApplicationController
 
+  ################################################################################################
+  # つぶやきコメント作成
+  ################################################################################################
   def create
     @comment = PostComment.new(comment_params)
     if @comment.save
       @comment.notice_comment(@comment.user_id, @comment.post_id)
-      render json: @comment.as_json(include: [{user: {methods: :avatar_url}},
+      render json: @comment.as_json(include: [{user: {methods: :avatar_url,
+                                                      except: [:uid, :email]}},
                                               :post],
                                     methods: :images_url),
               status: :created
@@ -13,6 +17,9 @@ class V1::PostCommentsController < ApplicationController
     end
   end
 
+  ################################################################################################
+  # つぶやきコメント削除
+  ################################################################################################
   def destroy
     @comment = PostComment.find_by(id: params[:comment_id])
     # 親コメントを削除する場合、小コメントも併せて削除する
@@ -27,6 +34,9 @@ class V1::PostCommentsController < ApplicationController
     end
   end
 
+  ################################################################################################
+  # プライベートメソッド
+  ################################################################################################
   private
 
     def comment_params

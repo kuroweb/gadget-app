@@ -113,7 +113,7 @@
                             />
                             <v-row justify="center">
                               <v-btn
-                                v-if="currentUser.guest === false"
+                                v-if="guest === false"
                                 color="success"
                                 block
                                 class="white--text"
@@ -161,7 +161,7 @@
                           />  
                           <v-row justify="center">
                             <v-btn
-                              v-if="currentUser.guest === false"
+                              v-if="guest === false"
                               color="success"
                               block
                               class="white--text"
@@ -190,7 +190,7 @@
                     <v-col cols="12">
                       <v-row justify="center">
                         <v-btn
-                          v-if="currentUser.guest === false"
+                          v-if="guest === false"
                           block
                           color="white--text red"
                           @click="openDialogForDeleteAccount"
@@ -251,7 +251,8 @@ export default {
       profile: '',
       isDeleteAccount: false,
       avatar: [],
-      tab: null
+      tab: null,
+      guest: false
     }
   },
   async asyncData({ $axios, store }) {
@@ -264,7 +265,8 @@ export default {
       name: res.name,
       userId: res.id,
       profile: res.profile,
-      avatar_url: res.avatar_url
+      avatar_url: res.avatar_url,
+      guest: res.guest
     }
   },
 
@@ -277,6 +279,7 @@ export default {
   methods: {
     ...mapActions({
       login: 'modules/user/login',
+      logout: 'modules/user/logout',
       setLoading: 'modules/info/setLoading',
       setFlash: 'modules/info/setFlash'
     }),
@@ -310,7 +313,8 @@ export default {
       const user = await firebaseApp.auth().currentUser
       user.updateEmail(this.email)
         .then(() => {
-          this.$axios.$patch(process.env.BROWSER_BASE_URL + `/v1/users/${this.userId}`, { user: { email: this.email }})
+          this.$axios.$patch(process.env.BROWSER_BASE_URL + `/v1/users/${this.userId}`, { user: { email: this.email,
+                                                                                                  uid: this.$store.state.modules.user.user.uid}})
             .then((res) => {
               this.emailOriginal = res.email
               this.setFlash({
@@ -346,7 +350,8 @@ export default {
       this.$axios.$patch(process.env.BROWSER_BASE_URL +　`/v1/users/${this.userId}`, {
         user: {
           name: this.name,
-          profile: this.profile
+          profile: this.profile,
+          uid: this.$store.state.modules.user.user.uid
         }
       })
         .then((res) => {
@@ -366,6 +371,8 @@ export default {
     async changeUserAvatar() {
       const formData = new FormData()
       formData.append('avatar', this.avatar)
+      formData.append('uid', this.$store.state.modules.user.user.uid)
+      formData.append('id', this.$store.state.modules.user.data.id)
       const config = {
         headers: {
           'content-type': 'multipart/form-data'
@@ -402,7 +409,11 @@ export default {
       const user = await firebaseApp.auth().currentUser
       user.delete()
         .then(() => {
-          this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/users/${this.userId}`)
+          this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/users/${this.userId}`, {
+            params: {
+              uid: this.$store.state.modules.user.user.uid
+            }
+          })
         })
           .then(() => {
             this.logout()

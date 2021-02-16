@@ -22,16 +22,20 @@ class V1::TagsController < ApplicationController
                         {gadgets: [{images_attachments: :blob},
                                   :tags,
                                   {user: {avatar_attachment: :blob}}]}).find(params[:id])
-    render json: @tag.as_json(include: [{users: {methods: :avatar_url}},
+    render json: @tag.as_json(include: [{users: {methods: :avatar_url,
+                                                  except: [:uid, :email]}},
                                         {posts: {methods: :images_url,
                                                   include: [:tags,
-                                                            {user: {methods: :avatar_url}}]}},
+                                                            {user: {methods: :avatar_url,
+                                                                    except: [:uid, :email]}}]}},
                                         {boards: {methods: :images_url,
                                                   include: [:tags,
-                                                            {user: {methods: :avatar_url}}]}},
+                                                            {user: {methods: :avatar_url,
+                                                                    except: [:uid, :email]}}]}},
                                         {gadgets: {methods: :images_url,
                                                   include: [:tags,
-                                                            {user: {methods: :avatar_url}}]}}])
+                                                            {user: {methods: :avatar_url,
+                                                                    except: [:uid, :email]}}]}}])
   end
   
   ################################################################################################
@@ -43,7 +47,8 @@ class V1::TagsController < ApplicationController
                             {posts: {images_attachments: :blob}},
                             {boards: {images_attachments: :blob}},
                             {gadgets: {images_attachments: :blob}}).search(params[:tag_name])
-      render json: @tags.as_json(include: [{users: {methods: :avatar_url}},
+      render json: @tags.as_json(include: [{users: {methods: :avatar_url,
+                                                    except: [:uid, :email]}},
                                             {posts: {methods: :images_url}},
                                             {boards: {methods: :images_url}},
                                             {gadgets: {methods: :images_url}}])
