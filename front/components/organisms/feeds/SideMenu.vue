@@ -47,12 +47,12 @@ export default {
         },
         {
           title: '掲示板',
-          name: 'openBoardList',
+          name: 'openBoardFeed',
           icon: 'mdi-forum'
         },
         {
           title: 'みんなのガジェット',
-          name: 'openGadgetList',
+          name: 'openGadgetFeed',
           icon: 'mdi-laptop'
         }
       ]
