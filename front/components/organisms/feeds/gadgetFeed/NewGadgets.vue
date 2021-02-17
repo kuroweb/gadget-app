@@ -5,8 +5,8 @@
       @createGadget="createGadget"
       @closeDialog="createGadgetDialog = false"
     />
-    <v-row>
-      <v-col cols="12" v-if="loading">
+    <v-row v-if="loading">
+      <v-col cols="12">
         <v-skeleton-loader
           class="mx-auto"
           type="card"
@@ -14,35 +14,40 @@
           :key="n.id"
         />
       </v-col>
-      <v-col cols="12" v-if="loading === false">
-        <v-row>
-          <v-col cols="12">
-            <v-btn
-              block
-              color="orange"
-              dark
-              rounded
-              @click="openCreateGadgetDialog"
-            >
-              新しいガジェットを追加する
-            </v-btn>
-          </v-col>
-          <v-col cols="12">
-            <GadgetCard
-              v-for="(gadget, index) in gadgets"
-              :key="index"
-              :gadget="gadget"
-            />
-            <VueInfiniteLoading
-              ref="infiniteLoading"
-              spinner="spiral"
-              @infinite="infiniteHandler"
-            >
-              <span slot="no-more">-----ガジェットは以上です-----</span>
-              <span slot="no-results"></span>
-            </VueInfiniteLoading>
-          </v-col>
-        </v-row>
+    </v-row>
+    <v-row v-if="loading === false">
+      <v-col cols="12">
+        <v-btn
+          block
+          color="orange"
+          dark
+          rounded
+          @click="openCreateGadgetDialog"
+        >
+          新しいガジェットを追加する
+        </v-btn>
+      </v-col>
+      <v-col cols="12">
+        <GadgetCard
+          v-for="(gadget, index) in gadgets"
+          :key="index"
+          :gadget="gadget"
+        />
+        <VueInfiniteLoading
+          ref="infiniteLoading"
+          spinner="spiral"
+          @infinite="infiniteHandler"
+        >
+          <span slot="no-more">-----ガジェットは以上です-----</span>
+          <span slot="no-results"></span>
+        </VueInfiniteLoading>
+      </v-col>
+      <v-col
+        v-if="gadgets.length === 0 && loading === false"
+        cols="12"
+        class="text-center"
+      >
+        <span>ガジェットが存在しません。</span>
       </v-col>
     </v-row>
   </v-container>
