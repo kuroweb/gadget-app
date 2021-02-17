@@ -36,8 +36,8 @@ class V1::UsersController < ApplicationController
                                     {user: {avatar_attachment: :blob}},
                                     {post_comments: [{user: {avatar_attachment: :blob}},
                                                 {images_attachments: :blob}]}]}).find(params[:id])
-    render json: @user.as_json(include: [:following,
-                                          :followers,
+    render json: @user.as_json(include: [{following: {except: [:uid, :email]}},
+                                          {followers: {except: [:uid, :email]}},
                                           {gadgets: {include: [:tags,
                                                               {user: {methods: :avatar_url,
                                                                       except: [:uid, :email]}}],
