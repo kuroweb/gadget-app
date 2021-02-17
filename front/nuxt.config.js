@@ -54,7 +54,7 @@ export default {
       "vee-validate/dist/rules"
     ],
     extend (config, ctx) {
-      config.performance.maxAssetSize = 1024 * 1024
+      config.performance.maxAssetSize = 2048 * 1024,
       config.performance.maxEntrypointSize = 2048 * 1024
     }
   },
