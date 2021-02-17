@@ -55,8 +55,8 @@ services:
         GUEST_EMAIL:       $GUEST_EMAIL
         GUEST_PASSWORD:    $GUEST_PASSWORD
         ADMIN_EMAIL:       $ADMIN_EMAIL
-    command: yarn start
-    # command: yarn run dev
+    # command: yarn start
+    command: yarn run dev
     volumes:
       - ./front:/$WORKDIR
       - front-node_modules:/app/node_modules
@@ -64,8 +64,8 @@ services:
       - "$FRONT_PORT:8080"
     depends_on:
       - api
-    environment:
-      NODE_ENV: "production"
+    # environment:
+    #   NODE_ENV: "production"
 
 volumes:
   db-data:
