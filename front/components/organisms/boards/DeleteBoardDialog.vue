@@ -85,7 +85,11 @@ export default {
       setFlash: 'modules/info/setFlash'
     }),
     async deleteBoard () {
-      this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/boards/${this.boardId}`)
+      this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/boards/${this.boardId}`, {
+        params: {
+          uid: this.$store.state.modules.user.user.uid
+        }
+      })
         .then(() => {
           this.$emit('deleteBoard', this.boardId)
           this.$emit('closeDialog')

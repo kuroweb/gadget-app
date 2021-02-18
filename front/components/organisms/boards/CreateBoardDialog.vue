@@ -171,6 +171,7 @@ export default {
       data.append('board[title]', this.title)
       data.append('board[description]', this.description)
       data.append('board[user_id]', this.$store.state.modules.user.data.id)
+      data.append('board[uid]', this.$store.state.modules.user.user.uid)
       // this.tagsの中身を抽出して配列に格納
       if (this.tags.length !== 0) {
         this.tags.forEach(tag => {
