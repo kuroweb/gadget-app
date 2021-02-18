@@ -103,6 +103,9 @@ class V1::UsersController < ApplicationController
   # ユーザー削除
   ################################################################################################
   def destroy
+    # ゲストユーザーは削除できない
+    return if @user.guest == true
+    
     if @user.uid == params[:uid]
       @user.destroy
     else
