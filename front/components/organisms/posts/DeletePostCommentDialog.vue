@@ -95,7 +95,8 @@ export default {
       this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/post_comments/delete', {
         params: {
           comment_id: this.comment.id,
-          reply_comment_id: this.comment.reply_comment_id
+          reply_comment_id: this.comment.reply_comment_id,
+          uid: this.$store.state.modules.user.user.uid
         }
       })
         .then(() => {
