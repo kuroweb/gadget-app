@@ -23,11 +23,15 @@ env:
     BROWSER_BASE_URL: browser-base-url
     AWS_ACCESS_KEY_ID: access-key-id
     AWS_SECRET_ACCESS_KEY: secret-access-key
+    DOCKERHUB_USER: dockerhub-user
+    DOCKERHUB_PASS: dockerhub-pass
 
 phases:
 
   pre_build:
     commands:
+      - echo Logging in to Docker Hub...
+      - docker login -u $DOCKERHUB_USER --password-stdin
       - echo Starting Tests...
       - docker-compose build
   build:
