@@ -41,7 +41,10 @@ class V1::GadgetsController < ApplicationController
   # ガジェット新規作成
   ################################################################################################
   def create
-    gadget = Gadget.new(gadget_content_params)
+    # uidが一致する場合のみ処理を実行
+    return if User.find(gadget_content_params[:user_id]).uid != gadget_content_params[:uid]
+
+    gadget = Gadget.new(gadget_content_params.except(:uid))
     sent_tags = gadget_tags_params[:tags] === nil ? [] : gadget_tags_params[:tags]
     if gadget.save
       gadget.save_tag(sent_tags)
@@ -57,8 +60,12 @@ class V1::GadgetsController < ApplicationController
   ################################################################################################
   def update
     gadget = Gadget.find(params[:id])
+
+    # uidが一致する場合のみ処理を実行
+    return if gadget.user.uid != gadget_content_params[:uid]
+
     sent_tags = gadget_tags_params[:tags] === nil ? [] : gadget_tags_params[:tags]
-    if gadget.update(gadget_content_params)
+    if gadget.update(gadget_content_params.except(:uid))
       gadget.save_tag(sent_tags)
       # imagesが空の場合に、updateメソッドで初期化
       if gadget_content_params[:images] === nil
@@ -78,6 +85,10 @@ class V1::GadgetsController < ApplicationController
   ################################################################################################
   def destroy
     gadget = Gadget.find(params[:id])
+
+    # uidが一致する場合のみ処理を実行
+    return if gadget.user.uid != params[:uid]
+
     gadget.destroy
   end
 
@@ -99,7 +110,7 @@ class V1::GadgetsController < ApplicationController
   ################################################################################################
   private
     def gadget_content_params
-      params.require(:gadget).permit(:title, :good_description, :bad_description, :stars, :user_id, images: [])
+      params.require(:gadget).permit(:title, :good_description, :bad_description, :stars, :user_id, :uid, images: [])
     end
 
     def gadget_tags_params

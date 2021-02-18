@@ -341,6 +341,7 @@ export default {
       data.append('gadget[bad_description]', this.bad_description)
       data.append('gadget[stars]', this.stars)
       data.append('gadget[user_id]', this.$store.state.modules.user.data.id)
+      data.append('gadget[uid]', this.$store.state.modules.user.user.uid)
       if (this.tags.length !== 0) {
         this.tags.forEach(function(tag){
         data.append('gadget[tags][]', tag.text)

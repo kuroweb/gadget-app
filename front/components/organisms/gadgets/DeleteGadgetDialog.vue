@@ -94,7 +94,11 @@ export default {
       setFlash: 'modules/info/setFlash'
     }),
     async deleteGadget () {
-      this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/gadgets/${this.gadgetId}`)
+      this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/gadgets/${this.gadgetId}`, {
+        params: {
+          uid: this.$store.state.modules.user.user.uid
+        }
+      })
         .then(() => {
           this.$emit('deleteGadget', this.gadgetId)
           this.$emit('closeDialog')
