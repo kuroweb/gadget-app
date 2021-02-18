@@ -186,7 +186,8 @@ export default {
     async follow() {
       await this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/relationships', {
           user_id: this.currentUser.id,
-          follow_id: this.otherUser.id
+          follow_id: this.otherUser.id,
+          uid: this.$store.state.modules.user.user.uid
       })
       await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}`)
         .then(res => {
@@ -197,7 +198,8 @@ export default {
       await this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/relationships/delete', {
         params: {
           user_id: this.currentUser.id,
-          follow_id: this.otherUser.id
+          follow_id: this.otherUser.id,
+          uid: this.$store.state.modules.user.user.uid
         }
       })
       await this.$axios.$get(process.env.BROWSER_BASE_URL + `/v1/users/${this.$route.params.id}`)

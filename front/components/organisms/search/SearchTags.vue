@@ -141,7 +141,8 @@ export default {
         this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/user_tag_maps', {
           follow_tag: {
             user_id: this.$store.state.modules.user.data.id,
-            tag_id: tag.id
+            tag_id: tag.id,
+            uid: this.$store.state.modules.user.user.uid
           }
         })
           .then(() => {
@@ -155,10 +156,9 @@ export default {
       if (this.$store.state.modules.user.data) {
         this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/user_tag_maps/delete', {
           params: {
-            follow_tag: {
-              user_id: this.$store.state.modules.user.data.id,
-              tag_id: tag.id
-            }
+            user_id: this.$store.state.modules.user.data.id,
+            tag_id: tag.id,
+            uid: this.$store.state.modules.user.user.uid
           }
         })
           .then(() => {

@@ -5,6 +5,9 @@ class V1::RelationshipsController < ApplicationController
   # フォローする
   ################################################################################################
   def create
+    # uidが一致する場合のみ処理を実行
+    return if @current_user.uid != params[:uid]
+
     @current_user.follow(@other_user)
     @current_user.notice_follow(@current_user.id, @other_user.id)
     render json: @other_user
@@ -14,6 +17,9 @@ class V1::RelationshipsController < ApplicationController
   # フォローを解除する
   ################################################################################################
   def destroy
+    # uidが一致する場合のみ処理を実行
+    return if @current_user.uid != params[:uid]
+
     @current_user.unfollow(@other_user)
     render json: @other_user
   end
