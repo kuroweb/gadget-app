@@ -119,7 +119,8 @@ export default {
       if (this.$store.state.modules.user.data) {
         this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/relationships', {
           user_id: this.$store.state.modules.user.data.id,
-          follow_id: user.id
+          follow_id: user.id,
+          uid: this.$store.state.modules.user.user.uid
         })
           .then(() => {
             this.reloadUsersByFollow(user)
@@ -133,7 +134,8 @@ export default {
         this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/relationships/delete', {
           params: {
             user_id: this.$store.state.modules.user.data.id,
-            follow_id: user.id
+            follow_id: user.id,
+            uid: this.$store.state.modules.user.user.uid
           }
         })
           .then(() => {

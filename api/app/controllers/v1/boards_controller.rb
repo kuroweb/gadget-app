@@ -61,7 +61,10 @@ class V1::BoardsController < ApplicationController
   # 掲示板新規作成
   ################################################################################################
   def create
-    @board = Board.new(board_content_params)
+    # uidが一致する場合のみ処理を実行
+    return if User.find(board_content_params[:user_id]).uid != board_content_params[:uid]
+
+    @board = Board.new(board_content_params.except(:uid))
     sent_tags = board_tags_params[:tags] === nil ? [] : board_tags_params[:tags]
     if @board.save
       @board.save_tag(sent_tags)
@@ -83,8 +86,12 @@ class V1::BoardsController < ApplicationController
   ################################################################################################
   def update
     @board = Board.find(params[:id])
+
+    # uidが一致する場合のみ処理を実行
+    return if @board.user.uid != board_content_params[:uid]
+
     sent_tags = board_tags_params[:tags] === nil ? [] : board_tags_params[:tags]
-    if @board.update(board_content_params)
+    if @board.update(board_content_params.except(:uid))
       @board.save_tag(sent_tags)
       # imagesが空の場合に、updateメソッドで初期化
       if board_content_params[:images] === nil
@@ -107,6 +114,10 @@ class V1::BoardsController < ApplicationController
   ################################################################################################
   def destroy
     @board = Board.find(params[:id])
+
+    # uidが一致する場合のみ処理を実行
+    return if @board.user.uid != params[:uid]
+
     @board.destroy
   end
 
@@ -132,7 +143,7 @@ class V1::BoardsController < ApplicationController
   private
 
     def board_content_params
-      params.require(:board).permit(:title, :description, :board_type, :user_id, images: [])
+      params.require(:board).permit(:title, :description, :board_type, :user_id, :uid, images: [])
     end
 
     def board_tags_params

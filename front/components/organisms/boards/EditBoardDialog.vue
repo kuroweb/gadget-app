@@ -329,6 +329,7 @@ export default {
       data.append('board[user_id]', this.currentUser.id)
       data.append('board[board_type]', this.type)
       data.append('board[title]', this.title)
+      data.append('board[uid]', this.$store.state.modules.user.user.uid)
       if (this.tags.length !== 0) {
         this.tags.forEach(function(tag){
         data.append('board[tags][]', tag.text)

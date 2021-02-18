@@ -300,6 +300,7 @@ export default {
       }
       data.append('post[description]', this.description)
       data.append('post[user_id]', this.currentUser.id)
+      data.append('post[uid]', this.$store.state.modules.user.user.uid)
       if (this.tags.length !== 0) {
         this.tags.forEach(function(tag){
         data.append('post[tags][]', tag.text)

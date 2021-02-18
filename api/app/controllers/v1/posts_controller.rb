@@ -150,7 +150,10 @@ class V1::PostsController < ApplicationController
   # 投稿新規作成
   ################################################################################################
   def create
-    @post = Post.new(post_content_params)
+    # uidが一致する場合のみ処理を実行
+    return if User.find(post_content_params[:user_id]).uid != post_content_params[:uid]
+
+    @post = Post.new(post_content_params.except(:uid))
     sent_tags = post_tags_params[:tags] === nil ? [] : post_tags_params[:tags]
     if @post.save
       @post.save_tag(sent_tags)
@@ -172,8 +175,11 @@ class V1::PostsController < ApplicationController
   # 投稿更新
   ################################################################################################
   def update
+    # uidが一致する場合のみ処理を実行
+    return if @post.user.uid != post_content_params[:uid]
+
     sent_tags = post_tags_params[:tags] === nil ? [] : post_tags_params[:tags]
-    if @post.update(post_content_params)
+    if @post.update(post_content_params.except(:uid))
       @post.save_tag(sent_tags)
       # imagesが空の場合に、updateメソッドで初期化
       if post_content_params[:images] === nil
@@ -196,6 +202,9 @@ class V1::PostsController < ApplicationController
   # 投稿削除
   ################################################################################################
   def destroy
+    # uidが一致する場合のみ処理を実行
+    return if @post.user.uid != params[:uid]
+
     @post.destroy
   end
 
@@ -225,7 +234,7 @@ class V1::PostsController < ApplicationController
     end
 
     def post_content_params
-      params.require(:post).permit(:description, :user_id, images: [])
+      params.require(:post).permit(:description, :user_id, :uid, images: [])
     end
 
     def post_tags_params

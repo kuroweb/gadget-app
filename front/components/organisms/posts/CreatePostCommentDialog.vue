@@ -142,6 +142,7 @@ export default {
       data.append('post_comment[post_id]', this.postId)
       data.append('post_comment[reply_comment_id]', '')
       data.append('post_comment[user_id]', this.$store.state.modules.user.data.id)
+      data.append('post_comment[uid]', this.$store.state.modules.user.user.uid)
 
       this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/post_comments', data, config)
         .then(res => {

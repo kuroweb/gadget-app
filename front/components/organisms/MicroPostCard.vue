@@ -551,8 +551,11 @@ export default {
     likedPost (payload) {
       if (this.$store.state.modules.user.data) {
         this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/likes', {
-          user_id: this.$store.state.modules.user.data.id,
-          post_id: payload.id
+          like: {
+            user_id: this.$store.state.modules.user.data.id,
+            post_id: payload.id,
+            uid: this.$store.state.modules.user.user.uid
+          }
         })
           .then(() => {
             this.reloadPostsByLikedPost(payload)
@@ -575,10 +578,9 @@ export default {
       if (this.$store.state.modules.user.data) {
         this.$axios.$delete(process.env.BROWSER_BASE_URL + '/v1/likes/delete', {
           params: {
-            like: {
-              user_id: this.$store.state.modules.user.data.id,
-              post_id: payload.id
-            }
+            user_id: this.$store.state.modules.user.data.id,
+            post_id: payload.id,
+            uid: this.$store.state.modules.user.user.uid
           }
         })
           .then(() => {
