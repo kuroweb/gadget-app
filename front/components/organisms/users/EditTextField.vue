@@ -1,23 +1,21 @@
 <template>
   <ValidationObserver>
-    <div class="input-block">
-      <v-row>
-        <v-col>
-          <v-icon v-if="icon">{{ icon }}</v-icon>
-          <span class="input-label">{{ label }}</span>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <TextFieldWithValidation
-          v-model="inputValue"
-          :rules="rules"
-          :label="label"
-          />
-        </v-col>
-        <p v-if="error" class="errors">{{ error }}</p>
-      </v-row>
-    </div>
+    <v-row>
+      <v-col>
+        <v-icon v-if="icon">{{ icon }}</v-icon>
+        <span class="input-label">{{ label }}</span>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <TextFieldWithValidation
+        v-model="inputValue"
+        :rules="rules"
+        :label="label"
+        />
+      </v-col>
+      <p v-if="error" class="errors">{{ error }}</p>
+    </v-row>
   </ValidationObserver>
 </template>
 <script>
