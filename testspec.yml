@@ -31,7 +31,7 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Docker Hub...
-      - docker login -u $DOCKERHUB_USER --password-stdin
+      - echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
       - echo Starting Tests...
       - docker-compose build
   build:
