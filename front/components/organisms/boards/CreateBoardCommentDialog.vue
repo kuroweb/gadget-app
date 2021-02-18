@@ -130,6 +130,7 @@ export default {
       data.append('board_comment[board_id]', this.boardId)
       data.append('board_comment[reply_comment_id]', '')
       data.append('board_comment[user_id]', this.$store.state.modules.user.data.id)
+      data.append('board_comment[uid]', this.$store.state.modules.user.user.uid)
 
       this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/board_comments', data, config)
         .then(res => {
