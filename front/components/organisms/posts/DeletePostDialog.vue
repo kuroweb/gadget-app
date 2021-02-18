@@ -91,7 +91,11 @@ export default {
       setFlash: 'modules/info/setFlash'
     }),
     async deletePost () {
-      this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`)
+      this.$axios.$delete(process.env.BROWSER_BASE_URL + `/v1/posts/${this.postId}`, {
+        params: {
+          uid: this.$store.state.modules.user.user.uid
+        }
+      })
         .then(() => {
           this.$emit('deletePost', this.postId)
           this.$emit('closeDialog')

@@ -151,6 +151,7 @@ export default {
       }
       data.append('post[description]', this.description)
       data.append('post[user_id]', this.$store.state.modules.user.data.id)
+      data.append('post[uid]', this.$store.state.modules.user.user.uid)
       this.$axios.$post(process.env.BROWSER_BASE_URL + '/v1/posts', data, config)
         .then(res => {
           console.log('投稿に成功しました')
