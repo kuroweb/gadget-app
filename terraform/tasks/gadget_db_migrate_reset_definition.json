@@ -36,6 +36,10 @@
     ],
     "secrets": [
       {
+        "name": "USER_ADMIN_PASS",
+        "valueFrom": "user-admin-pass"
+      },
+      {
         "name": "RAILS_MASTER_KEY",
         "valueFrom": "rails-master-key"
       },

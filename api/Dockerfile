@@ -12,6 +12,7 @@ ARG DB_PASSWORD
 ARG S3_REGION
 ARG S3_BUCKET
 ARG RAILS_MASTER_KEY
+ARG USER_ADMIN_PASS
 
 ENV RUNTIME_PACKAGES      "linux-headers libxml2-dev make gcc libc-dev nodejs tzdata postgresql-dev postgresql git"
 ENV DEV_PACKAGES          "build-base curl-dev"
@@ -28,6 +29,7 @@ ENV DB_PASSWORD           $DB_PASSWORD
 ENV S3_REGION             $S3_REGION
 ENV S3_BUCKET             $S3_BUCKET
 ENV RAILS_MASTER_KEY      $RAILS_MASTER_KEY
+ENV USER_ADMIN_PASS       $USER_ADMIN_PASS
 
 WORKDIR ${WORKDIR}
 

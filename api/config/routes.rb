@@ -7,7 +7,11 @@ Rails.application.routes.draw do
         get '/following', to: 'users#following'
         get '/followers', to: 'users#followers'
         get '/posts', to: 'users#posts'
+        # 以下管理者用
         get '/guestmode', to: 'users#guestmode'
+        get '/adminmode', to: 'users#adminmode'
+        get '/userinfo', to: 'users#userinfo'
+        get '/userdelete', to: 'users#userdelete'
       end
     end
     resources :relationships, only: [:create, :destroy]
