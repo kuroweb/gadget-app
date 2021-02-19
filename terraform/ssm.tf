@@ -36,6 +36,7 @@ variable "TEST_DB_PASSWORD" {}
 variable "S3_REGION" {}
 variable "S3_BUCKET" {}
 variable "RAILS_MASTER_KEY" {}
+variable "USER_ADMIN_PASS" {}
 
 resource "aws_ssm_parameter" "api-port" {
   name = "api-port"
@@ -108,6 +109,12 @@ resource "aws_ssm_parameter" "rails-master-key" {
   value = var.RAILS_MASTER_KEY
   type = "SecureString"
   description = "RAILS_MASTER_KEY"
+}
+resource "aws_ssm_parameter" "user-admin-pass" {
+  name = "user-admin-pass"
+  value = var.USER_ADMIN_PASS
+  type = "SecureString"
+  description = "USER_ADMIN_PASS"
 }
 
 #============================================================

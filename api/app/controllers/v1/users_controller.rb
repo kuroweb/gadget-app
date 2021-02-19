@@ -70,33 +70,22 @@ class V1::UsersController < ApplicationController
   # ユーザー更新
   ################################################################################################
   def update
-    if @user.uid = user_params[:uid]
-      @user.update(user_params)
-      render json: @user
-    else
-      render status: 403, json: false
-    end
-  end
+    # uidが一致する場合のみ処理を実行
+    return if @user.uid != user_params[:uid]
 
-  ################################################################################################
-  # ゲストモードの有効化
-  ################################################################################################
-  # def guestmode
-  #   user = User.find(params[:id])
-  #   user.guest = true
-  #   user.save
-  # end
+    @user.update(user_params.except(:uid))
+    render json: @user
+  end
 
   ################################################################################################
   # アバター更新
   ################################################################################################
   def update_avatar
-    if @user.uid = params[:uid]
-      @user.avatar.attach(params[:avatar])
-      render json: @user
-    else
-      render status: 403, json: false
-    end
+    # uidが一致する場合のみ処理を実行
+    return if @user.uid != params[:uid]
+
+    @user.avatar.attach(params[:avatar])
+    render json: @user
   end
 
   ################################################################################################
@@ -106,11 +95,10 @@ class V1::UsersController < ApplicationController
     # ゲストユーザーは削除できない
     return if @user.guest == true
     
-    if @user.uid == params[:uid]
-      @user.destroy
-    else
-      render status: 403, json: false
-    end
+    # uidが一致する場合のみ処理を実行
+    return if @user.uid != params[:uid]
+
+    @user.destroy
   end
 
   ################################################################################################
@@ -124,6 +112,59 @@ class V1::UsersController < ApplicationController
                                   methods: :avatar_url,
                                   except: [:uid, :email])
     end
+  end
+
+  ################################################################################################
+  # ゲストモードの切り替え（管理者専用）
+  ################################################################################################
+  def guestmode
+    # 管理者パスワードと照合できた場合のみ処理を実行
+    return if ENV['USER_ADMIN_PASS'] != params[:user_admin_pass]
+
+    user = User.find(params[:id])
+    user.guest = !user.guest
+    user.save
+
+    render json: "name: #{user.name}, guestmode: #{user.guest}, adminmode: #{user.admin}"
+  end
+
+  ################################################################################################
+  # 管理者モードの切り替え（管理者専用）
+  ################################################################################################
+  def adminmode
+    # 管理者パスワードと照合できた場合のみ処理を実行
+    return if ENV['USER_ADMIN_PASS'] != params[:user_admin_pass]
+
+    user = User.find(params[:id])
+    user.admin = !user.admin
+    user.save
+
+    render json: "name: #{user.name}, guestmode: #{user.guest}, adminmode: #{user.admin}"
+  end
+
+  ################################################################################################
+  # ユーザー情報を取得（管理者専用）
+  ################################################################################################
+  def userinfo
+    # 管理者パスワードと照合できた場合のみ処理を実行
+    return if ENV['USER_ADMIN_PASS'] != params[:user_admin_pass]
+
+    user = User.find(params[:id])
+
+    render json: "name: #{user.name}, email: #{user.email}, uid: #{user.uid}, guestmode: #{user.guest}, adminmode: #{user.admin}"
+  end
+  
+  ################################################################################################
+  # ユーザーを削除（管理者専用）
+  ################################################################################################
+  def userdelete
+    # 管理者パスワードと照合できた場合のみ処理を実行
+    return if ENV['USER_ADMIN_PASS'] != params[:user_admin_pass]
+
+    user = User.find(params[:id])
+    user.destroy
+
+    render json: "name: #{user.name}, email: #{user.email}, uid: #{user.uid}, guestmode: #{user.guest}, adminmode: #{user.admin}"
   end
 
   ################################################################################################
