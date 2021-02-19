@@ -76,8 +76,8 @@
         "valueFrom": "guest-email"
       },
       {
-        "name": "GUEST_PASSWORD",
-        "valueFrom": "guest-password"
+        "name": "GUEST_UID",
+        "valueFrom": "guest-uid"
       },
       {
         "name": "ADMIN_EMAIL",

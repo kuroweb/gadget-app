@@ -111,22 +111,21 @@ export default {
       this.setLoading(true)
       setTimeout(() => {
         this.setLoading(false)
-      }, 1000)
-      this.guestLogin()
-        .then(() => {
-          this.setFlash({
-            status: true,
-            message: "ゲストユーザーとしてログインしました",
-          })
-          setTimeout(() => {
+        this.guestLogin()
+          .then(() => {
+            this.$router.push("/")
             this.setFlash({
-              status: false,
-              message: "",
+              status: true,
+              message: "ゲストユーザーとしてログインしました",
             })
-          }, 2000)
-          this.setLoading(false)
-          this.$router.push("/")
-        })
+            setTimeout(() => {
+              this.setFlash({
+                status: false,
+                message: "",
+              })
+            }, 2000)
+          })
+      }, 1000)
     }
   }
 }
