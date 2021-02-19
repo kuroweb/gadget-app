@@ -102,7 +102,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import NoticeFeed from '~/components/organisms/NoticeFeed.vue'
 export default {
-  componetns: {
+  components: {
     NoticeFeed
   },
   data () {
@@ -138,22 +138,29 @@ export default {
   methods: {
     ...mapActions({
       logout: 'modules/user/logout',
+      setLoading: "modules/info/setLoading",
       setFlash: 'modules/info/setFlash',
       setAdmin: 'modules/user/setAdmin'
     }),
     async logOut() {
-      this.logout()
-      this.$router.push('/')
-      this.setFlash({
-        status: true,
-        message: "ログアウトしました"
-      })
+      this.setLoading(true)
       setTimeout(() => {
-        this.setFlash({
-          status: false,
-          message: ""
-        })
-      }, 2000)
+        this.setLoading(false)
+        this.logout()
+          .then(() => {
+            this.$router.push('/')
+            this.setFlash({
+              status: true,
+              message: "ログアウトしました",
+            })
+            setTimeout(() => {
+              this.setFlash({
+                status: false,
+                message: "",
+              })
+            }, 2000)
+          })
+      }, 1000)
     },
     changeAdmin () {
       this.setAdmin(this.admin)

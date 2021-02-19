@@ -19,7 +19,7 @@ module.exports = {
   // GuestUser
   ////////////////////////////////////////////////
   GUEST_EMAIL: process.env.GUEST_EMAIL,
-  GUEST_PASSWORD: process.env.GUEST_PASSWORD,
+  GUEST_UID: process.env.GUEST_UID,
 
   ////////////////////////////////////////////////
   // AdminUser
