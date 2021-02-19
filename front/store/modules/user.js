@@ -44,22 +44,32 @@ export const getters = {
 
 export const actions = {
 
-  async login({dispatch, state}, user) {
+  async login({ dispatch }, user) {
     const token = await firebaseApp.auth().currentUser.getIdToken(true)
     const userInfo = {
       email: user.email,
       uid: user.uid
     }
-    const uid = user.uid
 
     Cookies.set('access_token', token)
     await dispatch('setUser', userInfo)
-    await dispatch('loadData', uid)
-
+    await dispatch('loadData', userInfo.uid)
   },
 
-  async logout({commit, dispatch}) {
-    await firebaseApp.auth().signOut()
+  async guestLogin({ dispatch }) {
+    const userInfo = {
+      email: process.env.GUEST_EMAIL,
+      uid: process.env.GUEST_UID
+    }
+
+    await dispatch('setUser', userInfo)
+    await dispatch('loadData', userInfo.uid)
+  },
+
+  async logout({ commit, state }) {
+    if (state.data.guest == false) {
+      await firebaseApp.auth().signOut()
+    }
 
     Cookies.remove('access_token');
     commit('setUser', null)
@@ -79,7 +89,6 @@ export const actions = {
       console.log(e)
     }
   },
-
   
   ///////////////////////////////////////////////////////////////////////////////////
   // ユーザー一覧ページ用 / Searchページで使用中

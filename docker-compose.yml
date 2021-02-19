@@ -26,7 +26,7 @@ services:
         S3_REGION:             $S3_REGION
         S3_BUCKET:             $S3_BUCKET
         RAILS_MASTER_KEY:      $RAILS_MASTER_KEY
-        USER_ADMIN_PASS:      $USER_ADMIN_PASS
+        USER_ADMIN_PASS:       $USER_ADMIN_PASS
     command: /bin/sh -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -b ${HOST}"
     volumes:
       - ./api:/$WORKDIR
@@ -54,7 +54,7 @@ services:
         API_BASE_URL:      $API_BASE_URL
         BROWSER_BASE_URL:  $BROWSER_BASE_URL
         GUEST_EMAIL:       $GUEST_EMAIL
-        GUEST_PASSWORD:    $GUEST_PASSWORD
+        GUEST_UID:         $GUEST_UID
         ADMIN_EMAIL:       $ADMIN_EMAIL
     # command: yarn start
     command: yarn run dev

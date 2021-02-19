@@ -132,7 +132,7 @@ variable "PROJECT_ID" {}
 variable "STORAGE_BUCKET" {}
 variable "MESSAGE_SENDER_ID" {}
 variable "GUEST_EMAIL" {}
-variable "GUEST_PASSWORD" {}
+variable "GUEST_UID" {}
 variable "ADMIN_EMAIL" {}
 
 resource "aws_ssm_parameter" "workdir" {
@@ -207,11 +207,11 @@ resource "aws_ssm_parameter" "guest-email" {
   type = "SecureString"
   description = "GUEST_EMAIL"
 }
-resource "aws_ssm_parameter" "guest-password" {
-  name = "guest-password"
-  value = var.GUEST_PASSWORD
+resource "aws_ssm_parameter" "guest-uid" {
+  name = "guest-uid"
+  value = var.GUEST_UID
   type = "SecureString"
-  description = "GUEST_PASSWORD"
+  description = "GUEST_UID"
 }
 resource "aws_ssm_parameter" "admin-email" {
   name = "admin-email"

@@ -60,7 +60,7 @@
                     </v-col>
                   </v-row>
                 </v-col>
-                <v-col cols="12" v-if="isAuthenticated && currentUser.id !== otherUser.id">
+                <v-col cols="12" v-if="myselfCheck">
                   <v-row justify="center">
                     <v-btn
                       v-if="!otherUser.isFollowed"
@@ -177,7 +177,18 @@ export default {
       isAuthenticated: 'modules/user/isAuthenticated',
       otherUser: 'modules/otherUser/data',
       error: 'modules/info/error'
-    })
+    }),
+    myselfCheck () {
+      if (this.$store.getters['modules/user/data'] == undefined) {
+        return false
+      } else {
+        if (this.$store.getters['modules/user/data'].id == this.$store.getters['modules/otherUser/data'].id) {
+          return false
+        } else {
+          return true
+        }
+      }
+    }
   },
   methods: {
     ...mapActions({
@@ -215,7 +226,7 @@ export default {
     },
     changeUserGadgets () {
       this.loadUserGadgets = !this.loadUserGadgets
-    },
+    }
   }
 }
 </script>
