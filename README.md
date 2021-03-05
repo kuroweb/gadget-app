@@ -52,7 +52,7 @@
 
 - Vuexストアでステート管理。
 
-- 個人情報（メールアドレス・パスワード）は、外部API（Firebase Authentication）に保存する仕組みで、外部APIで発行されるJWTをSession Storageに保存してログイン・ログアウト機能を実装しました。
+- 個人情報（メールアドレス・パスワード）は、外部API（Firebase Authentication）に保存する仕組みで、外部APIで発行されるJWTをCookieに保存してログイン・ログアウト機能を実装しました。
 
 - 未ログイン状態でアクセスして欲しくないページ（ /users/editなど ）へのアクセス対策には、Nuxt.jsのmiddlewareを活用することで自動的にリダイレクトするようにしました。
 
@@ -70,7 +70,7 @@
 
 - その他のデータはRDSに保存。
 
-- 個人情報（メールアドレス・パスワード）は外部API（Firebase Authentication）に保存しているので、バックエンド側にセンシティブな情報を保存しない仕組みです。
+- 個人情報（ログインパスワード）は外部API（Firebase Authentication）にのみ保存しており、バックエンド（Rails）には保存されません。
 
 #### テストコード
 | 名称 | 説明 |
@@ -112,8 +112,9 @@ RDSにはPostgreSQLを採用し、画像を除いたデータを保管。
 
 ![ER_latest.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/290888/5e990b5c-9302-9d78-26f0-c3de6a09ae25.png)
 
-# アプリの機能一覧
+# アプリの機能紹介
 
+### 0. 機能一覧
 | 機能名 | 説明 |
 | ---- | ---- |
 | ユーザー機能 | 新規登録、登録内容変更、アバター登録、ログイン、ログアウト、フォロー |
