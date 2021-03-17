@@ -1,4 +1,4 @@
-class V2::BoardCommentsController < ApplicationController
+class V1::BoardCommentsController < ApplicationController
 
   ################################################################################################
   # 掲示板コメント作成
