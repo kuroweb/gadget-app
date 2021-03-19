@@ -28,7 +28,8 @@ export default {
   plugins: [
     '~/plugins/vee-validate',
     { src: '~/plugins/vue-tags-input.js', ssr: false},
-    { src: '~/plugins/vue-infinite-loading.js', ssr: false}
+    { src: '~/plugins/vue-infinite-loading.js', ssr: false},
+    { src: '~/plugins/authentication.js', ssr: false}
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
