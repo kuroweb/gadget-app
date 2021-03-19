@@ -131,7 +131,7 @@ export default {
     async createComment () {
       const data = new FormData()
       const config = {
-        headders: {
+        headers: {
           'content-type': 'multipart/form-data'
         }
       }

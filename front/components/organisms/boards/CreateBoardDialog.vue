@@ -160,7 +160,7 @@ export default {
     async createBoard () {
       const data = new FormData()
       const config = {
-        headders: {
+        headers: {
           'content-type': 'multipart/form-data'
         }
       }
