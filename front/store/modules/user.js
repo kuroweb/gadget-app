@@ -57,6 +57,10 @@ export const actions = {
   },
 
   async guestLogin({ dispatch }) {
+    // ユーザーが故意にCookieを削除した場合の例外対策
+    // 前回ログインしていたFirebaseAuthenticationのログイン情報をブラウザから削除
+    firebaseApp.auth().signOut()
+
     const userInfo = {
       email: process.env.GUEST_EMAIL,
       uid: process.env.GUEST_UID
