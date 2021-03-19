@@ -309,7 +309,7 @@ export default {
     async updateBoard () {
       const data = new FormData()
       const config = {
-        headders: {
+        headers: {
           'content-type': 'multipart/form-data'
         }
       }
