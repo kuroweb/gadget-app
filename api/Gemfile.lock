@@ -95,12 +95,16 @@ GEM
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
     ffi (1.14.2)
+    firebase-auth-id_token_keeper (0.2.3)
+      activesupport (>= 5.1.0)
+      jwt (>= 1.5.6)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     i18n (1.8.7)
       concurrent-ruby (~> 1.0)
     jmespath (1.4.0)
     jsonapi-renderer (0.2.2)
+    jwt (2.2.2)
     kaminari (1.2.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.2.1)
@@ -250,6 +254,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   factory_bot_rails
+  firebase-auth-id_token_keeper
   kaminari
   listen (~> 3.2)
   pg (>= 0.18, < 2.0)
