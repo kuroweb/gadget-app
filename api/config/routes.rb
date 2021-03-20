@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   ################################################################################################
   # V2
   ################################################################################################
-  namespace :v1 do
+  namespace :v2 do
     resources :users do
       get :search, on: :collection
       member do
