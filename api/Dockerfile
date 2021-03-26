@@ -16,7 +16,7 @@ ARG USER_ADMIN_PASS
 ARG GUEST_EMAIL
 ARG GUEST_UID
 
-ENV RUNTIME_PACKAGES      "linux-headers libxml2-dev make gcc libc-dev nodejs tzdata postgresql-dev postgresql git less"
+ENV RUNTIME_PACKAGES "linux-headers libxml2-dev make gcc libc-dev nodejs tzdata postgresql-dev postgresql git less shared-mime-info"
 ENV DEV_PACKAGES          "build-base curl-dev"
 ENV LANG                  C.UTF-8
 ENV TZ                    Asia/Tokyo
